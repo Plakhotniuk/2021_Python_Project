@@ -3,7 +3,8 @@
 """
 
 from vpython import scene, vector, sphere, color, rate, mag, box
-
+from Starship import *
+import math
 # GlowScript 3.1 VPython
 
 
@@ -15,12 +16,11 @@ To pan left/right and up/down, Shift-drag.
 Touch screen: pinch/extend to zoom, swipe or two-finger rotate."""
 scene.forward = vector(0,-3,-1)
 
-# scene.width = 1500
-# scene.height = 1000
+scene.width = 1500
+scene.height = 1000
 G = 6.7e-11 # Newton gravitational constant
 
-giant = sphere(pos=vector(-1e11,0,0), radius=2e10, color=color.red,
-                make_trail=True, trail_type='points', interval=10, retain=50, opacity=0.5)
+giant = sphere(pos=vector(-1e11,0,0), radius=2e10, color=color.red)
 giant.mass = 2e30
 giant.p = vector(0, 0, -1e4) * giant.mass
 
@@ -33,7 +33,12 @@ dwarf.p = -giant.p
 
 scene.autoscale = False
 
-sphere(pos=vector(0, 0, 0), texture="Space_Image.jpg", radius=25e11, shininess=0)
+
+ship = Player(100, (0, 0, 0), (100, 100, 0))
+
+ship.draw()
+
+sphere(pos=vector(0, 0, 0), texture="Stars.jpg", radius=25e12, shininess=0)
 
 dt = 1e5
 while True:
@@ -45,6 +50,10 @@ while True:
     dwarf.p = dwarf.p - F*dt
     giant.pos = giant.pos + (giant.p/giant.mass) * dt
     dwarf.pos = dwarf.pos + (dwarf.p/dwarf.mass) * dt
-    scene.camera.follow(giant)
+
+    ship.camera_tracking()
+    camera_pos = scene.camera.pos
+
+
 
 

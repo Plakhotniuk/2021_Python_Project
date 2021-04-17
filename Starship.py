@@ -15,20 +15,24 @@ class Player:
 
         self.force = force
         """Сила, действующая на космический корабль"""
+        self.body = body = cylinder(pos=vector(0, 0, 0),
+                                    axis=vector(0, 0, 0) + vector(1, 1, 1),
+                        size=vector(20, 10, 10), color=color.white)
 
     def draw(self):
         """
         Рисует космический корабль
         :return:
         """
-        nose_cone = cone(pos=self.position, axis=self.position - vector(1, 1, 1),
-                         size=vector(10, 10, 10), color=color.white)
-        body = cylinder(pos=self.position, axis=self.position + vector(1, 1, 1),
+
+        body = cylinder(pos=vector(0, 0, 0), axis=vector(0, 0, 0) + vector(1, 1, 1),
                         size=vector(20, 10, 10), color=color.white)
-        cone(pos=nose_cone.pos + vector(12, 12, 12), axis=nose_cone.pos - vector(1, 1, 1),
+        cone(pos=vector(0, 0, 0), axis=-vector(1, 1, 1),
+                         size=vector(10, 10, 10), color=color.white)
+        cone(pos=vector(0, 0, 0) + vector(12, 12, 12), axis=vector(0, 0, 0) - vector(1, 1, 1),
              size=vector(22, 15, 7), color=color.white)
 
-        cone(pos=nose_cone.pos + vector(12, 12, 12), axis=nose_cone.pos - vector(1, 1, 1),
+        cone(pos=vector(0, 0, 0) + vector(12, 12, 12), axis=vector(0, 0, 0) - vector(1, 1, 1),
              size=vector(22, 7, 15), color=color.white)
 
     def camera_tracking(self):
@@ -36,5 +40,5 @@ class Player:
         Устанавливает слежение камеры за кораблем
         :return:
         """
-        scene.camera.follow(self)
+        scene.camera.follow(self.body)
 
