@@ -1,0 +1,61 @@
+from PyQt5.QtGui import QKeySequence
+
+try:
+    import OpenGL as ogl
+    try:
+        import OpenGL.GL
+    except ImportError:
+        print('Drat, patching for Big Sur')
+        from ctypes import util
+        orig_util_find_library = util.find_library
+
+        def new_util_find_library(name):
+            res = orig_util_find_library(name)
+            if res:
+                return res
+            return '/System/Library/Frameworks/'+name+'.framework/'+name
+        util.find_library = new_util_find_library
+except ImportError:
+    pass
+
+import sys
+from PyQt5.QtWidgets import QApplication, QAction, QPushButton
+from Ui_mainwindow import Ui_MainWindow
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
+from PyQt_OpenGL import PyOpenGL
+
+class MainWindow:
+    """
+    Класс основного меню внутри приложения
+    """
+    def __init__(self):
+        self.app = QtWidgets.QApplication(sys.argv)
+        MainWin = QtWidgets.QMainWindow()
+        self.main_win = MainWin
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(MainWin)
+        open_gl = PyOpenGL(parent=self.ui.frame)
+        open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
+
+        self.screen_size = open_gl.size()
+        self.show()
+
+
+
+
+    def show(self):
+        """
+        Отображает меню на экране
+        """
+        self.main_win.show()
+
+
+if __name__ == '__main__':
+
+    App = QApplication(sys.argv)
+
+    window = MainWindow()
+
+    sys.exit(App.exec())
+
+

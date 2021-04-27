@@ -1,1 +1,1 @@
-Let's collect уд3
+From PerfectGame import PerfectGame
