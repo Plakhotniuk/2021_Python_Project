@@ -19,10 +19,11 @@ except ImportError:
     pass
 
 import sys
-from PyQt5.QtWidgets import QApplication, QAction, QPushButton
+from PyQt5.QtWidgets import QApplication, QAction, QPushButton, qApp
 from Ui_mainwindow import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt_OpenGL import PyOpenGL
+
 
 class MainWindow:
     """
@@ -30,18 +31,15 @@ class MainWindow:
     """
     def __init__(self):
         self.app = QtWidgets.QApplication(sys.argv)
-        MainWin = QtWidgets.QMainWindow()
-        self.main_win = MainWin
+        self.main_win = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
-        self.ui.setupUi(MainWin)
+        self.ui.setupUi(self.main_win)
         open_gl = PyOpenGL(parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
 
         self.screen_size = open_gl.size()
         self.show()
-
-
-
+        self.ui.pushButton.clicked.connect(sys.exit)
 
     def show(self):
         """
