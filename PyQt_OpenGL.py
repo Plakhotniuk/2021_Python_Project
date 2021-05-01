@@ -1,22 +1,4 @@
-try:
-    import OpenGL as ogl
-    try:
-        import OpenGL.GL
-    except ImportError:
-        print('Drat, patching for Big Sur')
-        from ctypes import util
-        orig_util_find_library = util.find_library
-
-        def new_util_find_library(name):
-            res = orig_util_find_library(name)
-            if res:
-                return res
-            return '/System/Library/Frameworks/'+name+'.framework/'+name
-        util.find_library = new_util_find_library
-except ImportError:
-    pass
-
-from PyQt5.QtWidgets import QOpenGLWidget, QApplication, QMouseEventTransition, QGraphicsView, QGraphicsSceneMouseEvent, QKeyEventTransition
+from PyQt5.QtWidgets import QOpenGLWidget, QApplication, QMouseEventTransition, QVBoxLayout, QGraphicsView, QGraphicsSceneMouseEvent, QKeyEventTransition, QTextEdit
 from PyQt5 import QtCore, QtGui, QtOpenGL, Qt, QtWidgets
 from PyQt5.Qt import Qt, QMouseEvent, QScrollEvent
 import Space_objects
@@ -53,10 +35,16 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.viewMatrix = None
         self.setFocus()
         self.scalefactor = 5.0E6
-        self.rotation_angle = 0
+        self.rotation_angle = 10
         self.scale_x = 0
         self.scale_y = 0
         self.scale_z = 0
+        self.input()
+        self.input_pulse = 0
+
+
+    def input(self):
+        pass
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         pass

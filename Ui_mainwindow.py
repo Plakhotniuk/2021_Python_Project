@@ -11,7 +11,7 @@ class Ui_MainWindow(object):
         self.menuOpengl = QtWidgets.QMenu(self.menubar)
         self.horizontalSlider_2 = QtWidgets.QSlider(self.centralwidget)
         self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
-        self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_time = QtWidgets.QTextEdit(self.centralwidget)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -20,7 +20,7 @@ class Ui_MainWindow(object):
         self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_confirm2 = QtWidgets.QPushButton(self.centralwidget)
 
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_pulse = QtWidgets.QTextEdit(self.centralwidget)
         self.frame = QtWidgets.QFrame(self.centralwidget)
 
     def setupUi(self, MainWindow):
@@ -91,10 +91,10 @@ class Ui_MainWindow(object):
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         """Text edit"""
-        self.textEdit.setGeometry(QtCore.QRect(20, 180, 104, 31))
-        self.textEdit.setObjectName("textEdit")
-        self.textEdit_2.setGeometry(QtCore.QRect(20, 330, 104, 31))
-        self.textEdit_2.setObjectName("textEdit_2")
+        self.textEdit_pulse.setGeometry(QtCore.QRect(20, 180, 104, 31))
+        self.textEdit_pulse.setObjectName("textEdit_pulse")
+        self.textEdit_time.setGeometry(QtCore.QRect(20, 330, 104, 31))
+        self.textEdit_time.setObjectName("textEdit_time")
 
         """Horizontal Slider 1"""
         self.horizontalSlider.setGeometry(QtCore.QRect(10, 230, 180, 32))

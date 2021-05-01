@@ -17,9 +17,9 @@ except ImportError:
     pass
 
 import sys
-from PyQt5.QtWidgets import QApplication, QAction, QPushButton, qApp
+from PyQt5.QtWidgets import QApplication, QAction, QPushButton, qApp, QTextEdit, QMouseEventTransition
 from Ui_mainwindow import Ui_MainWindow
-from PyQt5 import QtCore, QtGui, QtWidgets, Qt
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt, QtPrintSupport
 from PyQt_OpenGL import PyOpenGL
 
 
@@ -39,11 +39,13 @@ class MainWindow:
         self.show()
         self.ui.pushButton_quit.clicked.connect(sys.exit)
 
+
     def show(self):
         """
         Отображает меню на экране
         """
         self.main_win.show()
+
 
 
 if __name__ == '__main__':
@@ -53,5 +55,4 @@ if __name__ == '__main__':
     window = MainWindow()
 
     sys.exit(App.exec())
-
 
