@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QDesktopWidget, QSlider
-import sys
-import os
+from PyQt5.QtWidgets import QSlider
+
 
 
 class Ui_MainWindow(object):

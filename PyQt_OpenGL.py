@@ -34,14 +34,14 @@ import OpenGL.GLUT
 #                                                  texture_filename='wall-murals-planet-earth-texture.jpg',
 #                                                  color=Space_objects.WHITE, x=3.8E8, vy=1.0E3))
 
-dt = 1000
+dt = 10
 space_objects = []
 """Cписок небесных тел"""
 f_func = Motion.f(dt)
-space_objects.append(Space_objects.CelestialBody(name='Moon', r=1.7E5, m=7.36E22,
-                                                 color=Space_objects.WHITE, x=3.8E8, vy=500, vx=-00))
-space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E5, m=5.974E24,
-                                                 color=Space_objects.GREEN, vy=-0, vx=0))
+space_objects.append(Space_objects.CelestialBody(name='Moon', r=5.7E4, m=400000,
+                                                 color=Space_objects.WHITE, x=3.8E7, vy=3000, vx=-0))
+space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E6, m=5.974E24,
+                                                 color=Space_objects.GREEN, vy=-0, vx=0, x=0, y=0))
 g_func = Motion.g(dt)
 g_func.set_mass([space_objects[1].m, space_objects[0].m])
 
@@ -87,7 +87,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
     def eventFilter(self, obj: QtCore.QObject, event: QtGui.QKeyEvent) -> bool:
         if event.type() == QtGui.QKeyEvent.KeyPress:
             if event.key() == QtCore.Qt.Key_Escape:
-
                 return True
         return super().eventFilter(obj, event)
 
