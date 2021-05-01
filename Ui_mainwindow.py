@@ -15,10 +15,12 @@ class Ui_MainWindow(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.pushButton_start = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_quit = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_confirm2 = QtWidgets.QPushButton(self.centralwidget)
 
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.frame = QtWidgets.QFrame(self.centralwidget)
 
     def setupUi(self, MainWindow):
@@ -42,8 +44,7 @@ class Ui_MainWindow(object):
 
         self.centralwidget.setMinimumSize(QtCore.QSize(800, 0))
         self.centralwidget.setObjectName("centralwidget")
-        self.textEdit.setGeometry(QtCore.QRect(20, 180, 104, 31))
-        self.textEdit.setObjectName("textEdit")
+
         self.frame.setGeometry(QtCore.QRect(249, 20, 1161, 811))
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -57,15 +58,21 @@ class Ui_MainWindow(object):
         self.frame.setObjectName("frame")
 
         """Buttons"""
-        self.pushButton.setGeometry(QtCore.QRect(10, 750, 113, 32))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2.setGeometry(QtCore.QRect(10, 460, 131, 71))
+        self.pushButton_quit.setGeometry(QtCore.QRect(10, 750, 113, 32))
+        self.pushButton_quit.setObjectName("pushButton_quit")
+
+        self.pushButton_confirm1.setGeometry(QtCore.QRect(125, 180, 100, 32))
+        self.pushButton_confirm1.setObjectName("pushButton_confirm1")
+
+        self.pushButton_confirm2.setGeometry(QtCore.QRect(125, 330, 100, 32))
+        self.pushButton_confirm2.setObjectName("pushButton_confirm2")
+        self.pushButton_start.setGeometry(QtCore.QRect(10, 460, 131, 71))
         font = QtGui.QFont()
         font.setPointSize(21)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setObjectName("pushButton_2")
-        """Labels and Fonts"""
+        self.pushButton_start.setFont(font)
+        self.pushButton_start.setObjectName("pushButton_start")
 
+        """Labels and Fonts"""
         self.label.setGeometry(QtCore.QRect(20, 20, 221, 111))
         font = QtGui.QFont()
         font.setPointSize(25)
@@ -83,7 +90,10 @@ class Ui_MainWindow(object):
         font.setPointSize(20)
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
-        self.textEdit_2.setGeometry(QtCore.QRect(10, 330, 104, 31))
+        """Text edit"""
+        self.textEdit.setGeometry(QtCore.QRect(20, 180, 104, 31))
+        self.textEdit.setObjectName("textEdit")
+        self.textEdit_2.setGeometry(QtCore.QRect(20, 330, 104, 31))
         self.textEdit_2.setObjectName("textEdit_2")
 
         """Horizontal Slider 1"""
@@ -131,8 +141,10 @@ class Ui_MainWindow(object):
         """
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.pushButton.setText(_translate("MainWindow", "Quit"))
-        self.pushButton_2.setText(_translate("MainWindow", "Start!"))
+        self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
+        self.pushButton_confirm1.setText(_translate("MainWindow", "Confirm"))
+        self.pushButton_confirm2.setText(_translate("MainWindow", "Confirm"))
+        self.pushButton_start.setText(_translate("MainWindow", "Start!"))
         self.label.setText(_translate("MainWindow", "Set Parametrs to\n" " Start modeling!"))
         self.label_2.setText(_translate("MainWindow", "PULSE:"))
         self.label_3.setText(_translate("MainWindow", "Time wait:"))

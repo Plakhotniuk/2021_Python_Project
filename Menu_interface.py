@@ -37,7 +37,7 @@ class MainWindow:
 
         self.screen_size = open_gl.size()
         self.show()
-        self.ui.pushButton.clicked.connect(sys.exit)
+        self.ui.pushButton_quit.clicked.connect(sys.exit)
 
     def show(self):
         """

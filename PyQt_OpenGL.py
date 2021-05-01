@@ -38,7 +38,7 @@ dt = 10
 space_objects = []
 """Cписок небесных тел"""
 f_func = Motion.f(dt)
-space_objects.append(Space_objects.CelestialBody(name='Moon', r=5.7E4, m=400000,
+space_objects.append(Space_objects.CelestialBody(name='Moon', r=5.7E5, m=400000,
                                                  color=Space_objects.WHITE, x=3.8E7, vy=3000, vx=-0))
 space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E6, m=5.974E24,
                                                  color=Space_objects.GREEN, vy=-0, vx=0, x=0, y=0))
