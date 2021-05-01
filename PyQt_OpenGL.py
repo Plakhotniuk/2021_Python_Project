@@ -6,26 +6,17 @@ import Motion
 import OpenGL.GL
 import OpenGL.GLU
 import OpenGL.GLUT
-#
-# space_objects = []
-# """Cписок небесных тел"""
-# space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E5, m=5.974E24,
-#                                                  texture_filename='wall-murals-planet-earth-texture.jpg' ,
-#                                                  color=Space_objects.GREEN))
-# space_objects.append(Space_objects.CelestialBody(name='Moon', r=1.7E5, m=7.36E22,
-#                                                  texture_filename='wall-murals-planet-earth-texture.jpg',
-#                                                  color=Space_objects.WHITE, x=3.8E8, vy=1.0E3))
 
-dt = 10
+dt = 100
 space_objects = []
 """Cписок небесных тел"""
 f_func = Motion.f(dt)
 space_objects.append(Space_objects.CelestialBody(name='Moon', r=5.7E5, m=400000,
-                                                 color=Space_objects.WHITE, x=3.8E7, vy=3000, vx=-0))
+                                                 color=Space_objects.WHITE, x=3.8E7, vy=1000, vx=-0))
 space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E6, m=5.974E24,
                                                  color=Space_objects.GREEN, vy=-0, vx=0, x=0, y=0))
 g_func = Motion.g(dt)
-g_func.set_mass([space_objects[1].m, space_objects[0].m])
+g_func.set_mass([space_objects[0].m, space_objects[1].m])
 
 
 class PyOpenGL(QOpenGLWidget, QGraphicsView):
@@ -35,7 +26,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.viewMatrix = None
         self.setFocus()
         self.scalefactor = 5.0E6
-        self.rotation_angle = 10
+        self.rotation_angle = 0
         self.scale_x = 0
         self.scale_y = 0
         self.scale_z = 0
