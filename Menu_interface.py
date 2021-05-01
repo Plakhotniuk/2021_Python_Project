@@ -32,7 +32,7 @@ class MainWindow:
     def __init__(self):
         self.app = QtWidgets.QApplication(sys.argv)
         self.main_win = QtWidgets.QMainWindow()
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_MainWindow(self.main_win)
         self.ui.setupUi(self.main_win)
         open_gl = PyOpenGL(parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())

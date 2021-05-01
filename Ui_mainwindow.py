@@ -3,7 +3,25 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QDesktopWidget, 
 import sys
 import os
 
+
 class Ui_MainWindow(object):
+    def __init__(self, MainWindow):
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menuOpengl = QtWidgets.QMenu(self.menubar)
+        self.horizontalSlider_2 = QtWidgets.QSlider(self.centralwidget)
+        self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
+        self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+
     def setupUi(self, MainWindow):
         """
         Интерфейс окна
@@ -23,13 +41,10 @@ class Ui_MainWindow(object):
         MainWindow.setMouseTracking(True)
         """Далее идут все детали интерфейса (ползунки, кнопочки и тд):"""
 
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(800, 0))
         self.centralwidget.setObjectName("centralwidget")
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setGeometry(QtCore.QRect(20, 180, 104, 31))
         self.textEdit.setObjectName("textEdit")
-        self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setGeometry(QtCore.QRect(249, 20, 1161, 811))
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -43,10 +58,8 @@ class Ui_MainWindow(object):
         self.frame.setObjectName("frame")
 
         """Buttons"""
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(10, 750, 113, 32))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(10, 460, 131, 71))
         font = QtGui.QFont()
         font.setPointSize(21)
@@ -54,7 +67,6 @@ class Ui_MainWindow(object):
         self.pushButton_2.setObjectName("pushButton_2")
         """Labels and Fonts"""
 
-        self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 20, 221, 111))
         font = QtGui.QFont()
         font.setPointSize(25)
@@ -62,43 +74,34 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(20, 130, 121, 51))
         font = QtGui.QFont()
         font.setPointSize(20)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(10, 270, 131, 51))
         font = QtGui.QFont()
         font.setPointSize(20)
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
-        self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_2.setGeometry(QtCore.QRect(10, 330, 104, 31))
         self.textEdit_2.setObjectName("textEdit_2")
 
         """Horizontal Slider 1"""
-        self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
         self.horizontalSlider.setGeometry(QtCore.QRect(10, 230, 180, 32))
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
 
         """Horizontal Slider 2"""
-        self.horizontalSlider_2 = QtWidgets.QSlider(self.centralwidget)
         self.horizontalSlider_2.setGeometry(QtCore.QRect(10, 390, 180, 22))
         self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider_2.setObjectName("horizontalSlider_2")
 
-
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 827, 24))
         self.menubar.setObjectName("menubar")
-        self.menuOpengl = QtWidgets.QMenu(self.menubar)
         self.menuOpengl.setObjectName("menuOpengl")
         MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuOpengl.menuAction())
