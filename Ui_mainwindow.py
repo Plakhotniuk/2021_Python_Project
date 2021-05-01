@@ -2,7 +2,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
 
 
-
 class Ui_MainWindow(object):
     def __init__(self, MainWindow):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
