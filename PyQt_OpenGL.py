@@ -24,15 +24,26 @@ import Motion
 import OpenGL.GL
 import OpenGL.GLU
 import OpenGL.GLUT
+#
+# space_objects = []
+# """Cписок небесных тел"""
+# space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E5, m=5.974E24,
+#                                                  texture_filename='wall-murals-planet-earth-texture.jpg' ,
+#                                                  color=Space_objects.GREEN))
+# space_objects.append(Space_objects.CelestialBody(name='Moon', r=1.7E5, m=7.36E22,
+#                                                  texture_filename='wall-murals-planet-earth-texture.jpg',
+#                                                  color=Space_objects.WHITE, x=3.8E8, vy=1.0E3))
 
+dt = 1000
 space_objects = []
 """Cписок небесных тел"""
-space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E5, m=5.974E24,
-                                                 texture_filename='wall-murals-planet-earth-texture.jpg' ,
-                                                 color=Space_objects.GREEN))
+f_func = Motion.f(dt)
 space_objects.append(Space_objects.CelestialBody(name='Moon', r=1.7E5, m=7.36E22,
-                                                 texture_filename='wall-murals-planet-earth-texture.jpg',
-                                                 color=Space_objects.WHITE, x=3.8E8, vy=1.0E3))
+                                                 color=Space_objects.WHITE, x=3.8E8, vy=500, vx=-00))
+space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E5, m=5.974E24,
+                                                 color=Space_objects.GREEN, vy=-0, vx=0))
+g_func = Motion.g(dt)
+g_func.set_mass([space_objects[1].m, space_objects[0].m])
 
 
 class PyOpenGL(QOpenGLWidget, QGraphicsView):
@@ -84,7 +95,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
 
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
-        Motion.recalculate_space_objects_positions(space_objects, 1.0E3)
+        Motion.recalculate_space_objects_positions(space_objects, f_func, g_func)
         for obj in space_objects:
             obj.Draw()
         self.update()

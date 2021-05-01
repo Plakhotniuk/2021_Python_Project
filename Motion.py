@@ -1,45 +1,7 @@
-import math
-gravitational_constant = 6.67408e-11
+from counting import np, count_pos, f, g
 
 
-def calculate_force(body, space_objects):
-    """Вычисляет силу, действующую на тело.
-
-    Параметры:
-
-    **body** — тело, для которого нужно вычислить дейстующую силу.
-    **space_objects** — список объектов, которые воздействуют на тело.    """
-
-    body.fx = body.fy = 0
-    fx = 0
-    fy = 0
-    for obj in space_objects:
-        if body == obj:
-            continue
-        r = math.sqrt(((body.x - obj.x) ** 2 + (body.y - obj.y) ** 2))
-        fx -= (gravitational_constant * obj.m * body.m * (body.x - obj.x))/r**3
-        fy -= (gravitational_constant * obj.m * body.m * (body.y - obj.y)) / r**3
-    body.fx = fx
-    body.fy = fy
-
-def move_space_object(body, dt):
-    """Перемещает тело в соответствии с действующей на него силой.
-
-    Параметры:
-
-    **body** — тело, которое нужно переместить.
-    """
-
-    ax = body.fx/body.m
-    ay = body.fy/body.m
-    body.vx += ax * dt
-
-    body.x += body.vx * dt
-    body.vy += ay * dt
-    body.y += body.vy * dt
-
-
-def recalculate_space_objects_positions(space_objects, dt):
+def recalculate_space_objects_positions(space_objects, f_func, g_func):
     """Пересчитывает координаты объектов.
 
     Параметры:
@@ -48,10 +10,24 @@ def recalculate_space_objects_positions(space_objects, dt):
     **dt** — шаг по времени
     """
 
+    x = []
+    v = []
     for body in space_objects:
-        calculate_force(body, space_objects)
+        x.append(body.x)
+        x.append(body.y)
+        v.append(body.vx)
+        v.append(body.vy)
+    x = np.array(x)
+    v = np.array(v)
+
+    new_x, new_v = count_pos(x, v, f_func, g_func)
+    i = 0
     for body in space_objects:
-        move_space_object(body, dt)
+        body.x = new_x[i]
+        body.y = new_x[i+1]
+        body.vx = new_v[i]
+        body.vy = new_v[i+1]
+        i += 2
 
 
 if __name__ == "__main__":
