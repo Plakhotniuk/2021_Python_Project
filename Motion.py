@@ -1,6 +1,7 @@
 import math
 gravitational_constant = 6.67408e-11
 
+
 def calculate_force(body, space_objects):
     """Вычисляет силу, действующую на тело.
 

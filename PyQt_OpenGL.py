@@ -86,7 +86,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
         Motion.recalculate_space_objects_positions(space_objects, 1.0E3)
         for obj in space_objects:
-            obj.PlanetDraw()
+            obj.Draw()
         self.update()
 
     def keyPressEvent(self, event):

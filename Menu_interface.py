@@ -1,5 +1,3 @@
-from PyQt5.QtGui import QKeySequence
-
 try:
     import OpenGL as ogl
     try:
