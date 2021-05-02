@@ -17,10 +17,11 @@ except ImportError:
     pass
 
 import sys
-
+from math import pi
 from Ui_mainwindow import Ui_MainWindow
 from PyQt5 import QtWidgets
 from PyQt_OpenGL import PyOpenGL
+from space_objects import space_objects
 
 
 class MainWindow:
@@ -68,9 +69,8 @@ class MainWindow:
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")
-            print(self.pulse)
-            print(self.time_wait)
-            print(self.input_pulse_direction_angle)
+            space_objects[0].time_engine_working = float(self.time_wait)
+            space_objects[0].engine_angle = float(self.input_pulse_direction_angle) * pi / 180
         else:
             self.ui.pushButton_start.setText("Start!")
             self.time_wait = 0
