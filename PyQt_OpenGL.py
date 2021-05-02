@@ -56,12 +56,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         OpenGL.GLU.gluLookAt(0, -1, 0, 0, 0, 0, 0, 0, 10)
         self.viewMatrix = OpenGL.GL.glGetFloatv(OpenGL.GL.GL_MODELVIEW_MATRIX)
 
-    def eventFilter(self, obj: QtCore.QObject, event: QtGui.QKeyEvent) -> bool:
-        if event.type() == QtGui.QKeyEvent.KeyPress:
-            if event.key() == QtCore.Qt.Key_Escape:
-                return True
-        return super().eventFilter(obj, event)
-
     def paintGL(self):
 
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
@@ -108,3 +102,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.scale_z = 0
         if event.key() == Qt.Key_Up:
             self.scale_z = 0
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")

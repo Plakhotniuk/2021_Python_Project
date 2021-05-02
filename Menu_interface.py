@@ -37,6 +37,7 @@ class MainWindow:
         self.open_gl = open_gl
         self.screen_size = open_gl.size()
         self.input_pulse = 0
+        self.input_pulse_direction_angle = 0
         self.show()
 
         self.ui.pushButton_confirm1.clicked.connect(open_gl.setFocus)
@@ -48,6 +49,11 @@ class MainWindow:
 
         self.ui.pushButton_start.clicked.connect(self.input)
         self.ui.pushButton_clear.clicked.connect(self.clear)
+
+        self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
+
+    def slider_pulse_direction(self):
+        self.input_pulse_direction_angle = str(self.ui.slider_pulse_direction.value())
 
     def clear(self):
         self.ui.textEdit_pulse.clear()
@@ -63,10 +69,11 @@ class MainWindow:
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")
+            print(self.pulse)
+            print(self.time_wait)
+            print(self.input_pulse_direction_angle)
         else:
             self.ui.pushButton_start.setText("Start!")
-        print(self.pulse)
-        print(self.time_wait)
 
     def show(self):
         """

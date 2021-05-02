@@ -120,4 +120,4 @@ def count_pos(x, v, f, g):
 
 
 if __name__ == "__main__":
-    print(*(np.array([0, 1]) + np.array([0, 1])))
+    print("This module is not for direct call!")

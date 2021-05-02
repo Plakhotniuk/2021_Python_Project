@@ -17,6 +17,12 @@ class Ui_MainWindow(object):
         self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_confirm2 = QtWidgets.QPushButton(self.centralwidget)
         self.textEdit_pulse = QtWidgets.QTextEdit(self.centralwidget)
+
+        self.slider_pulse_direction = QtWidgets.QSlider(self.centralwidget)
+        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 230, 200, 22))
+        self.slider_pulse_direction.setOrientation(QtCore.Qt.Horizontal)
+        self.slider_pulse_direction.setObjectName("horizontalSlider_pulse_direction")
+
         self.frame = QtWidgets.QFrame(self.centralwidget)
 
     def setupUi(self, MainWindow):
@@ -70,6 +76,14 @@ class Ui_MainWindow(object):
         font.setPointSize(21)
         self.pushButton_start.setFont(font)
         self.pushButton_start.setObjectName("pushButton_start")
+
+        """Slider"""
+        self.slider_pulse_direction.setMinimum(0)
+        self.slider_pulse_direction.setMaximum(360)
+        self.slider_pulse_direction.setValue(0)
+        self.slider_pulse_direction.setTickInterval(5)
+        self.slider_pulse_direction.setTickPosition(QSlider.TicksBelow)
+
 
         """Labels and Fonts"""
         self.label.setGeometry(QtCore.QRect(20, 20, 221, 111))
@@ -125,3 +139,6 @@ class Ui_MainWindow(object):
         self.label_pulse.setText(_translate("MainWindow", "PULSE:"))
         self.label_time_wait.setText(_translate("MainWindow", "Time wait:"))
         self.menuOpengl.setTitle(_translate("MainWindow", "Opengl"))
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")

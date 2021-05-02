@@ -104,3 +104,6 @@ class Ui_MainWindow(object):
         self.pushButton_Confirm1.setText(_translate("MainWindow", "Confirm"))
         self.pushButton_Confirm2.setText(_translate("MainWindow", "Confirm"))
         self.menuOpengl.setTitle(_translate("MainWindow", "Opengl"))
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")
