@@ -21,7 +21,9 @@ from PyQt5.QtWidgets import QApplication, QAction, QPushButton, qApp, QTextEdit,
 from Ui_mainwindow import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt, QtPrintSupport
 from PyQt_OpenGL import PyOpenGL
-
+from PyQt_OpenGL import space_objects
+import math
+import time
 
 class MainWindow:
     """
@@ -36,7 +38,6 @@ class MainWindow:
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
         self.open_gl = open_gl
         self.screen_size = open_gl.size()
-        self.input_pulse = 0
         self.input_pulse_direction_angle = 0
         self.show()
 
@@ -47,13 +48,14 @@ class MainWindow:
         self.pulse = ''
         self.time_wait = ''
 
+
         self.ui.pushButton_start.clicked.connect(self.input)
         self.ui.pushButton_clear.clicked.connect(self.clear)
 
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
     def slider_pulse_direction(self):
-        self.input_pulse_direction_angle = str(self.ui.slider_pulse_direction.value())
+        self.input_pulse_direction_angle = int(self.ui.slider_pulse_direction.value())
 
     def clear(self):
         self.ui.textEdit_pulse.clear()
@@ -64,16 +66,23 @@ class MainWindow:
         Записывает в поля self.pulse и self.time_wait введенные пользователем значения
         после нажатия Start!
         """
-        self.pulse = self.ui.textEdit_pulse.toPlainText()
-        self.time_wait = self.ui.textEdit_time.toPlainText()
+        self.pulse = str(self.ui.textEdit_pulse.toPlainText())
+        self.time_wait = str(self.ui.textEdit_time.toPlainText())
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")
             print(self.pulse)
             print(self.time_wait)
             print(self.input_pulse_direction_angle)
+            # self.time_wait -= 1
+            # if not self.time_wait:
+            #     space_objects[0].vx += 1 / math.tan(math.pi / 180 * self.input_pulse_direction_angle)\
+            #                            * float(self.pulse) /space_objects[0].m
+            #     space_objects[0].yx += math.tan(math.pi / 180 * self.input_pulse_direction_angle) \
+            #                            * float(self.pulse) / space_objects[0].m
         else:
             self.ui.pushButton_start.setText("Start!")
+            self.time_wait = 0
 
     def show(self):
         """
