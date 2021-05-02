@@ -1,4 +1,10 @@
 from counting import np, count_pos, f, g
+from Celectial_bodies import space_objects
+
+dt = 100
+f_func = f(dt)
+g_func = g(dt)
+g_func.set_mass([space_objects[0].m, space_objects[1].m, space_objects[2].m, space_objects[3].m])
 
 
 def recalculate_space_objects_positions(space_objects, f_func, g_func):

@@ -1,14 +1,16 @@
 import numpy as np
+from Celectial_bodies import space_objects
+from math import cos, sin
 
 G = -6.67E-11
-
+GAME_TIME = [1, -1]
 
 class f:
     def __init__(self, dt):
         pass
 
-    def __call__(self, t_n, x_n, y_n):
-        return y_n
+    def __call__(self, t_n, x_n, vx_n):
+        return vx_n
 
     def __add__(self):
         pass
@@ -22,10 +24,9 @@ class g:
     def set_mass(self, masss: list):
         self.mass = masss
 
-    def __call__(self, t_n, x_n, y_n):
-        return np.array([*(CalcGForce(x_n[0], x_n[1], x_n[2], x_n[3], self.mass[1]) + CalcGForce(x_n[0], x_n[1], x_n[4],x_n[5], self.mass[2])),
-                         *(CalcGForce(x_n[2], x_n[3], x_n[0], x_n[1], self.mass[0]) + CalcGForce(x_n[2], x_n[3], x_n[4],x_n[5], self.mass[2])),
-                         *(CalcGForce(x_n[4], x_n[5], x_n[0], x_n[1], self.mass[0]) + CalcGForce(x_n[4], x_n[5], x_n[2],x_n[3], self.mass[1]))])
+    def __call__(self, t_n, x_n, vx_n):
+        return np.array([*CalcForcesOnStarShip(0, x_n, self.mass),*CalcALLGForces(1, x_n, self.mass),
+                         *CalcALLGForces(2, x_n, self.mass),*CalcALLGForces(3, x_n, self.mass)])
 
     def __add__(self):
         pass
@@ -36,7 +37,23 @@ def CalcGForce(x1, y1, x2, y2, mass):
             G * mass * (y1 - y2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3)])
 
 
-def RungeKutt(t_n, x_n, vx_n, f, g, t):
+def CalcALLGForces(ind, x_n, mass):
+    result = np.array([0.0, 0.0])
+    for i in range(x_n.size//2):
+        if i != ind:
+            result = result + CalcGForce(x_n[2*ind], x_n[2*ind+1], x_n[2*i], x_n[2*i+1], mass[i])
+    return result
+
+
+def CalcForcesOnStarShip(ind, x_n, mass):
+    result = CalcALLGForces(ind, x_n, mass)
+    if space_objects[0].time_engine_working:
+        result = result + np.array([space_objects[0].engine_thrust * cos(space_objects[0].engine_angle) / mass[0],
+                                    space_objects[0].engine_thrust * sin(space_objects[0].engine_angle) / mass[0]])
+    return result
+
+
+def RungeKutt(t_n, x_n, vx_n, f, g, t, Gt):
     k1 = f(t_n, x_n, vx_n)
     m1 = g(t_n, x_n, vx_n)
     k2 = f(t_n + (t / 2), x_n + (t / 2) * k1, vx_n + (t / 2) * m1)
@@ -48,11 +65,11 @@ def RungeKutt(t_n, x_n, vx_n, f, g, t):
 
     x = x_n + (t / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
     vx = vx_n + (t / 6) * (m1 + 2 * m2 + 2 * m3 + m4)
-
+    # Gt[0] += g.dt
     return x, vx
 
 
-def DormPrise(t_n, x_n, vx_n, f, g, t):
+def DormPrise(t_n, x_n, vx_n, f, g, t, Gt):
     k1 = f(t_n, x_n, vx_n)
     m1 = g(t_n, x_n, vx_n)
 
@@ -104,18 +121,29 @@ def DormPrise(t_n, x_n, vx_n, f, g, t):
     vx2 = vx_n + t * ((5179 / 57600) * m1 + (7571 / 16695) * m3 + (393 / 640) * m4 + (-92097 / 339200) * m5 + (
                 187 / 2100) * m6 + (1 / 40) * m7)
 
-    if abs(x1[0] - x2[0]) < 0.0005:
-        g.dt = g.dt * 2
-    else:
+    if abs(x1[0] - x2[0]) > 0.0005:
         g.dt = g.dt / 2
+    elif abs(x1[2] - x2[2]) > 0.0005:
+        g.dt = g.dt / 2
+    elif abs(x1[4] - x2[4]) > 0.0005:
+        g.dt = g.dt / 2
+    elif abs(x1[6] - x2[6]) > 0.0005:
+        g.dt = g.dt / 2
+    else:
+        g.dt = g.dt * 2
+
+    if g.dt > 400:
+        g.dt = 400
 
     print(g.dt)
-
+    # Gt[0] += g.dt
     return x1, vx1
 
 
 def count_pos(x, v, f, g):
-    nx, nv = RungeKutt(0, x, v, f, g, g.dt)
+    nx, nv = RungeKutt(0, x, v, f, g, g.dt, GAME_TIME)
+    if space_objects[0].time_engine_working:
+        space_objects[0].time_engine_working -= 1
     return nx, nv
 
 

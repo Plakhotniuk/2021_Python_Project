@@ -17,13 +17,11 @@ except ImportError:
     pass
 
 import sys
-from PyQt5.QtWidgets import QApplication, QAction, QPushButton, qApp, QTextEdit, QMouseEventTransition
+from PyQt5.QtWidgets import QApplication
 from Ui_mainwindow import Ui_MainWindow
-from PyQt5 import QtCore, QtGui, QtWidgets, Qt, QtPrintSupport
+from PyQt5 import QtWidgets
 from PyQt_OpenGL import PyOpenGL
-from PyQt_OpenGL import space_objects
-import math
-import time
+
 
 class MainWindow:
     """
@@ -92,7 +90,6 @@ class MainWindow:
 
 
 if __name__ == '__main__':
-
     App = QApplication(sys.argv)
 
     window = MainWindow()

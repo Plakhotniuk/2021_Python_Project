@@ -1,25 +1,11 @@
-from PyQt5.QtWidgets import QOpenGLWidget, QApplication, QMouseEventTransition, QVBoxLayout, QGraphicsView, QGraphicsSceneMouseEvent, QKeyEventTransition, QTextEdit
-from PyQt5 import QtCore, QtGui, QtOpenGL, Qt, QtWidgets
-from PyQt5.Qt import Qt, QMouseEvent, QScrollEvent, QPoint
-import Space_objects
-import Motion
+from PyQt5.QtWidgets import QOpenGLWidget, QGraphicsView
+from PyQt5 import QtGui, Qt, QtWidgets
+from PyQt5.Qt import Qt
 import OpenGL.GL
 import OpenGL.GLU
 import OpenGL.GLUT
-
-dt = 100
-space_objects = []
-"""Cписок небесных тел"""
-f_func = Motion.f(dt)
-space_objects.append(Space_objects.CelestialBody(name='SpaceShip', r=5.7E5, m=400000,
-                                                 color=Space_objects.WHITE, x=3.8E7, vy=3000, vx=-0))
-space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E6, m=5.974E24,
-                                                 color=Space_objects.GREEN, vy=0, vx=300, x=0, y=0))
-space_objects.append(Space_objects.CelestialBody(name='Moon', r=1.7E6, m=7.34E22,
-                                                 color=Space_objects.RED, x=38500000*5, vy=1000, vx=-0))
-
-g_func = Motion.g(dt)
-g_func.set_mass([space_objects[0].m, space_objects[1].m, space_objects[2].m])
+import Celectial_bodies
+import Motion
 
 
 class PyOpenGL(QOpenGLWidget, QGraphicsView):
@@ -57,13 +43,11 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.viewMatrix = OpenGL.GL.glGetFloatv(OpenGL.GL.GL_MODELVIEW_MATRIX)
 
     def paintGL(self):
-
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
         if self.start_modeling:
-            Motion.recalculate_space_objects_positions(space_objects, f_func, g_func)
-
-        for obj in space_objects:
+            Motion.recalculate_space_objects_positions(Celectial_bodies.space_objects, Motion.f_func, Motion.g_func)
+        for obj in Celectial_bodies.space_objects:
             obj.Draw()
         self.update()
 
@@ -81,13 +65,13 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = self.scalefactor
         if event.key() == Qt.Key_6:
-            space_objects[0].vx += 50
+            Celectial_bodies.space_objects[0].vx += 50
         if event.key() == Qt.Key_4:
-            space_objects[0].vx -= 50
+            Celectial_bodies.space_objects[0].vx -= 50
         if event.key() == Qt.Key_8:
-            space_objects[0].vy += 50
+            Celectial_bodies.space_objects[0].vy += 50
         if event.key() == Qt.Key_2:
-            space_objects[0].vy -= 50
+            Celectial_bodies.space_objects[0].vy -= 50
 
     def keyReleaseEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_W:
@@ -102,6 +86,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.scale_z = 0
         if event.key() == Qt.Key_Up:
             self.scale_z = 0
+
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
