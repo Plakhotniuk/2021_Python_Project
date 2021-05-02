@@ -21,6 +21,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.scale_z = 0
         self.input_pulse = 0
         self.start_modeling = False
+        self.is_trajectory_shown = False
 
     def initializeGL(self):
         OpenGL.GL.glClearColor(0, 0, 0, 1)

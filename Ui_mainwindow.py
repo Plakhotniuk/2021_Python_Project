@@ -131,7 +131,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
-        self.pushButton_clear.setText(_translate("MainWindow", "clear"))
+        self.pushButton_clear.setText(_translate("MainWindow", "Calculate"))
         self.pushButton_confirm1.setText(_translate("MainWindow", "Confirm"))
         self.pushButton_confirm2.setText(_translate("MainWindow", "Confirm"))
         self.pushButton_start.setText(_translate("MainWindow", "Start!"))

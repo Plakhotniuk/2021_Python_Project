@@ -1,9 +1,10 @@
 import numpy as np
 from space_objects import space_objects
-from math import cos, sin
+from math import cos, sin, pi
 
 G = -6.67E-11
 GAME_TIME = [1, -1]
+
 
 class f:
     def __init__(self, dt):
@@ -25,8 +26,8 @@ class g:
         self.mass = masss
 
     def __call__(self, t_n, x_n, vx_n):
-        return np.array([*CalcForcesOnStarShip(0, x_n, self.mass),*CalcALLGForces(1, x_n, self.mass),
-                         *CalcALLGForces(2, x_n, self.mass),*CalcALLGForces(3, x_n, self.mass)])
+        return np.array([*CalcForcesOnStarShip(0, x_n, self.mass), *CalcALLGForces(1, x_n, self.mass),
+                         *CalcALLGForces(2, x_n, self.mass), *CalcALLGForces(3, x_n, self.mass)])
 
     def __add__(self):
         pass
@@ -34,22 +35,23 @@ class g:
 
 def CalcGForce(x1, y1, x2, y2, mass):
     return np.array([G * mass * (x1 - x2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3),
-            G * mass * (y1 - y2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3)])
+                     G * mass * (y1 - y2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3)])
 
 
 def CalcALLGForces(ind, x_n, mass):
     result = np.array([0.0, 0.0])
-    for i in range(x_n.size//2):
+    for i in range(x_n.size // 2):
         if i != ind:
-            result = result + CalcGForce(x_n[2*ind], x_n[2*ind+1], x_n[2*i], x_n[2*i+1], mass[i])
+            result = result + CalcGForce(x_n[2 * ind], x_n[2 * ind + 1], x_n[2 * i], x_n[2 * i + 1], mass[i])
     return result
 
 
 def CalcForcesOnStarShip(ind, x_n, mass):
     result = CalcALLGForces(ind, x_n, mass)
-    if space_objects[0].time_engine_working:
+    if space_objects[0].time_engine_working > 0:
         result = result + np.array([space_objects[0].engine_thrust * cos(space_objects[0].engine_angle) / mass[0],
                                     space_objects[0].engine_thrust * sin(space_objects[0].engine_angle) / mass[0]])
+    print(space_objects[0].engine_angle)
     return result
 
 
@@ -93,33 +95,33 @@ def DormPrise(t_n, x_n, vx_n, f, g, t, Gt):
 
     k6 = f(t_n + t,
            x_n + t * (9017 / 3168) * k1 + t * (-355 / 33) * k2 + t * (46732 / 5247) * k3 + t * (49 / 176) * k4 + t * (
-                       -5103 / 18656) * k5,
+                   -5103 / 18656) * k5,
            vx_n + t * (9017 / 3168) * m1 + t * (-355 / 33) * m2 + t * (46732 / 5247) * m3 + t * (49 / 176) * m4 + t * (
-                       -5103 / 18656) * m5)
+                   -5103 / 18656) * m5)
     m6 = g(t_n + t,
            x_n + t * (9017 / 3168) * k1 + t * (-355 / 33) * k2 + t * (46732 / 5247) * k3 + t * (49 / 176) * k4 + t * (
-                       -5103 / 18656) * k5,
+                   -5103 / 18656) * k5,
            vx_n + t * (9017 / 3168) * m1 + t * (-355 / 33) * m2 + t * (46732 / 5247) * m3 + t * (49 / 176) * m4 + t * (
-                       -5103 / 18656) * m5)
+                   -5103 / 18656) * m5)
 
     k7 = f(t_n + t, x_n + t * (35 / 384) * k1 + t * 0 * k2 + t * (500 / 1113) * k3 + t * (125 / 192) * k4 + t * (
-                -2187 / 6784) * k5 + t * (11 / 84) * k6,
+            -2187 / 6784) * k5 + t * (11 / 84) * k6,
            vx_n + t * (35 / 384) * m1 + t * 0 * m2 + t * (500 / 1113) * m3 + t * (125 / 192) * m4 + t * (
-                       -2187 / 6784) * m5 + t * (11 / 84) * m6)
+                   -2187 / 6784) * m5 + t * (11 / 84) * m6)
     m7 = g(t_n + t, x_n + t * (35 / 384) * k1 + t * 0 * k2 + t * (500 / 1113) * k3 + t * (125 / 192) * k4 + t * (
-                -2187 / 6784) * k5 + t * (11 / 84) * k6,
+            -2187 / 6784) * k5 + t * (11 / 84) * k6,
            vx_n + t * (35 / 384) * m1 + t * 0 * m2 + t * (500 / 1113) * m3 + t * (125 / 192) * m4 + t * (
-                       -2187 / 6784) * m5 + t * (11 / 84) * m6)
+                   -2187 / 6784) * m5 + t * (11 / 84) * m6)
 
     x1 = x_n + t * ((35 / 384) * k1 + (0) * k2 + (500 / 1113) * k3 + (125 / 192) * k4 + (-2187 / 6784) * k5 + (
-                11 / 84) * k6 + (0) * k7)
+            11 / 84) * k6 + (0) * k7)
     vx1 = vx_n + t * ((35 / 384) * m1 + (0) * m2 + (500 / 1113) * m3 + (125 / 192) * m4 + (-2187 / 6784) * m5 + (
-                11 / 84) * m6 + (0) * m7)
+            11 / 84) * m6 + (0) * m7)
 
     x2 = x_n + t * ((5179 / 57600) * k1 + (7571 / 16695) * k3 + (393 / 640) * k4 + (-92097 / 339200) * k5 + (
-                187 / 2100) * k6 + (1 / 40) * k7)
+            187 / 2100) * k6 + (1 / 40) * k7)
     vx2 = vx_n + t * ((5179 / 57600) * m1 + (7571 / 16695) * m3 + (393 / 640) * m4 + (-92097 / 339200) * m5 + (
-                187 / 2100) * m6 + (1 / 40) * m7)
+            187 / 2100) * m6 + (1 / 40) * m7)
 
     if abs(x1[0] - x2[0]) > 0.0005:
         g.dt = g.dt / 2
@@ -140,12 +142,19 @@ def DormPrise(t_n, x_n, vx_n, f, g, t, Gt):
     return x1, vx1
 
 
+def Eiler(t_n, x_n, vx_n, f, g, t, Gt):
+    x = x_n + t * f(t_n, x_n, vx_n)
+    vx = vx_n + t * g(t_n, x_n, vx_n)
+    return x, vx
+
+
 def count_pos(x, v, f, g):
     nx, nv = RungeKutt(0, x, v, f, g, g.dt, GAME_TIME)
-    if space_objects[0].time_engine_working:
-        space_objects[0].time_engine_working -= 1
+    if space_objects[0].time_engine_working > 0:
+        space_objects[0].time_engine_working -= g.dt
     return nx, nv
 
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
+    print(cos(270))
