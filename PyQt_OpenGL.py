@@ -4,7 +4,7 @@ from PyQt5.Qt import Qt
 import OpenGL.GL
 import OpenGL.GLU
 import OpenGL.GLUT
-import Celectial_bodies
+import space_objects
 import Motion
 
 
@@ -46,8 +46,10 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
         if self.start_modeling:
-            Motion.recalculate_space_objects_positions(Celectial_bodies.space_objects, Motion.f_func, Motion.g_func)
-        for obj in Celectial_bodies.space_objects:
+            Motion.recalculate_space_objects_positions(space_objects.space_objects, Motion.f_func, Motion.g_func)
+        for obj in space_objects.space_objects:
+            # if obj.name == 'SpaceShip':
+            #     obj.pulse_direction()
             obj.Draw()
         self.update()
 
@@ -65,13 +67,13 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = self.scalefactor
         if event.key() == Qt.Key_6:
-            Celectial_bodies.space_objects[0].vx += 50
+            space_objects.space_objects[0].vx += 50
         if event.key() == Qt.Key_4:
-            Celectial_bodies.space_objects[0].vx -= 50
+            space_objects.space_objects[0].vx -= 50
         if event.key() == Qt.Key_8:
-            Celectial_bodies.space_objects[0].vy += 50
+            space_objects.space_objects[0].vy += 50
         if event.key() == Qt.Key_2:
-            Celectial_bodies.space_objects[0].vy -= 50
+            space_objects.space_objects[0].vy -= 50
 
     def keyReleaseEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_W:

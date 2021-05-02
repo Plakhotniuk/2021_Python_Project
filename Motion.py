@@ -1,5 +1,5 @@
 from counting import np, count_pos, f, g
-from Celectial_bodies import space_objects
+from space_objects import space_objects
 
 dt = 100
 f_func = f(dt)

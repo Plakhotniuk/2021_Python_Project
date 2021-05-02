@@ -17,7 +17,7 @@ except ImportError:
     pass
 
 import sys
-from PyQt5.QtWidgets import QApplication
+
 from Ui_mainwindow import Ui_MainWindow
 from PyQt5 import QtWidgets
 from PyQt_OpenGL import PyOpenGL
@@ -46,7 +46,6 @@ class MainWindow:
         self.pulse = ''
         self.time_wait = ''
 
-
         self.ui.pushButton_start.clicked.connect(self.input)
         self.ui.pushButton_clear.clicked.connect(self.clear)
 
@@ -72,12 +71,6 @@ class MainWindow:
             print(self.pulse)
             print(self.time_wait)
             print(self.input_pulse_direction_angle)
-            # self.time_wait -= 1
-            # if not self.time_wait:
-            #     space_objects[0].vx += 1 / math.tan(math.pi / 180 * self.input_pulse_direction_angle)\
-            #                            * float(self.pulse) /space_objects[0].m
-            #     space_objects[0].yx += math.tan(math.pi / 180 * self.input_pulse_direction_angle) \
-            #                            * float(self.pulse) / space_objects[0].m
         else:
             self.ui.pushButton_start.setText("Start!")
             self.time_wait = 0
@@ -89,10 +82,6 @@ class MainWindow:
         self.main_win.show()
 
 
-if __name__ == '__main__':
-    App = QApplication(sys.argv)
 
-    window = MainWindow()
 
-    sys.exit(App.exec())
 

@@ -1,5 +1,5 @@
 import numpy as np
-from Celectial_bodies import space_objects
+from space_objects import space_objects
 from math import cos, sin
 
 G = -6.67E-11
