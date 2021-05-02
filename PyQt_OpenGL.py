@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QOpenGLWidget, QApplication, QMouseEventTransition, QVBoxLayout, QGraphicsView, QGraphicsSceneMouseEvent, QKeyEventTransition, QTextEdit
 from PyQt5 import QtCore, QtGui, QtOpenGL, Qt, QtWidgets
-from PyQt5.Qt import Qt, QMouseEvent, QScrollEvent
+from PyQt5.Qt import Qt, QMouseEvent, QScrollEvent, QPoint
 import Space_objects
 import Motion
 import OpenGL.GL
@@ -33,17 +33,8 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.scale_x = 0
         self.scale_y = 0
         self.scale_z = 0
-        self.input()
         self.input_pulse = 0
-
-    def input(self):
-        pass
-
-    def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
-        pass
-
-    def mouseReleaseEvent(self, event: QtGui.QMouseEvent) -> None:
-        pass
+        self.start_modeling = False
 
     def initializeGL(self):
         OpenGL.GL.glClearColor(0, 0, 0, 1)
@@ -75,7 +66,9 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
 
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
-        Motion.recalculate_space_objects_positions(space_objects, f_func, g_func)
+        if self.start_modeling:
+            Motion.recalculate_space_objects_positions(space_objects, f_func, g_func)
+
         for obj in space_objects:
             obj.Draw()
         self.update()

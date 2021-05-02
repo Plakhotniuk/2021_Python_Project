@@ -34,6 +34,7 @@ class MainWindow:
         self.ui.setupUi(self.main_win)
         open_gl = PyOpenGL(parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
+        self.open_gl = open_gl
         self.screen_size = open_gl.size()
         self.input_pulse = 0
         self.show()
@@ -59,6 +60,11 @@ class MainWindow:
         """
         self.pulse = self.ui.textEdit_pulse.toPlainText()
         self.time_wait = self.ui.textEdit_time.toPlainText()
+        self.open_gl.start_modeling = not self.open_gl.start_modeling
+        if self.open_gl.start_modeling:
+            self.ui.pushButton_start.setText("Pause")
+        else:
+            self.ui.pushButton_start.setText("Start!")
         print(self.pulse)
         print(self.time_wait)
 

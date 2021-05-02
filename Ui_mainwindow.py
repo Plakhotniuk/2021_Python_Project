@@ -16,7 +16,6 @@ class Ui_MainWindow(object):
         self.pushButton_clear = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_confirm2 = QtWidgets.QPushButton(self.centralwidget)
-
         self.textEdit_pulse = QtWidgets.QTextEdit(self.centralwidget)
         self.frame = QtWidgets.QFrame(self.centralwidget)
 
