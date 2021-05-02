@@ -34,11 +34,33 @@ class MainWindow:
         self.ui.setupUi(self.main_win)
         open_gl = PyOpenGL(parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
-
         self.screen_size = open_gl.size()
+        self.input_pulse = 0
         self.show()
-        self.ui.pushButton_quit.clicked.connect(sys.exit)
 
+        self.ui.pushButton_confirm1.clicked.connect(open_gl.setFocus)
+        self.ui.pushButton_confirm2.clicked.connect(open_gl.setFocus)
+        self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
+        self.ui.pushButton_quit.clicked.connect(self.main_win.close)
+        self.pulse = ''
+        self.time_wait = ''
+
+        self.ui.pushButton_start.clicked.connect(self.input)
+        self.ui.pushButton_clear.clicked.connect(self.clear)
+
+    def clear(self):
+        self.ui.textEdit_pulse.clear()
+        self.ui.textEdit_time.clear()
+
+    def input(self):
+        """
+        Записывает в поля self.pulse и self.time_wait введенные пользователем значения
+        после нажатия Start!
+        """
+        self.pulse = self.ui.textEdit_pulse.toPlainText()
+        self.time_wait = self.ui.textEdit_time.toPlainText()
+        print(self.pulse)
+        print(self.time_wait)
 
     def show(self):
         """

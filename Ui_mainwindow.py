@@ -1,21 +1,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
 
-
 class Ui_MainWindow(object):
     def __init__(self, MainWindow):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menuOpengl = QtWidgets.QMenu(self.menubar)
-        self.horizontalSlider_2 = QtWidgets.QSlider(self.centralwidget)
-        self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
         self.textEdit_time = QtWidgets.QTextEdit(self.centralwidget)
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_time_wait = QtWidgets.QLabel(self.centralwidget)
+        self.label_pulse = QtWidgets.QLabel(self.centralwidget)
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.pushButton_start = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_quit = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_clear = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_confirm2 = QtWidgets.QPushButton(self.centralwidget)
 
@@ -57,15 +55,18 @@ class Ui_MainWindow(object):
         self.frame.setObjectName("frame")
 
         """Buttons"""
-        self.pushButton_quit.setGeometry(QtCore.QRect(10, 750, 113, 32))
+        self.pushButton_quit.setGeometry(QtCore.QRect(60, 750, 113, 32))
         self.pushButton_quit.setObjectName("pushButton_quit")
+
+        self.pushButton_clear.setGeometry(QtCore.QRect(60, 550, 113, 32))
+        self.pushButton_clear.setObjectName("pushButton_clear")
 
         self.pushButton_confirm1.setGeometry(QtCore.QRect(125, 180, 100, 32))
         self.pushButton_confirm1.setObjectName("pushButton_confirm1")
 
         self.pushButton_confirm2.setGeometry(QtCore.QRect(125, 330, 100, 32))
         self.pushButton_confirm2.setObjectName("pushButton_confirm2")
-        self.pushButton_start.setGeometry(QtCore.QRect(10, 460, 131, 71))
+        self.pushButton_start.setGeometry(QtCore.QRect(50, 460, 131, 71))
         font = QtGui.QFont()
         font.setPointSize(21)
         self.pushButton_start.setFont(font)
@@ -79,31 +80,21 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setObjectName("label")
-        self.label_2.setGeometry(QtCore.QRect(20, 130, 121, 51))
+        self.label_pulse.setGeometry(QtCore.QRect(80, 130, 121, 51))
         font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
-        self.label_3.setGeometry(QtCore.QRect(10, 270, 131, 51))
+        font.setPointSize(25)
+        self.label_pulse.setFont(font)
+        self.label_pulse.setObjectName("label_pulse")
+        self.label_time_wait.setGeometry(QtCore.QRect(77, 270, 121, 51))
         font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label_3.setFont(font)
-        self.label_3.setObjectName("label_3")
+        font.setPointSize(25)
+        self.label_time_wait.setFont(font)
+        self.label_time_wait.setObjectName("label_time_wait")
         """Text edit"""
         self.textEdit_pulse.setGeometry(QtCore.QRect(20, 180, 104, 31))
         self.textEdit_pulse.setObjectName("textEdit_pulse")
         self.textEdit_time.setGeometry(QtCore.QRect(20, 330, 104, 31))
         self.textEdit_time.setObjectName("textEdit_time")
-
-        """Horizontal Slider 1"""
-        self.horizontalSlider.setGeometry(QtCore.QRect(10, 230, 180, 32))
-        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider.setObjectName("horizontalSlider")
-
-        """Horizontal Slider 2"""
-        self.horizontalSlider_2.setGeometry(QtCore.QRect(10, 390, 180, 22))
-        self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider_2.setObjectName("horizontalSlider_2")
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 827, 24))
@@ -115,23 +106,9 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuOpengl.menuAction())
 
         self.retranslateUi(MainWindow)
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.add_functions()
-
-    def add_functions(self):
-        """
-        Дополнительная функция обработки нажатия на кнопки
-        """
-        self.horizontalSlider.setTickPosition(QSlider.TicksBelow)
-        self.horizontalSlider.setTickInterval(1)
-        self.horizontalSlider.setMinimum(0)
-        self.horizontalSlider.setMaximum(100)
-
-        self.horizontalSlider_2.setTickPosition(QSlider.TicksBelow)
-        self.horizontalSlider_2.setTickInterval(1)
-        self.horizontalSlider_2.setMinimum(0)
-        self.horizontalSlider_2.setMaximum(100)
 
     def retranslateUi(self, MainWindow):
         """
@@ -141,10 +118,11 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
+        self.pushButton_clear.setText(_translate("MainWindow", "clear"))
         self.pushButton_confirm1.setText(_translate("MainWindow", "Confirm"))
         self.pushButton_confirm2.setText(_translate("MainWindow", "Confirm"))
         self.pushButton_start.setText(_translate("MainWindow", "Start!"))
-        self.label.setText(_translate("MainWindow", "Set Parametrs to\n" " Start modeling!"))
-        self.label_2.setText(_translate("MainWindow", "PULSE:"))
-        self.label_3.setText(_translate("MainWindow", "Time wait:"))
+        self.label.setText(_translate("MainWindow", "Set Parametrs\n" "to\n" "Start modeling!"))
+        self.label_pulse.setText(_translate("MainWindow", "PULSE:"))
+        self.label_time_wait.setText(_translate("MainWindow", "Time wait:"))
         self.menuOpengl.setTitle(_translate("MainWindow", "Opengl"))

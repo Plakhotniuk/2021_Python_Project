@@ -16,7 +16,7 @@ space_objects.append(Space_objects.CelestialBody(name='SpaceShip', r=5.7E5, m=40
 space_objects.append(Space_objects.CelestialBody(name='Earth', r=6.4E6, m=5.974E24,
                                                  color=Space_objects.GREEN, vy=0, vx=300, x=0, y=0))
 space_objects.append(Space_objects.CelestialBody(name='Moon', r=1.7E6, m=7.34E22,
-                                                 color=Space_objects.RED, x=385000000, vy=1000, vx=-0))
+                                                 color=Space_objects.RED, x=38500000*5, vy=1000, vx=-0))
 
 g_func = Motion.g(dt)
 g_func.set_mass([space_objects[0].m, space_objects[1].m, space_objects[2].m])
@@ -35,7 +35,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.scale_z = 0
         self.input()
         self.input_pulse = 0
-
 
     def input(self):
         pass
@@ -82,7 +81,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.update()
 
     def keyPressEvent(self, event):
-        print("pressed key " + str(event.key()))
         if event.key() == Qt.Key_W:
             self.scale_y = self.scalefactor
         elif event.key() == Qt.Key_S:
