@@ -18,11 +18,9 @@ except ImportError:
 
 import sys
 from math import pi
-from PyQt5 import QtWidgets
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QSlider, QDesktopWidget
+from PyQt5.QtWidgets import QSlider
 from PyQt_OpenGL import PyOpenGL
-# from Ui_mainwindow import UiMainWindow
 from space_objects import space_objects
 
 
@@ -162,7 +160,6 @@ class UiMainWindow(object):
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
     def retranslateUi(self, MainWindow):
         """
         Выводит надписи на кнопках и доп поверхностях
@@ -244,8 +241,6 @@ class MainWindow:
         else:
             self.ui.pushButton_start.setText("Start!")
             self.time_wait = 0
-
-
 
     def show(self):
         """
