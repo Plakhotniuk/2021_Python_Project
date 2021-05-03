@@ -3,7 +3,7 @@ from space_objects import space_objects
 from math import cos, sin, pi
 
 G = -6.67E-11
-GAME_TIME = [1, -1]
+time_of_count = [0, 0]
 
 
 class f:
@@ -67,7 +67,9 @@ def RungeKutt(t_n, x_n, vx_n, f, g, t, Gt):
 
     x = x_n + (t / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
     vx = vx_n + (t / 6) * (m1 + 2 * m2 + 2 * m3 + m4)
-    # Gt[0] += g.dt
+
+    Gt[0] += g.dt
+
     return x, vx
 
 
@@ -123,6 +125,7 @@ def DormPrise(t_n, x_n, vx_n, f, g, t, Gt):
     vx2 = vx_n + t * ((5179 / 57600) * m1 + (7571 / 16695) * m3 + (393 / 640) * m4 + (-92097 / 339200) * m5 + (
             187 / 2100) * m6 + (1 / 40) * m7)
 
+    Gt[0] += g.dt
     if abs(x1[0] - x2[0]) > 0.0005:
         g.dt = g.dt / 2
     elif abs(x1[2] - x2[2]) > 0.0005:
@@ -134,11 +137,9 @@ def DormPrise(t_n, x_n, vx_n, f, g, t, Gt):
     else:
         g.dt = g.dt * 2
 
-    if g.dt > 400:
-        g.dt = 400
+    if g.dt > 100:
+        g.dt = 100
 
-    print(g.dt)
-    # Gt[0] += g.dt
     return x1, vx1
 
 
@@ -149,7 +150,10 @@ def Eiler(t_n, x_n, vx_n, f, g, t, Gt):
 
 
 def count_pos(x, v, f, g):
-    nx, nv = RungeKutt(0, x, v, f, g, g.dt, GAME_TIME)
+    time_of_count[0] = 0
+    nx, nv = DormPrise(0, x, v, f, g, g.dt, time_of_count)
+    while time_of_count[0] < 200:
+        nx, nv = DormPrise(0, nx, nv, f, g, g.dt, time_of_count)
     if space_objects[0].time_engine_working > 0:
         space_objects[0].time_engine_working -= g.dt
     return nx, nv
