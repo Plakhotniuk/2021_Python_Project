@@ -12,6 +12,9 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
     def __init__(self, parent=None):
         super().__init__(parent)
         QtWidgets.qApp.installEventFilter(self)
+
+        width = self.width()
+        height = self.height()
         self.viewMatrix = None
         self.setFocus()
         self.scalefactor = 5.0E6

@@ -1,6 +1,6 @@
 from class_Cel_body import CelestialBody
 from Globals import Globals
-
+from Ui_mainwindow import Ui_MainWindow
 import OpenGL.GLU
 import OpenGL.GL
 
@@ -20,7 +20,7 @@ class Starship(CelestialBody):
     #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_PROJECTION)
     #
     #     OpenGL.GL.glLoadIdentity()
-    #     OpenGL.GL.glOrtho(0.0, Globals.DESCTOPSIZE.width(), Globals.DESCTOPSIZE.height(), 0.0, -1.0, 10.0)
+    #     OpenGL.GL.glOrtho(0.0, PyOpenGL.width, PyOpenGL.height, 0.0, -1.0, 10.0)
     #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_MODELVIEW)
     #
     #     OpenGL.GL.glLoadIdentity()
@@ -31,12 +31,12 @@ class Starship(CelestialBody):
     #     OpenGL.GL.glBegin(OpenGL.GL.GL_QUADS)
     #     OpenGL.GL.glColor3f(Globals.COLORS[0][0], Globals.COLORS[0][1], Globals.COLORS[0][2])
     #     OpenGL.GL.glVertex2f(0.0, 0.0)
-    #     OpenGL.GL.glVertex2f(1000000000.0, 0.0)
-    #     OpenGL.GL.glVertex2f(10.0, 100000000.0)
-    #     OpenGL.GL.glVertex2f(0.0, 100000000.0)
+    #     OpenGL.GL.glVertex2f(10.0, 0.0)
+    #     OpenGL.GL.glVertex2f(10.0, 10.0)
+    #     OpenGL.GL.glVertex2f(0.0, 10.0)
     #     OpenGL.GL.glEnd()
     #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_PROJECTION)
-    #     OpenGL.GL.glPopMatrix()
+    #     # OpenGL.GL.glPopMatrix()
     #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_MODELVIEW)
 
 

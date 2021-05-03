@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
 
+#TODO: запихнуть в MainWindow!
+
 
 class Ui_MainWindow(object):
     def __init__(self, MainWindow):

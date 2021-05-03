@@ -1,4 +1,4 @@
-from counting import np, count_pos, f, g
+from calculation import np, count_pos, f, g
 from space_objects import space_objects
 
 dt = 100
@@ -6,7 +6,7 @@ f_func = f(dt)
 g_func = g(dt)
 g_func.set_mass([space_objects[0].m, space_objects[1].m, space_objects[2].m, space_objects[3].m])
 
-
+#TODO: запихнуть в calculation
 def recalculate_space_objects_positions(space_objects, f_func, g_func):
     """Пересчитывает координаты объектов.
 

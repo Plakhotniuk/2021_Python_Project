@@ -1,6 +1,3 @@
-from PyQt5 import QtWidgets
-
-
 class Globals:
     DESCTOPSIZE = 0
     WHITE = (1, 1, 1)

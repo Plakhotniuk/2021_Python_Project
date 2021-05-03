@@ -5,6 +5,7 @@ from math import cos, sin, pi
 G = -6.67E-11
 time_of_count = [0, 0]
 
+# TODO: переписать названия функций
 
 class f:
     def __init__(self, dt):
@@ -32,6 +33,7 @@ class g:
     def __add__(self):
         pass
 
+# TODO: инкапсуляция!
 
 def CalcGForce(x1, y1, x2, y2, mass):
     return np.array([G * mass * (x1 - x2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3),
@@ -45,13 +47,13 @@ def CalcALLGForces(ind, x_n, mass):
             result = result + CalcGForce(x_n[2 * ind], x_n[2 * ind + 1], x_n[2 * i], x_n[2 * i + 1], mass[i])
     return result
 
-
+# TODO: rename
 def CalcForcesOnStarShip(ind, x_n, mass):
     result = CalcALLGForces(ind, x_n, mass)
     if space_objects[0].time_engine_working > 0:
         result = result + np.array([space_objects[0].engine_thrust * cos(space_objects[0].engine_angle) / mass[0],
                                     space_objects[0].engine_thrust * sin(space_objects[0].engine_angle) / mass[0]])
-    print(space_objects[0].engine_angle)
+    print(space_objects[0].time_engine_working)
     return result
 
 
@@ -161,4 +163,4 @@ def count_pos(x, v, f, g):
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
-    print(cos(270))
+
