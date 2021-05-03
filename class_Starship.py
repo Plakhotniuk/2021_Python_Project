@@ -1,6 +1,6 @@
 from class_Cel_body import CelestialBody
 from Globals import Globals
-from Ui_mainwindow import Ui_MainWindow
+# from Ui_mainwindow import UiMainWindow
 import OpenGL.GLU
 import OpenGL.GL
 
