@@ -4,12 +4,11 @@ from PyQt5.Qt import Qt
 import OpenGL.GL
 import OpenGL.GLU
 import OpenGL.GLUT
-import space_objects
-import Motion
+from calculation import Calculation
 
 
 class PyOpenGL(QOpenGLWidget, QGraphicsView):
-    def __init__(self, parent=None):
+    def __init__(self, sp_objects: list, parent=None):
         super().__init__(parent)
         QtWidgets.qApp.installEventFilter(self)
 
@@ -25,6 +24,8 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.input_pulse = 0
         self.start_modeling = False
         self.is_trajectory_shown = False
+        self.calculation_module = Calculation(sp_objects, dt=100)
+        self.space_objects = sp_objects
 
     def initializeGL(self):
         OpenGL.GL.glClearColor(0, 0, 0, 1)
@@ -50,10 +51,10 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
         if self.start_modeling:
-            Motion.recalculate_space_objects_positions(space_objects.space_objects, Motion.f_func, Motion.g_func)
-        for obj in space_objects.space_objects:
+            self.calculation_module.recalculate_space_objects_positions()
+        for obj in self.space_objects:
             # if obj.name == 'SpaceShip':
-            #     obj.pulse_direction()
+            #      obj.pulse_direction()
             obj.Draw()
         self.update()
 
@@ -71,13 +72,13 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = self.scalefactor
         if event.key() == Qt.Key_6:
-            space_objects.space_objects[0].vx += 50
+            self.space_objects[0].vx += 50
         if event.key() == Qt.Key_4:
-            space_objects.space_objects[0].vx -= 50
+            self.space_objects[0].vx -= 50
         if event.key() == Qt.Key_8:
-            space_objects.space_objects[0].vy += 50
+            self.space_objects[0].vy += 50
         if event.key() == Qt.Key_2:
-            space_objects.space_objects[0].vy -= 50
+            self.space_objects[0].vy -= 50
 
     def keyReleaseEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_W:

@@ -1,17 +1,22 @@
 try:
     import OpenGL as ogl
+
     try:
         import OpenGL.GL
     except ImportError:
         print('Drat, patching for Big Sur')
         from ctypes import util
+
         orig_util_find_library = util.find_library
+
 
         def new_util_find_library(name):
             res = orig_util_find_library(name)
             if res:
                 return res
-            return '/System/Library/Frameworks/'+name+'.framework/'+name
+            return '/System/Library/Frameworks/' + name + '.framework/' + name
+
+
         util.find_library = new_util_find_library
 except ImportError:
     pass
@@ -21,13 +26,13 @@ from math import pi
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
 from PyQt_OpenGL import PyOpenGL
-from space_objects import space_objects
 
 
 class UiMainWindow(object):
     """
     Класс, создающий все виджеты (кнопки, слайдеры, надписи...)
     """
+
     def __init__(self, MainWindow):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -68,7 +73,8 @@ class UiMainWindow(object):
 
         self.centralwidget.setMinimumSize(QtCore.QSize(800, 0))
         self.centralwidget.setObjectName("centralwidget")
-        self.frame.setGeometry(QtCore.QRect(250, 20, desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
+        self.frame.setGeometry(
+            QtCore.QRect(250, 20, desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -183,23 +189,25 @@ class MainWindow:
     """
     Класс основного меню внутри приложения
     """
-    def __init__(self):
+
+    def __init__(self, sp_objects: list):
         self.app = QtWidgets.QApplication(sys.argv)
         self.main_win = QtWidgets.QMainWindow()
         self.ui = UiMainWindow(self.main_win)
         self.ui.setupUi(self.main_win)
-        open_gl = PyOpenGL(parent=self.ui.frame)
+        open_gl = PyOpenGL(sp_objects, parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
         self.open_gl = open_gl
         self.screen_size = open_gl.size()
         self.input_pulse_direction_angle = 0
         self.show()
-
         self.ui.pushButton_confirm1.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
         self.pulse = ''
         self.time_wait = ''
+        self.space_objects = sp_objects
+        self.starshipi_index = 0
 
         self.ui.pushButton_start.clicked.connect(self.input)
         self.ui.pushButton_calculate.clicked.connect(self.calc_trajectory)
@@ -231,11 +239,12 @@ class MainWindow:
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")
             if self.time_wait != '':
-                space_objects[0].time_engine_working = float(self.time_wait)
+                self.space_objects[self.starshipi_index].time_engine_working = float(self.time_wait)
             if self.input_pulse_direction_angle != '':
-                space_objects[0].engine_angle = float(self.input_pulse_direction_angle) * pi / 180
+                self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
+                                                                        * pi / 180
             if self.pulse != '':
-                space_objects[0].engine_thrust = float(self.pulse)
+                self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
             self.ui.slider_pulse_direction.setValue(0)
             self.clear()
         else:
@@ -247,8 +256,3 @@ class MainWindow:
         Отображает меню на экране
         """
         self.main_win.show()
-
-
-
-
-
