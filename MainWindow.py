@@ -205,7 +205,7 @@ class MainWindow:
         self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
         self.pulse = ''
-        self.time_wait = ''
+        self.time_engine_thrust = ''
         self.space_objects = sp_objects
         self.starshipi_index = 0
 
@@ -234,12 +234,12 @@ class MainWindow:
         после нажатия Start!
         """
         self.pulse = str(self.ui.textEdit_pulse.toPlainText())
-        self.time_wait = str(self.ui.textEdit_time.toPlainText())
+        self.time_engine_thrust = str(self.ui.textEdit_time.toPlainText())
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")
-            if self.time_wait != '':
-                self.space_objects[self.starshipi_index].time_engine_working = float(self.time_wait)
+            if self.time_engine_thrust != '':
+                self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_thrust)
             if self.input_pulse_direction_angle != '':
                 self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
                                                                         * pi / 180
@@ -249,7 +249,7 @@ class MainWindow:
             self.clear()
         else:
             self.ui.pushButton_start.setText("Start!")
-            self.time_wait = 0
+            self.time_engine_thrust = 0
 
     def show(self):
         """
