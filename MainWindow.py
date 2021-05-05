@@ -236,7 +236,7 @@ class MainWindow:
         if self.pulse != '':
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
 
-        self.open_gl.calculation_module.calculate_prev_trajectory(100000)
+        self.open_gl.calculation_module.calculate_prev_trajectory(10000)
 
     def input(self):
         """

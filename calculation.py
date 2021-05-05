@@ -24,8 +24,8 @@ class function_g:
         self.index_of_starship = 0
 
     def __call__(self, t_n, x_n, vx_n):
-        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_gforces(1, x_n),
-                         *self.calc_all_gforces(2, x_n), *self.calc_all_gforces(3, x_n)])
+        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_gforces(1, x_n)])
+                         # *self.calc_all_gforces(2, x_n), *self.calc_all_gforces(3, x_n)])
 
     def __add__(self):
         pass
@@ -50,7 +50,6 @@ class function_g:
                                         self.space_objects[self.index_of_starship].engine_thrust * sin(
                                             self.space_objects[self.index_of_starship].engine_angle) / self.mass[
                                             self.index_of_starship]])
-        print(self.space_objects[self.index_of_starship].time_engine_working)
         return result
 
 
@@ -87,8 +86,6 @@ class Calculation:
 
         x = x_n + (self.dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
         vx = vx_n + (self.dt / 6) * (m1 + 2 * m2 + 2 * m3 + m4)
-
-        self.time_of_count += self.dt
 
         return x, vx
 
@@ -164,47 +161,54 @@ class Calculation:
                 (5179 / 57600) * m1 + (7571 / 16695) * m3 + (393 / 640) * m4 + (-92097 / 339200) * m5 + (187 / 2100) *
                 m6 + (1 / 40) * m7)
 
-        self.time_of_count += self.dt
         if abs(x1[0] - x2[0]) > 0.0005:
             self.dt = self.dt / 2
         elif abs(x1[2] - x2[2]) > 0.0005:
             self.dt = self.dt / 2
-        elif abs(x1[4] - x2[4]) > 0.0005:
-            self.dt = self.dt / 2
-        elif abs(x1[6] - x2[6]) > 0.0005:
-            self.dt = self.dt / 2
+        # elif abs(x1[4] - x2[4]) > 0.0005:
+        #     self.dt = self.dt / 2
+        # elif abs(x1[6] - x2[6]) > 0.0005:
+        #     self.dt = self.dt / 2
         else:
             self.dt = self.dt * 2
 
         if self.dt > 100:
             self.dt = 100
-
         return x1, vx1
 
     def eiler(self, t_n, x_n, vx_n):
         x = x_n + self.dt * self.f(t_n, x_n, vx_n)
         vx = vx_n + self.dt * self.g(t_n, x_n, vx_n)
+
         return x, vx
 
     def count_pos(self):
-        nx, nv = self.dorm_prise(0, self.x, self.v)
-        while self.time_of_count < 200:
+        nx = self.x
+        nv = self.v
+        if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
+            self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
             nx, nv = self.dorm_prise(0, nx, nv)
+            self.time_of_count += self.dt
+            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
+            self.dt = 100
+
+        while self.time_of_count < 300:
+            nx, nv = self.dorm_prise(0, nx, nv)
+            self.time_of_count += self.dt
 
         if self.g.space_objects[0].time_engine_working > self.time_of_count:
             self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.time_of_count
-            self.x = nx
-            self.v = nx
-            self.time_of_count = self.time_of_count - 200  # либо тут поменять
+            self.time_of_count = self.time_of_count - 300  # либо тут поменять
 
         if 0 < self.g.space_objects[0].time_engine_working < self.time_of_count:
             self.dt = self.g.space_objects[0].time_engine_working
             self.x, self.v = self.dorm_prise(0, nx, nv)
-            self.time_of_count += self.g.space_objects[0].time_engine_working
+            self.time_of_count = self.dt + self.time_of_count - 300
+            self.dt = 100
             self.g.space_objects[self.g.index_of_starship].time_engine_working = 0  # либо тут поменять
 
         else:
-            self.time_of_count = 0
+            self.time_of_count = self.time_of_count - 300
             self.x = nx
             self.v = nv
 
@@ -233,26 +237,47 @@ class Calculation:
         """
         x = []
         self.dt = 100
-        time_of_calcs = self.dt
-        tmp_x, tmp_v = self.dorm_prise(0, self.x, self.v)
+        time_of_calcs = 0
+
+        nx = self.x
+        nv = self.v
+        if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
+            self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
+            nx, nv = self.runge_kutta(0, nx, nv)
+            x.append(nx)
+            time_of_calcs += self.dt
+            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
+            self.dt = 100
+
         while time_of_calcs < time:
-            tmp_x, tmp_v = self.dorm_prise(0, tmp_x, tmp_v)
-            if self.g.space_objects[0].time_engine_working > 100:
+            nx, nv = self.runge_kutta(0, nx, nv)
+            time_of_calcs += self.dt
+            x.append(nx)
+            self.dt = 100
+
+            if self.g.space_objects[0].time_engine_working >= 100:
                 self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.dt
             if 0 < self.g.space_objects[0].time_engine_working < 100:
                 self.dt = self.g.space_objects[0].time_engine_working
                 time_of_calcs += self.dt
-                tmp_x, tmp_v = self.dorm_prise(0, tmp_x, tmp_v)
+                nx, nv = self.runge_kutta(0, nx, nv)
+                x.append(nx)
                 self.dt = 100
                 self.g.space_objects[0].time_engine_working = 0
-            time_of_calcs += self.dt
+
+        self.dt = 100
+
+        # нужно закомментить этот кусок кода, чтобы планетки не перемещались после нажатия calculate
+        ######################################################################################
         i = 0
         for body in self.g.space_objects:
-            body.x = tmp_x[i]
-            body.y = tmp_x[i + 1]
-            body.vx = tmp_v[i]
-            body.vy = tmp_v[i + 1]
+            body.x = nx[i]
+            body.y = nx[i + 1]
+            body.vx = nv[i]
+            body.vy = nv[i + 1]
             i += 2
+        print(np.sqrt(nv[0]**2 + nv[1]**2))
+        ########################################################################################
         return np.array(x)
 
 
