@@ -226,7 +226,17 @@ class MainWindow:
         # TODO: меняем текст кнопки вызываем метод окна PyQt
         #          Оттуда вызываем калкулятор и возвращаем большуб херню
         #         потом в том же методе отрисовываем эту фигню
-        pass
+        self.pulse = str(self.ui.textEdit_pulse.toPlainText())
+        self.time_wait = str(self.ui.textEdit_time.toPlainText())
+        if self.time_wait != '':
+            self.space_objects[self.starshipi_index].time_engine_working = float(self.time_wait)
+        if self.input_pulse_direction_angle != '':
+            self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
+                                                                    * pi / 180
+        if self.pulse != '':
+            self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
+
+        self.open_gl.calculation_module.calculate_prev_trajectory(100000)
 
     def input(self):
         """
