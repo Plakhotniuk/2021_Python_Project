@@ -24,8 +24,8 @@ class function_g:
         self.index_of_starship = 0
 
     def __call__(self, t_n, x_n, vx_n):
-        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_gforces(1, x_n)])
-                         # *self.calc_all_gforces(2, x_n), *self.calc_all_gforces(3, x_n)])
+        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_gforces(1, x_n),
+                         *self.calc_all_gforces(2, x_n), *self.calc_all_gforces(3, x_n)])
 
     def __add__(self):
         pass
@@ -165,10 +165,10 @@ class Calculation:
             self.dt = self.dt / 2
         elif abs(x1[2] - x2[2]) > 0.0005:
             self.dt = self.dt / 2
-        # elif abs(x1[4] - x2[4]) > 0.0005:
-        #     self.dt = self.dt / 2
-        # elif abs(x1[6] - x2[6]) > 0.0005:
-        #     self.dt = self.dt / 2
+        elif abs(x1[4] - x2[4]) > 0.0005:
+            self.dt = self.dt / 2
+        elif abs(x1[6] - x2[6]) > 0.0005:
+            self.dt = self.dt / 2
         else:
             self.dt = self.dt * 2
 
@@ -276,7 +276,7 @@ class Calculation:
             body.vx = nv[i]
             body.vy = nv[i + 1]
             i += 2
-        print(np.sqrt(nv[0]**2 + nv[1]**2))
+        print(np.sqrt(nv[0] ** 2 + nv[1] ** 2))
         ########################################################################################
         return np.array(x)
 
