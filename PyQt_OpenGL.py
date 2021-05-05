@@ -72,13 +72,13 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = self.scalefactor
         if event.key() == Qt.Key_6:
-            self.space_objects[0].vx += 50
+            self.calculation_module.v[0] += 50
         if event.key() == Qt.Key_4:
-            self.space_objects[0].vx -= 50
+            self.calculation_module.v[0] -= 50
         if event.key() == Qt.Key_8:
-            self.space_objects[0].vy += 50
+            self.calculation_module.v[1] += 50
         if event.key() == Qt.Key_2:
-            self.space_objects[0].vy -= 50
+            self.calculation_module.v[1] -= 50
 
     def keyReleaseEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_W:
