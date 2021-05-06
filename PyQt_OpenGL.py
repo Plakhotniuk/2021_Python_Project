@@ -50,6 +50,10 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
     def paintGL(self):
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
+
+        if self.is_trajectory_shown:
+            self.draw_trajectory()
+
         if self.start_modeling:
             self.calculation_module.recalculate_space_objects_positions()
         for obj in self.space_objects:
@@ -94,6 +98,14 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = 0
 
+    def draw_trajectory(self):
+        pass
+        # OpenGL.GL.glClear(OpenGL.GL.OpenGL.GL.GL_COLOR_BUFFER_BIT)
+        # OpenGL.GL.glEnableClientState(OpenGL.GL.GL_VERTEX_ARRAY)
+        # OpenGL.GL.glVertexPointer(3, OpenGL.GL.GL_FLOAT, 0, self.calculation_module.calculate_prev_trajectory(100000))
+        # OpenGL.GL.glDrawArrays(OpenGL.GL.GL_LINE_STRIP, 0,
+        #                        len(self.calculation_module.calculate_prev_trajectory(100000)))
+        # OpenGL.GL.glDisableClientState(OpenGL.GL.GL_VERTEX_ARRAY)
 
 if __name__ == "__main__":
     print("This module is not for direct call!")

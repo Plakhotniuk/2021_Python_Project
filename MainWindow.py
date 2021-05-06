@@ -92,14 +92,14 @@ class UiMainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(25)
         self.pushButton_calculate.setFont(font)
-        self.pushButton_calculate.setGeometry(QtCore.QRect(50, 545, 130, 70))
+        self.pushButton_calculate.setGeometry(QtCore.QRect(45, 545, 150, 70))
         self.pushButton_calculate.setObjectName("pushButton_calculate")
         font.setPointSize(25)
         self.pushButton_confirm1.setFont(font)
-        self.pushButton_confirm1.setGeometry(QtCore.QRect(50, 460, 130, 70))
+        self.pushButton_confirm1.setGeometry(QtCore.QRect(45, 460, 150, 70))
         self.pushButton_confirm1.setObjectName("pushButton_confirm1")
 
-        self.pushButton_start.setGeometry(QtCore.QRect(50, 630, 130, 70))
+        self.pushButton_start.setGeometry(QtCore.QRect(45, 630, 150, 70))
         font.setPointSize(25)
         self.pushButton_start.setFont(font)
         self.pushButton_start.setObjectName("pushButton_start")
@@ -222,6 +222,12 @@ class MainWindow:
         self.ui.textEdit_time.clear()
 
     def calc_trajectory(self):
+        self.open_gl.is_trajectory_shown = not self.open_gl.is_trajectory_shown
+        if self.open_gl.is_trajectory_shown:
+            self.ui.pushButton_calculate.setText('Calculated')
+
+        else:
+            self.ui.pushButton_calculate.setText('Calculate')
 
         # TODO: меняем текст кнопки вызываем метод окна PyQt
         #          Оттуда вызываем калкулятор и возвращаем большуб херню
@@ -236,7 +242,7 @@ class MainWindow:
         if self.pulse != '':
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
 
-        self.open_gl.calculation_module.calculate_prev_trajectory(10000)
+        self.open_gl.calculation_module.calculate_prev_trajectory(100000)
 
     def input(self):
         """
