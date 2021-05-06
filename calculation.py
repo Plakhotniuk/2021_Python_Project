@@ -19,7 +19,7 @@ class function_g:
     def __init__(self, sp_obj: list):
         self.mass = []
         self.space_objects = sp_obj
-        for i in range(4):
+        for i in range(len(self.space_objects)):
             self.mass.append(self.space_objects[i].m)
         self.index_of_starship = 0
 
@@ -50,7 +50,6 @@ class function_g:
                                         self.space_objects[self.index_of_starship].engine_thrust * sin(
                                             self.space_objects[self.index_of_starship].engine_angle) / self.mass[
                                             self.index_of_starship]])
-        print(self.space_objects[self.index_of_starship].time_engine_working)
         return result
 
 
@@ -60,6 +59,20 @@ class Calculation:
         self.g = function_g(space_obj)
         self.dt = dt
         self.time_of_count = 0
+        self.x = np.array([])  # координаты всех объектов системы подряд
+        self.v = np.array([])  # скорости всех объектов системы подряд
+        self.set_actual_params_of_system()
+
+    def set_actual_params_of_system(self):
+        x = []
+        v = []
+        for body in self.g.space_objects:
+            x.append(body.x)
+            x.append(body.y)
+            v.append(body.vx)
+            v.append(body.vy)
+        self.x = np.array(x)  # координаты всех объектов системы подряд
+        self.v = np.array(v)
 
     def runge_kutta(self, t_n, x_n, vx_n):
         k1 = self.f(t_n, x_n, vx_n)
@@ -73,8 +86,6 @@ class Calculation:
 
         x = x_n + (self.dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
         vx = vx_n + (self.dt / 6) * (m1 + 2 * m2 + 2 * m3 + m4)
-
-        self.time_of_count += self.dt
 
         return x, vx
 
@@ -150,7 +161,6 @@ class Calculation:
                 (5179 / 57600) * m1 + (7571 / 16695) * m3 + (393 / 640) * m4 + (-92097 / 339200) * m5 + (187 / 2100) *
                 m6 + (1 / 40) * m7)
 
-        self.time_of_count += self.dt
         if abs(x1[0] - x2[0]) > 0.0005:
             self.dt = self.dt / 2
         elif abs(x1[2] - x2[2]) > 0.0005:
@@ -164,40 +174,55 @@ class Calculation:
 
         if self.dt > 100:
             self.dt = 100
-
         return x1, vx1
 
-    def eiler(self, t_n, x_n, vx_n, f, g, t, Gt):
-        x = x_n + t * f(t_n, x_n, vx_n)
-        vx = vx_n + t * g(t_n, x_n, vx_n)
-        Gt[0] += g.dt
+    def eiler(self, t_n, x_n, vx_n):
+        x = x_n + self.dt * self.f(t_n, x_n, vx_n)
+        vx = vx_n + self.dt * self.g(t_n, x_n, vx_n)
+
         return x, vx
 
-    def count_pos(self, x, v):
-        self.time_of_count = 0
-        nx, nv = self.dorm_prise(0, x, v)
-        while self.time_of_count < 200:
+    def count_pos(self):
+        nx = self.x
+        nv = self.v
+        if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
+            self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
             nx, nv = self.dorm_prise(0, nx, nv)
-        if self.g.space_objects[0].time_engine_working > 0:
-            self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.dt
+            self.time_of_count += self.dt
+            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
+            self.dt = 100
+
+        while self.time_of_count < 300:
+            nx, nv = self.dorm_prise(0, nx, nv)
+            self.time_of_count += self.dt
+
+        if self.g.space_objects[0].time_engine_working > self.time_of_count:
+            self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.time_of_count
+            self.time_of_count = self.time_of_count - 300  # либо тут поменять
+
+        if 0 < self.g.space_objects[0].time_engine_working < self.time_of_count:
+            self.dt = self.g.space_objects[0].time_engine_working
+            self.x, self.v = self.dorm_prise(0, nx, nv)
+            self.time_of_count = self.dt + self.time_of_count - 300
+            self.dt = 100
+            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0  # либо тут поменять
+
+        else:
+            self.time_of_count = self.time_of_count - 300
+            self.x = nx
+            self.v = nv
+
         return nx, nv
+        # ATTENTION
+        # если обнаружится какая-то мегаприколденая ошибка с
+        # отрисовкой планет - это скорее всего здесь из-за счета времени
 
     def recalculate_space_objects_positions(self):
         """
         Пересчитывает координаты объектов.
         param: space_objects — список оьъектов, для которых нужно пересчитать координаты
         """
-        x = []
-        v = []
-        for body in self.g.space_objects:
-            x.append(body.x)
-            x.append(body.y)
-            v.append(body.vx)
-            v.append(body.vy)
-        x = np.array(x)
-        v = np.array(v)
-
-        new_x, new_v = self.count_pos(x, v)
+        new_x, new_v = self.count_pos()
         i = 0
         for body in self.g.space_objects:
             body.x = new_x[i]
@@ -205,6 +230,55 @@ class Calculation:
             body.vx = new_v[i]
             body.vy = new_v[i + 1]
             i += 2
+
+    def calculate_prev_trajectory(self, time):
+        """
+        Предрасчёт траектори на время time
+        """
+        x = []
+        self.dt = 100
+        time_of_calcs = 0
+
+        nx = self.x
+        nv = self.v
+        if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
+            self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
+            nx, nv = self.runge_kutta(0, nx, nv)
+            x.append(nx)
+            time_of_calcs += self.dt
+            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
+            self.dt = 100
+
+        while time_of_calcs < time:
+            nx, nv = self.runge_kutta(0, nx, nv)
+            time_of_calcs += self.dt
+            x.append(nx)
+            self.dt = 100
+
+            if self.g.space_objects[0].time_engine_working >= 100:
+                self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.dt
+            if 0 < self.g.space_objects[0].time_engine_working < 100:
+                self.dt = self.g.space_objects[0].time_engine_working
+                time_of_calcs += self.dt
+                nx, nv = self.runge_kutta(0, nx, nv)
+                x.append(nx)
+                self.dt = 100
+                self.g.space_objects[0].time_engine_working = 0
+
+        self.dt = 100
+
+        # нужно закомментить этот кусок кода, чтобы планетки не перемещались после нажатия calculate
+        ######################################################################################
+        i = 0
+        for body in self.g.space_objects:
+            body.x = nx[i]
+            body.y = nx[i + 1]
+            body.vx = nv[i]
+            body.vy = nv[i + 1]
+            i += 2
+        print(np.sqrt(nv[0] ** 2 + nv[1] ** 2))
+        ########################################################################################
+        return np.array(x)
 
 
 if __name__ == "__main__":
