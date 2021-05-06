@@ -1,5 +1,6 @@
 import OpenGL.GLU
 import OpenGL.GL
+import numpy as np
 
 
 class CelestialBody:
@@ -29,6 +30,8 @@ class CelestialBody:
         """Цвет"""
         self.name = name
         "Название"
+        self.prev_trajectory_coords = []
+        self.prev_velocity = []
 
     def Draw(self):
         """

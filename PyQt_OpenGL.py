@@ -95,5 +95,9 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.scale_z = 0
 
 
+# TODO: 1) Отрисовать траекторию (параметры коррмектно лежат в классах)
+#       2) Вывести парамтерты корабля и направление движения
+#       3) Кастануть ползунки (Жене)
+
 if __name__ == "__main__":
     print("This module is not for direct call!")

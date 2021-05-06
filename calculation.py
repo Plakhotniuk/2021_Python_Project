@@ -72,7 +72,7 @@ class Calculation:
             v.append(body.vx)
             v.append(body.vy)
         self.x = np.array(x)  # координаты всех объектов системы подряд
-        self.v = np.array(v)
+        self.v = np.array(v)  # скорости всех объектов системы подряд
 
     def runge_kutta(self, t_n, x_n, vx_n):
         k1 = self.f(t_n, x_n, vx_n)
@@ -235,7 +235,18 @@ class Calculation:
         """
         Предрасчёт траектори на время time
         """
+
+        self.g.space_objects[0].prev_trajectory_coords.clear()
+        self.g.space_objects[1].prev_trajectory_coords.clear()
+        self.g.space_objects[2].prev_trajectory_coords.clear()
+        self.g.space_objects[3].prev_trajectory_coords.clear()
+        self.g.space_objects[0].prev_velocity.clear()
+        self.g.space_objects[1].prev_velocity.clear()
+        self.g.space_objects[2].prev_velocity.clear()
+        self.g.space_objects[3].prev_velocity.clear()
+
         x = []
+        v = []
         self.dt = 100
         time_of_calcs = 0
 
@@ -244,7 +255,18 @@ class Calculation:
         if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
             self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
             nx, nv = self.runge_kutta(0, nx, nv)
+
             x.append(nx)
+            v.append(nv)
+            self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
+            self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
+            self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
+            self.g.space_objects[3].prev_trajectory_coords.append([nx[6], nx[7], 0])
+            self.g.space_objects[0].prev_velocity.append([nv[0], nv[1], 0])
+            self.g.space_objects[1].prev_velocity.append([nv[2], nv[3], 0])
+            self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
+            self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
+
             time_of_calcs += self.dt
             self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
             self.dt = 100
@@ -252,7 +274,18 @@ class Calculation:
         while time_of_calcs < time:
             nx, nv = self.runge_kutta(0, nx, nv)
             time_of_calcs += self.dt
+
             x.append(nx)
+            v.append(nv)
+            self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
+            self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
+            self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
+            self.g.space_objects[3].prev_trajectory_coords.append([nx[6], nx[7], 0])
+            self.g.space_objects[0].prev_velocity.append([nv[0], nv[1], 0])
+            self.g.space_objects[1].prev_velocity.append([nv[2], nv[3], 0])
+            self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
+            self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
+
             self.dt = 100
 
             if self.g.space_objects[0].time_engine_working >= 100:
@@ -261,7 +294,18 @@ class Calculation:
                 self.dt = self.g.space_objects[0].time_engine_working
                 time_of_calcs += self.dt
                 nx, nv = self.runge_kutta(0, nx, nv)
+
                 x.append(nx)
+                v.append(nv)
+                self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
+                self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
+                self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
+                self.g.space_objects[3].prev_trajectory_coords.append([nx[6], nx[7], 0])
+                self.g.space_objects[0].prev_velocity.append([nv[0], nv[1], 0])
+                self.g.space_objects[1].prev_velocity.append([nv[2], nv[3], 0])
+                self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
+                self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
+
                 self.dt = 100
                 self.g.space_objects[0].time_engine_working = 0
 
