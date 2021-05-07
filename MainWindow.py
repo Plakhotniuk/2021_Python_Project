@@ -51,6 +51,10 @@ class UiMainWindow(object):
         self.label_direction_angle = QtWidgets.QLabel(self.centralwidget)
         self.slider_pulse_direction = QtWidgets.QSlider(self.centralwidget)
         self.frame = QtWidgets.QFrame(self.centralwidget)
+        ########################################################
+        self.label_time_of_calculation_tr = QtWidgets.QLabel(self.centralwidget)
+        self.textEdit_calc_tr = QtWidgets.QTextEdit(self.centralwidget)
+        #########################################################
 
     def setupUi(self, MainWindow):
         """
@@ -87,19 +91,19 @@ class UiMainWindow(object):
         self.frame.setObjectName("frame")
 
         """Buttons"""
-        self.pushButton_quit.setGeometry(QtCore.QRect(60, 750, 113, 32))
+        self.pushButton_quit.setGeometry(QtCore.QRect(60, 850, 113, 32))
         self.pushButton_quit.setObjectName("pushButton_quit")
         font = QtGui.QFont()
         font.setPointSize(25)
         self.pushButton_calculate.setFont(font)
-        self.pushButton_calculate.setGeometry(QtCore.QRect(50, 545, 130, 70))
+        self.pushButton_calculate.setGeometry(QtCore.QRect(50, 645, 130, 70))
         self.pushButton_calculate.setObjectName("pushButton_calculate")
         font.setPointSize(25)
         self.pushButton_confirm1.setFont(font)
-        self.pushButton_confirm1.setGeometry(QtCore.QRect(50, 460, 130, 70))
+        self.pushButton_confirm1.setGeometry(QtCore.QRect(50, 560, 130, 70))
         self.pushButton_confirm1.setObjectName("pushButton_confirm1")
 
-        self.pushButton_start.setGeometry(QtCore.QRect(50, 630, 130, 70))
+        self.pushButton_start.setGeometry(QtCore.QRect(50, 730, 130, 70))
         font.setPointSize(25)
         self.pushButton_start.setFont(font)
         self.pushButton_start.setObjectName("pushButton_start")
@@ -135,8 +139,13 @@ class UiMainWindow(object):
         self.label_engine_running_time.setGeometry(QtCore.QRect(20, 225, 200, 251))
         self.label_engine_running_time.setFont(font)
         self.label_engine_running_time.setObjectName("label_time_wait")
+        font.setPointSize(25)
+################################
+        self.label_time_of_calculation_tr.setGeometry(QtCore.QRect(20, 410, 210, 70))
+        self.label_time_of_calculation_tr.setFont(font)
+        self.label_time_of_calculation_tr.setObjectName("label_time_of_calc")
         font.setPointSize(18)
-
+###############################
         self.label_current_direction_angle.setFont(font)
         self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 260, 50, 31))
         self.label_current_direction_angle.setObjectName("label_direction_angle")
@@ -152,7 +161,10 @@ class UiMainWindow(object):
         self.textEdit_pulse.setObjectName("textEdit_pulse")
         self.textEdit_time.setGeometry(QtCore.QRect(110, 360, 105, 30))
         self.textEdit_time.setObjectName("textEdit_time")
-
+##############
+        self.textEdit_calc_tr.setGeometry(QtCore.QRect(110, 480, 105, 30))
+        self.textEdit_calc_tr.setObjectName("textEdit_calcs_tr")
+##############
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 827, 24))
         self.menubar.setObjectName("menubar")
@@ -183,6 +195,9 @@ class UiMainWindow(object):
         self.menuOpengl.setTitle(_translate("MainWindow", "Opengl"))
         self.label_current_direction_angle.setText(_translate("MainWindow", "0"))
         self.label_direction_angle.setText(_translate("MainWindow", "Angle :"))
+        #####################################
+        self.label_time_of_calculation_tr.setText(_translate("MainWindow", "Time of \ncalculation:"))
+        ######################################
 
 
 class MainWindow:
@@ -205,7 +220,7 @@ class MainWindow:
         self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
         self.pulse = ''
-        self.time_wait = ''
+        self.time_engine_working = ''
         self.space_objects = sp_objects
         self.starshipi_index = 0
 
@@ -220,23 +235,23 @@ class MainWindow:
     def clear(self):
         self.ui.textEdit_pulse.clear()
         self.ui.textEdit_time.clear()
+        self.ui.textEdit_calc_tr.clear()
 
     def calc_trajectory(self):
 
         # TODO: меняем текст кнопки вызываем метод окна PyQt
         #          Оттуда вызываем калкулятор и возвращаем большуб херню
         #         потом в том же методе отрисовываем эту фигню
+        self.open_gl.setFocus()
         self.pulse = str(self.ui.textEdit_pulse.toPlainText())
-        self.time_wait = str(self.ui.textEdit_time.toPlainText())
-        if self.time_wait != '':
-            self.space_objects[self.starshipi_index].time_engine_working = float(self.time_wait)
+        self.time_engine_working = str(self.ui.textEdit_time.toPlainText())
+        if self.time_engine_working != '':
+            self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
         if self.input_pulse_direction_angle != '':
-            self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
-                                                                    * pi / 180
+            self.space_objects[self.starshipi_index].engine_angle = (int(self.input_pulse_direction_angle) * pi) / 180
         if self.pulse != '':
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
-
-        self.open_gl.calculation_module.calculate_prev_trajectory(10000)
+        self.open_gl.calculation_module.calculate_prev_trajectory(float(self.ui.textEdit_calc_tr.toPlainText()))
 
     def input(self):
         """
@@ -244,12 +259,12 @@ class MainWindow:
         после нажатия Start!
         """
         self.pulse = str(self.ui.textEdit_pulse.toPlainText())
-        self.time_wait = str(self.ui.textEdit_time.toPlainText())
+        self.time_engine_working = str(self.ui.textEdit_time.toPlainText())
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")
-            if self.time_wait != '':
-                self.space_objects[self.starshipi_index].time_engine_working = float(self.time_wait)
+            if self.time_engine_working != '':
+                self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
             if self.input_pulse_direction_angle != '':
                 self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
                                                                         * pi / 180
@@ -257,9 +272,13 @@ class MainWindow:
                 self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
             self.ui.slider_pulse_direction.setValue(0)
             self.clear()
+
+            self.ui.pushButton_calculate.setEnabled(False)  # чтобы нельзя было калькулить во время работы игры
+
         else:
             self.ui.pushButton_start.setText("Start!")
-            self.time_wait = 0
+            self.time_engine_working = 0
+            self.ui.pushButton_calculate.setEnabled(True)  # чтобы можно было калькулить только когда игра не работает
 
     def show(self):
         """
