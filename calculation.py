@@ -1,10 +1,13 @@
 import numpy as np
-from math import cos, sin, pi
+from math import cos, sin
 
 G = -6.67E-11
 
 
 class function_f:
+    """
+    Функтор, отвечающий за функцию по первой произсводной в расчёте системы
+    """
     def __init__(self):
         pass
 
@@ -16,7 +19,13 @@ class function_f:
 
 
 class function_g:
+    """
+    Функтор, отвечающий за функцию по второй произсводной в расчёте системы
+    """
     def __init__(self, sp_obj: list):
+        """
+        :param sp_obj: полный список объектов системы
+        """
         self.mass = []
         self.space_objects = sp_obj
         for i in range(len(self.space_objects)):
@@ -31,10 +40,21 @@ class function_g:
         pass
 
     def calc_gforce(self, x1, y1, x2, y2, mass):
+        """
+        Расчет гравитационной силы по осям, действующих со стороны x2 y2 на x1 y1
+        :param x1, y1, x2, y2 - координаты соответсвующих объектов
+        :param mass: масса второго объекта
+        """
         return np.array([G * mass * (x1 - x2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3),
                          G * mass * (y1 - y2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3)])
 
     def calc_all_gforces(self, ind, x_n):
+        """
+        Вычисление всех гравитационных сил для соответвующего тела
+        :param ind: индекс соответвующего тела в массиве space_objects
+        :param x_n: массив из координат соответвующих объектов
+        :return Сила по двум осям
+        """
         result = np.array([0.0, 0.0])
         for i in range(x_n.size // 2):
             if i != ind:
@@ -43,6 +63,9 @@ class function_g:
         return result
 
     def calc_forces_on_starship(self, ind, x_n):
+        """
+        Функция вычисления сил, действующих на корабль
+        """
         result = self.calc_all_gforces(ind, x_n)
         if self.space_objects[self.index_of_starship].time_engine_working > 0:
             result = result + np.array([self.space_objects[self.index_of_starship].engine_thrust * cos(
@@ -54,20 +77,26 @@ class function_g:
 
 
 class Calculation:
+    """
+    Класс - калькулятор, инкапсулируешь в себе вычисления координат траекторий
+    """
     def __init__(self, space_obj, dt, speed):
         self.f = function_f()
         self.g = function_g(space_obj)
-        self.dt = dt
-        self.time_of_count = 0
+        self.dt = dt  # шаг по времени
+        self.time_of_count = 0  # "на сколько времени уже предрассчитано"
         self.x = np.array([])  # координаты всех объектов системы подряд
         self.v = np.array([])  # скорости всех объектов системы подряд
         self.set_actual_params_of_system()
-        self.speed = speed
+        self.speed = speed  # условная "скорость" расчета
 
     def set_speed(self, speed):
         self.speed = speed
 
     def set_actual_params_of_system(self):
+        """
+        Восстанавливаем "актуальные парамтеры системы" - то есть те, которые в данным момент отрисовываются
+        """
         x = []
         v = []
         for body in self.g.space_objects:
@@ -79,6 +108,13 @@ class Calculation:
         self.v = np.array(v)  # скорости всех объектов системы подряд
 
     def runge_kutta(self, t_n, x_n, vx_n):
+        """
+        Интегратор Рунге-Кутты 4го порядка
+        # начальные условия #
+        :param t_n - время (чиселка)
+        :param x_n - координаты
+        :param vx_n - скорости
+        """
         k1 = self.f(t_n, x_n, vx_n)
         m1 = self.g(t_n, x_n, vx_n)
         k2 = self.f(t_n + (self.dt / 2), x_n + (self.dt / 2) * k1, vx_n + (self.dt / 2) * m1)
@@ -94,6 +130,15 @@ class Calculation:
         return x, vx
 
     def dorm_prise(self, t_n, x_n, vx_n, max_step=100):
+        """
+        Метод Дорманда-Принса 4-5
+        # начальные условия #
+        :param t_n - время (чиселка)
+        :param x_n - координаты
+        :param vx_n - скорости
+        # контроль шага #
+        :param max_step - максимальный размер возможного шага
+        """
         k1 = self.f(t_n, x_n, vx_n)
         m1 = self.g(t_n, x_n, vx_n)
 
@@ -182,12 +227,23 @@ class Calculation:
         return x1, vx1
 
     def eiler(self, t_n, x_n, vx_n):
+        """
+        Метод Эйлера 1го порядка
+        # начальные условия #
+        :param t_n - время (чиселка)
+        :param x_n - координаты
+        :param vx_n - скорости
+        """
         x = x_n + self.dt * self.f(t_n, x_n, vx_n)
         vx = vx_n + self.dt * self.g(t_n, x_n, vx_n)
 
         return x, vx
 
     def count_pos(self, all_time):
+        """
+        Вычисление позиций всех объектов системы через время all_time
+        :return координаты всех тел, скорости всех тел
+        """
         max_step = all_time/3
         nx = self.x
         nv = self.v
@@ -238,8 +294,8 @@ class Calculation:
     def calculate_prev_trajectory(self, time):
         """
         Предрасчёт траектори на время time
+        Вызовом этой функции происходит предрасчитанных траекторий в соответвующие поля объектов из space_objects
         """
-
         self.g.space_objects[0].prev_trajectory_coords.clear()
         self.g.space_objects[1].prev_trajectory_coords.clear()
         self.g.space_objects[2].prev_trajectory_coords.clear()
@@ -249,8 +305,6 @@ class Calculation:
         self.g.space_objects[2].prev_velocity.clear()
         self.g.space_objects[3].prev_velocity.clear()
 
-        x = []
-        v = []
         self.dt = 100
         time_of_calcs = 0
 
@@ -260,8 +314,7 @@ class Calculation:
             self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
             nx, nv = self.dorm_prise(0, nx, nv, 0)
 
-            x.append(nx)
-            v.append(nv)
+            # потому что фор лучше не делать
             self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
             self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
             self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
@@ -279,8 +332,7 @@ class Calculation:
             nx, nv = self.dorm_prise(0, nx, nv, 0)
             time_of_calcs += self.dt
 
-            x.append(nx)
-            v.append(nv)
+            # потому что фор лучше не делать
             self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
             self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
             self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
@@ -299,8 +351,7 @@ class Calculation:
                 time_of_calcs += self.dt
                 nx, nv = self.dorm_prise(0, nx, nv, 0)
 
-                x.append(nx)
-                v.append(nv)
+                # потому что фор лучше не делать
                 self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
                 self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
                 self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
@@ -326,7 +377,6 @@ class Calculation:
             i += 2
         print(np.sqrt(nv[0] ** 2 + nv[1] ** 2))
         ########################################################################################
-        return np.array(x)
 
 
 if __name__ == "__main__":
