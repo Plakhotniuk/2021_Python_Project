@@ -46,7 +46,7 @@ class UiMainWindow(object):
         self.pushButton_calculate = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
         self.textEdit_pulse = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_time = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_time_engine_working = QtWidgets.QTextEdit(self.centralwidget)
         self.label_current_direction_angle = QtWidgets.QLabel(self.centralwidget)
         self.label_direction_angle = QtWidgets.QLabel(self.centralwidget)
         self.slider_pulse_direction = QtWidgets.QSlider(self.centralwidget)
@@ -81,15 +81,15 @@ class UiMainWindow(object):
             QtCore.QRect(250, 20, desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
         self.frame.setSizePolicy(sizePolicy)
         self.frame.setMouseTracking(True)
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-
+        #TODO: уйти от хардкода в расположении виджетов(кнопок)
         """Buttons"""
         self.pushButton_quit.setGeometry(QtCore.QRect(60, 850, 113, 32))
         self.pushButton_quit.setObjectName("pushButton_quit")
@@ -122,7 +122,7 @@ class UiMainWindow(object):
         self.slider_pulse_direction.setSliderPosition(0)
 
         """Labels and Fonts"""
-        self.label.setGeometry(QtCore.QRect(20, 20, 221, 111))
+        self.label.setGeometry(QtCore.QRect(20, 20, int(220 / 1440 * desktop_size.width()), int(110 / 900 * desktop_size.height())))
         font = QtGui.QFont()
         font.setPointSize(25)
         font.setBold(True)
@@ -159,8 +159,8 @@ class UiMainWindow(object):
         """Text edit"""
         self.textEdit_pulse.setGeometry(QtCore.QRect(110, 150, 105, 30))
         self.textEdit_pulse.setObjectName("textEdit_pulse")
-        self.textEdit_time.setGeometry(QtCore.QRect(110, 360, 105, 30))
-        self.textEdit_time.setObjectName("textEdit_time")
+        self.textEdit_time_engine_working.setGeometry(QtCore.QRect(110, 360, 105, 30))
+        self.textEdit_time_engine_working.setObjectName("textEdit_time_engine_working")
 ##############
         self.textEdit_calc_tr.setGeometry(QtCore.QRect(110, 480, 105, 30))
         self.textEdit_calc_tr.setObjectName("textEdit_calcs_tr")
@@ -221,6 +221,7 @@ class MainWindow:
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
         self.pulse = ''
         self.time_engine_working = ''
+        self.time_of_modeling = ''
         self.space_objects = sp_objects
         self.starshipi_index = 0
 
@@ -229,29 +230,41 @@ class MainWindow:
 
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
+
     def slider_pulse_direction(self):
         self.input_pulse_direction_angle = int(self.ui.slider_pulse_direction.value())
 
     def clear(self):
         self.ui.textEdit_pulse.clear()
-        self.ui.textEdit_time.clear()
+        self.ui.textEdit_time_engine_working.clear()
         self.ui.textEdit_calc_tr.clear()
 
     def calc_trajectory(self):
+        self.open_gl.is_trajectory_shown = not self.open_gl.is_trajectory_shown
+        if self.open_gl.is_trajectory_shown:
+            self.ui.pushButton_calculate.setText('Back')
+            self.ui.pushButton_start.setEnabled(False)
+        else:
+            self.ui.pushButton_start.setEnabled(True)
+            self.ui.pushButton_calculate.setText('Calculate')
+
 
         # TODO: меняем текст кнопки вызываем метод окна PyQt
         #          Оттуда вызываем калкулятор и возвращаем большуб херню
         #         потом в том же методе отрисовываем эту фигню
         self.open_gl.setFocus()
         self.pulse = str(self.ui.textEdit_pulse.toPlainText())
-        self.time_engine_working = str(self.ui.textEdit_time.toPlainText())
+        self.time_engine_working = str(self.ui.textEdit_time_engine_working.toPlainText())
+        self.time_of_modeling = str(self.ui.textEdit_calc_tr.toPlainText())
         if self.time_engine_working != '':
             self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
         if self.input_pulse_direction_angle != '':
             self.space_objects[self.starshipi_index].engine_angle = (int(self.input_pulse_direction_angle) * pi) / 180
         if self.pulse != '':
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
-        self.open_gl.calculation_module.calculate_prev_trajectory(float(self.ui.textEdit_calc_tr.toPlainText()))
+        if self.time_of_modeling == '':
+            self.time_of_modeling = 0
+        self.open_gl.calculation_module.calculate_prev_trajectory(float(self.time_of_modeling))
 
     def input(self):
         """
@@ -259,7 +272,7 @@ class MainWindow:
         после нажатия Start!
         """
         self.pulse = str(self.ui.textEdit_pulse.toPlainText())
-        self.time_engine_working = str(self.ui.textEdit_time.toPlainText())
+        self.time_engine_working = str(self.ui.textEdit_time_engine_working.toPlainText())
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")

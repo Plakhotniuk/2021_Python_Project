@@ -30,8 +30,8 @@ class CelestialBody:
         """Цвет"""
         self.name = name
         "Название"
-        self.prev_trajectory_coords = []
-        self.prev_velocity = []
+        self.prev_trajectory_coords = [[self.x, self.y, 0]]
+        self.prev_velocity = [[self.vx, self.vy, 0]]
 
     def Draw(self):
         """
@@ -45,6 +45,17 @@ class CelestialBody:
         OpenGL.GLU.gluSphere(sphere, self.r, 320, 160)  # Draw sphere (sphere, radius)
         OpenGL.GLU.gluDeleteQuadric(sphere)
         OpenGL.GL.glPopMatrix()
+
+    def draw_trajectory(self):
+        OpenGL.GL.glLineWidth(10000000000)
+
+        OpenGL.GL.glBegin(OpenGL.GL.GL_LINE_STRIP)
+        OpenGL.GL.glColor3d(self.color[0], self.color[1], self.color[2])
+
+        for point in self.prev_trajectory_coords:
+            OpenGL.GL.glVertex3d(point[0], 5.0E7, point[1])
+
+        OpenGL.GL.glEnd()
 
 
 class Starship(CelestialBody):
@@ -80,6 +91,10 @@ class Starship(CelestialBody):
     #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_PROJECTION)
     #     # OpenGL.GL.glPopMatrix()
     #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_MODELVIEW)
+
+
+
+
 
 
 if __name__ == "__main__":

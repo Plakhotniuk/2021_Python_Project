@@ -16,7 +16,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.viewMatrix = None
         self.setFocus()
         self.scalefactor = 5.0E6
-        self.rotation_angle = 0
         self.scale_x = 0
         self.scale_y = 0
         self.scale_z = 0
@@ -50,14 +49,11 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
 
-        if self.is_trajectory_shown:
-            self.draw_trajectory()
-
         if self.start_modeling:
             self.calculation_module.recalculate_space_objects_positions()
         for obj in self.space_objects:
-            # if obj.name == 'SpaceShip':
-            #      obj.pulse_direction()
+            if self.is_trajectory_shown and not self.start_modeling:
+                 obj.draw_trajectory()
             obj.Draw()
         self.update()
 
@@ -97,16 +93,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = 0
 
-    def draw_trajectory(self):
-        pass
-        # OpenGL.GL.glClear(OpenGL.GL.OpenGL.GL.GL_COLOR_BUFFER_BIT)
-        # OpenGL.GL.glEnableClientState(OpenGL.GL.GL_VERTEX_ARRAY)
-        # OpenGL.GL.glVertexPointer(3, OpenGL.GL.GL_FLOAT, 0, self.calculation_module.calculate_prev_trajectory(100000))
-        # OpenGL.GL.glDrawArrays(OpenGL.GL.GL_LINE_STRIP, 0,
-        #                        len(self.calculation_module.calculate_prev_trajectory(100000)))
-        # OpenGL.GL.glDisableClientState(OpenGL.GL.GL_VERTEX_ARRAY)
-
-# TODO: 1) Отрисовать траекторию (параметры коррмектно лежат в классах)
+# TODO: 1) Отрисовать траекторию (параметры корректно лежат в классах)
 #       2) Вывести парамтерты корабля и направление движения
 #       3) Кастануть ползунки (Жене)
 

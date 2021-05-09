@@ -317,14 +317,14 @@ class Calculation:
 
         # нужно закомментить этот кусок кода, чтобы планетки не перемещались после нажатия calculate
         ######################################################################################
-        i = 0
-        for body in self.g.space_objects:
-            body.x = nx[i]
-            body.y = nx[i + 1]
-            body.vx = nv[i]
-            body.vy = nv[i + 1]
-            i += 2
-        print(np.sqrt(nv[0] ** 2 + nv[1] ** 2))
+        # i = 0
+        # for body in self.g.space_objects:
+        #     body.x = nx[i]
+        #     body.y = nx[i + 1]
+        #     body.vx = nv[i]
+        #     body.vy = nv[i + 1]
+        #     i += 2
+        # print(np.sqrt(nv[0] ** 2 + nv[1] ** 2))
         ########################################################################################
         return np.array(x)
 
