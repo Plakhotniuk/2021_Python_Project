@@ -54,7 +54,7 @@ class function_g:
 
 
 class Calculation:
-    def __init__(self, space_obj, dt):
+    def __init__(self, space_obj, dt, speed):
         self.f = function_f()
         self.g = function_g(space_obj)
         self.dt = dt
@@ -62,6 +62,10 @@ class Calculation:
         self.x = np.array([])  # координаты всех объектов системы подряд
         self.v = np.array([])  # скорости всех объектов системы подряд
         self.set_actual_params_of_system()
+        self.speed = speed
+
+    def set_speed(self, speed):
+        self.speed = speed
 
     def set_actual_params_of_system(self):
         x = []
@@ -72,7 +76,7 @@ class Calculation:
             v.append(body.vx)
             v.append(body.vy)
         self.x = np.array(x)  # координаты всех объектов системы подряд
-        self.v = np.array(v)
+        self.v = np.array(v)  # скорости всех объектов системы подряд
 
     def runge_kutta(self, t_n, x_n, vx_n):
         k1 = self.f(t_n, x_n, vx_n)
@@ -89,7 +93,7 @@ class Calculation:
 
         return x, vx
 
-    def dorm_prise(self, t_n, x_n, vx_n):
+    def dorm_prise(self, t_n, x_n, vx_n, max_step=100):
         k1 = self.f(t_n, x_n, vx_n)
         m1 = self.g(t_n, x_n, vx_n)
 
@@ -172,8 +176,9 @@ class Calculation:
         else:
             self.dt = self.dt * 2
 
-        if self.dt > 100:
-            self.dt = 100
+        if max_step:
+            if self.dt > max_step:
+                self.dt = max_step
         return x1, vx1
 
     def eiler(self, t_n, x_n, vx_n):
@@ -182,47 +187,46 @@ class Calculation:
 
         return x, vx
 
-    def count_pos(self):
+    def count_pos(self, all_time):
+        max_step = all_time/3
         nx = self.x
         nv = self.v
-        if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
-            self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
-            nx, nv = self.dorm_prise(0, nx, nv)
-            self.time_of_count += self.dt
-            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
-            self.dt = 100
 
-        while self.time_of_count < 300:
-            nx, nv = self.dorm_prise(0, nx, nv)
+        if self.g.space_objects[self.g.index_of_starship].time_engine_working:
+            if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
+                self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
+                nx, nv = self.dorm_prise(0, nx, nv, max_step=max_step)
+                self.time_of_count += self.dt
+                self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
+
+        while self.time_of_count < all_time:
+            nx, nv = self.dorm_prise(0, nx, nv, max_step=max_step)
             self.time_of_count += self.dt
 
-        if self.g.space_objects[0].time_engine_working > self.time_of_count:
-            self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.time_of_count
-            self.time_of_count = self.time_of_count - 300  # либо тут поменять
+        if self.g.space_objects[self.g.index_of_starship].time_engine_working:
+            if self.g.space_objects[0].time_engine_working > self.time_of_count:
+                self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.time_of_count
+                self.time_of_count = self.time_of_count - all_time
 
         if 0 < self.g.space_objects[0].time_engine_working < self.time_of_count:
             self.dt = self.g.space_objects[0].time_engine_working
-            self.x, self.v = self.dorm_prise(0, nx, nv)
-            self.time_of_count = self.dt + self.time_of_count - 300
-            self.dt = 100
-            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0  # либо тут поменять
+            self.x, self.v = self.dorm_prise(0, nx, nv, max_step=all_time//3)
+            self.time_of_count = self.dt + self.time_of_count - all_time
+            self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
 
         else:
-            self.time_of_count = self.time_of_count - 300
+            self.time_of_count = self.time_of_count - all_time
             self.x = nx
             self.v = nv
 
         return nx, nv
-        # ATTENTION
-        # если обнаружится какая-то мегаприколденая ошибка с
-        # отрисовкой планет - это скорее всего здесь из-за счета времени
 
     def recalculate_space_objects_positions(self):
         """
         Пересчитывает координаты объектов.
         param: space_objects — список оьъектов, для которых нужно пересчитать координаты
         """
-        new_x, new_v = self.count_pos()
+        new_x, new_v = self.count_pos(self.speed*0.01)
         i = 0
         for body in self.g.space_objects:
             body.x = new_x[i]
@@ -235,7 +239,18 @@ class Calculation:
         """
         Предрасчёт траектори на время time
         """
+
+        self.g.space_objects[0].prev_trajectory_coords.clear()
+        self.g.space_objects[1].prev_trajectory_coords.clear()
+        self.g.space_objects[2].prev_trajectory_coords.clear()
+        self.g.space_objects[3].prev_trajectory_coords.clear()
+        self.g.space_objects[0].prev_velocity.clear()
+        self.g.space_objects[1].prev_velocity.clear()
+        self.g.space_objects[2].prev_velocity.clear()
+        self.g.space_objects[3].prev_velocity.clear()
+
         x = []
+        v = []
         self.dt = 100
         time_of_calcs = 0
 
@@ -243,16 +258,38 @@ class Calculation:
         nv = self.v
         if self.dt > self.g.space_objects[self.g.index_of_starship].time_engine_working:
             self.dt = self.g.space_objects[self.g.index_of_starship].time_engine_working
-            nx, nv = self.runge_kutta(0, nx, nv)
+            nx, nv = self.dorm_prise(0, nx, nv, 0)
+
             x.append(nx)
+            v.append(nv)
+            self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
+            self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
+            self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
+            self.g.space_objects[3].prev_trajectory_coords.append([nx[6], nx[7], 0])
+            self.g.space_objects[0].prev_velocity.append([nv[0], nv[1], 0])
+            self.g.space_objects[1].prev_velocity.append([nv[2], nv[3], 0])
+            self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
+            self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
+
             time_of_calcs += self.dt
             self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
             self.dt = 100
 
         while time_of_calcs < time:
-            nx, nv = self.runge_kutta(0, nx, nv)
+            nx, nv = self.dorm_prise(0, nx, nv, 0)
             time_of_calcs += self.dt
+
             x.append(nx)
+            v.append(nv)
+            self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
+            self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
+            self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
+            self.g.space_objects[3].prev_trajectory_coords.append([nx[6], nx[7], 0])
+            self.g.space_objects[0].prev_velocity.append([nv[0], nv[1], 0])
+            self.g.space_objects[1].prev_velocity.append([nv[2], nv[3], 0])
+            self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
+            self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
+
             self.dt = 100
 
             if self.g.space_objects[0].time_engine_working >= 100:
@@ -260,8 +297,19 @@ class Calculation:
             if 0 < self.g.space_objects[0].time_engine_working < 100:
                 self.dt = self.g.space_objects[0].time_engine_working
                 time_of_calcs += self.dt
-                nx, nv = self.runge_kutta(0, nx, nv)
+                nx, nv = self.dorm_prise(0, nx, nv, 0)
+
                 x.append(nx)
+                v.append(nv)
+                self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
+                self.g.space_objects[1].prev_trajectory_coords.append([nx[2], nx[3], 0])
+                self.g.space_objects[2].prev_trajectory_coords.append([nx[4], nx[5], 0])
+                self.g.space_objects[3].prev_trajectory_coords.append([nx[6], nx[7], 0])
+                self.g.space_objects[0].prev_velocity.append([nv[0], nv[1], 0])
+                self.g.space_objects[1].prev_velocity.append([nv[2], nv[3], 0])
+                self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
+                self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
+
                 self.dt = 100
                 self.g.space_objects[0].time_engine_working = 0
 

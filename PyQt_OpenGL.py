@@ -11,7 +11,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
     def __init__(self, sp_objects: list, parent=None):
         super().__init__(parent)
         QtWidgets.qApp.installEventFilter(self)
-
         width = self.width()
         height = self.height()
         self.viewMatrix = None
@@ -24,7 +23,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.input_pulse = 0
         self.start_modeling = False
         self.is_trajectory_shown = False
-        self.calculation_module = Calculation(sp_objects, dt=100)
+        self.calculation_module = Calculation(sp_objects, speed=30000, dt=100)
         self.space_objects = sp_objects
 
     def initializeGL(self):
@@ -106,6 +105,10 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         # OpenGL.GL.glDrawArrays(OpenGL.GL.GL_LINE_STRIP, 0,
         #                        len(self.calculation_module.calculate_prev_trajectory(100000)))
         # OpenGL.GL.glDisableClientState(OpenGL.GL.GL_VERTEX_ARRAY)
+
+# TODO: 1) Отрисовать траекторию (параметры коррмектно лежат в классах)
+#       2) Вывести парамтерты корабля и направление движения
+#       3) Кастануть ползунки (Жене)
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
