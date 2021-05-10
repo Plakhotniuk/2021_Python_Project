@@ -68,34 +68,6 @@ class Starship(CelestialBody):
     def set_engine_angle(self, tootoo):
         self.engine_angle = tootoo
 
-    # def pulse_direction(self):
-    #
-    #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_PROJECTION)
-    #
-    #     OpenGL.GL.glLoadIdentity()
-    #     OpenGL.GL.glOrtho(0.0, PyOpenGL.width, PyOpenGL.height, 0.0, -1.0, 10.0)
-    #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_MODELVIEW)
-    #
-    #     OpenGL.GL.glLoadIdentity()
-    #     OpenGL.GL.glDisable(OpenGL.GL.GL_CULL_FACE)
-    #
-    #     OpenGL.GL.glClear(OpenGL.GL.GL_DEPTH_BUFFER_BIT)
-    #
-    #     OpenGL.GL.glBegin(OpenGL.GL.GL_QUADS)
-    #     OpenGL.GL.glColor3f(Globals.COLORS[0][0], Globals.COLORS[0][1], Globals.COLORS[0][2])
-    #     OpenGL.GL.glVertex2f(0.0, 0.0)
-    #     OpenGL.GL.glVertex2f(10.0, 0.0)
-    #     OpenGL.GL.glVertex2f(10.0, 10.0)
-    #     OpenGL.GL.glVertex2f(0.0, 10.0)
-    #     OpenGL.GL.glEnd()
-    #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_PROJECTION)
-    #     # OpenGL.GL.glPopMatrix()
-    #     OpenGL.GL.glMatrixMode(OpenGL.GL.GL_MODELVIEW)
-
-
-
-
-
 
 if __name__ == "__main__":
     print("This module is not for direct call!")

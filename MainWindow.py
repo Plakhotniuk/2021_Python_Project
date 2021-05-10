@@ -28,7 +28,6 @@ from PyQt_OpenGL import PyOpenGL
 from PyQt5.QtCore import QTimer
 
 
-
 class UiMainWindow(object):
     """
     Класс, создающий все виджеты (кнопки, слайдеры, надписи...)
@@ -45,7 +44,6 @@ class UiMainWindow(object):
         self.pushButton_start = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_quit = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_calculate = QtWidgets.QPushButton(self.centralwidget)
-        # self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
         self.textEdit_pulse = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_time_engine_working = QtWidgets.QTextEdit(self.centralwidget)
         self.label_current_direction_angle = QtWidgets.QLabel(self.centralwidget)
@@ -96,6 +94,7 @@ class UiMainWindow(object):
         self.frame.setObjectName("frame")
 
         #TODO: уйти от хардкода в расположении виджетов(кнопок)
+
         """Buttons"""
         self.pushButton_quit.setGeometry(QtCore.QRect(60, 800, 113, 32))
         self.pushButton_quit.setObjectName("pushButton_quit")
@@ -104,10 +103,6 @@ class UiMainWindow(object):
         self.pushButton_calculate.setFont(font)
         self.pushButton_calculate.setGeometry(QtCore.QRect(50, 645, 130, 70))
         self.pushButton_calculate.setObjectName("pushButton_calculate")
-        # font.setPointSize(25)
-        # self.pushButton_confirm1.setFont(font)
-        # self.pushButton_confirm1.setGeometry(QtCore.QRect(50, 560, 130, 70))
-        # self.pushButton_confirm1.setObjectName("pushButton_confirm1")
 
         self.pushButton_start.setGeometry(QtCore.QRect(50, 730, 130, 70))
         font.setPointSize(25)
@@ -224,7 +219,6 @@ class UiMainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
         self.pushButton_calculate.setText(_translate("MainWindow", "Calculate"))
-        # self.pushButton_confirm1.setText(_translate("MainWindow", "Confirm"))
         self.pushButton_start.setText(_translate("MainWindow", "Start !"))
         self.label.setText(_translate("MainWindow", "Set Parametrs\n" "to\n" "Start modeling!"))
         self.label_pulse.setText(_translate("MainWindow", "Pulse :"))
@@ -270,7 +264,6 @@ class MainWindow(QtWidgets.QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_velocity)
         self.timer.start(100)
-        # self.ui.pushButton_confirm1.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
         self.pulse = ''
