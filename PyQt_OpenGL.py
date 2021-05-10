@@ -5,6 +5,7 @@ import OpenGL.GL
 import OpenGL.GLU
 import OpenGL.GLUT
 from calculation import Calculation
+import math
 
 
 class PyOpenGL(QOpenGLWidget, QGraphicsView):
@@ -16,13 +17,16 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.viewMatrix = None
         self.setFocus()
         self.scalefactor = 5.0E6
+        self.specific_impulse_of_rocket_engine = 30000
         self.scale_x = 0
         self.scale_y = 0
         self.scale_z = 0
         self.input_pulse = 0
+        self.total_fuel_consumption = 0
+        self.current_velocity = 0
         self.start_modeling = False
         self.is_trajectory_shown = False
-        self.calculation_module = Calculation(sp_objects, speed=30000, dt=100)
+        self.calculation_module = Calculation(sp_objects, speed=3000, dt=100)
         self.space_objects = sp_objects
 
     def initializeGL(self):
@@ -46,6 +50,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.viewMatrix = OpenGL.GL.glGetFloatv(OpenGL.GL.GL_MODELVIEW_MATRIX)
 
     def paintGL(self):
+
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
 
@@ -55,6 +60,11 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             if self.is_trajectory_shown and not self.start_modeling:
                  obj.draw_trajectory()
             obj.Draw()
+
+            if obj.name == 'SpaceShip':
+                self.current_velocity = math.sqrt(obj.vx**2 + obj.vy**2)
+                print(self.current_velocity)
+
         self.update()
 
     def keyPressEvent(self, event):
@@ -93,8 +103,8 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = 0
 
-# TODO: 1) Отрисовать траекторию (параметры корректно лежат в классах)
-#       2) Вывести парамтерты корабля и направление движения
+# TODO: 1) Отрисовать траекторию (параметры корректно лежат в классах)   <-- done
+#       2) Вывести парамтерты корабля
 #       3) Кастануть ползунки (Жене)
 
 if __name__ == "__main__":

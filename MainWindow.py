@@ -20,12 +20,12 @@ try:
         util.find_library = new_util_find_library
 except ImportError:
     pass
-
 import sys
 from math import pi
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
 from PyQt_OpenGL import PyOpenGL
+
 
 
 class UiMainWindow(object):
@@ -44,7 +44,7 @@ class UiMainWindow(object):
         self.pushButton_start = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_quit = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_calculate = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton_confirm1 = QtWidgets.QPushButton(self.centralwidget)
         self.textEdit_pulse = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_time_engine_working = QtWidgets.QTextEdit(self.centralwidget)
         self.label_current_direction_angle = QtWidgets.QLabel(self.centralwidget)
@@ -52,11 +52,13 @@ class UiMainWindow(object):
         self.label_time_factor = QtWidgets.QLabel(self.centralwidget)
         self.slider_pulse_direction = QtWidgets.QSlider(self.centralwidget)
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        ########################################################
         self.label_time_of_calculation_tr = QtWidgets.QLabel(self.centralwidget)
         self.textEdit_calc_tr = QtWidgets.QTextEdit(self.centralwidget)
-        #########################################################
         self.comboBox_time = QtWidgets.QComboBox(self.centralwidget)
+
+        self.label_current_velocity_fuel = QtWidgets.QLabel(self.centralwidget)
+        self.label_current_velocity_value = QtWidgets.QLabel(self.centralwidget)
+        self.label_current_fuel_value = QtWidgets.QLabel(self.centralwidget)
 
 
     def setupUi(self, MainWindow):
@@ -84,8 +86,6 @@ class UiMainWindow(object):
             QtCore.QRect(250 * desktop_size.width() / 1440, desktop_size.height() * 20 / 900, desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
         self.frame.setSizePolicy(sizePolicy)
         self.frame.setMouseTracking(True)
@@ -103,10 +103,10 @@ class UiMainWindow(object):
         self.pushButton_calculate.setFont(font)
         self.pushButton_calculate.setGeometry(QtCore.QRect(50, 645, 130, 70))
         self.pushButton_calculate.setObjectName("pushButton_calculate")
-        font.setPointSize(25)
-        self.pushButton_confirm1.setFont(font)
-        self.pushButton_confirm1.setGeometry(QtCore.QRect(50, 560, 130, 70))
-        self.pushButton_confirm1.setObjectName("pushButton_confirm1")
+        # font.setPointSize(25)
+        # self.pushButton_confirm1.setFont(font)
+        # self.pushButton_confirm1.setGeometry(QtCore.QRect(50, 560, 130, 70))
+        # self.pushButton_confirm1.setObjectName("pushButton_confirm1")
 
         self.pushButton_start.setGeometry(QtCore.QRect(50, 730, 130, 70))
         font.setPointSize(25)
@@ -161,6 +161,22 @@ class UiMainWindow(object):
         self.label_time_of_calculation_tr.setFont(font)
         self.label_time_of_calculation_tr.setObjectName("label_time_of_calc")
 
+        self.label_current_velocity_fuel.setGeometry(QtCore.QRect(1100, 50, 210, 70))
+        self.label_current_velocity_fuel.setFont(font)
+        self.label_current_velocity_fuel.setObjectName("label_current_velocity")
+        self.label_current_velocity_fuel.setStyleSheet("color: white")
+
+        self.label_current_velocity_value.setGeometry(QtCore.QRect(1300, 40, 210, 70))
+        self.label_current_velocity_value.setFont(font)
+        self.label_current_velocity_value.setObjectName("label_current_velocity_value")
+        self.label_current_velocity_value.setStyleSheet("color: white")
+
+        self.label_current_fuel_value.setGeometry(QtCore.QRect(1300, 65, 210, 70))
+        self.label_current_fuel_value.setFont(font)
+        self.label_current_fuel_value.setObjectName("label_current_fuel_value")
+        self.label_current_fuel_value.setStyleSheet("color: white")
+
+
         font.setPointSize(18)
         self.label_current_direction_angle.setFont(font)
         self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 215, 50, 31))
@@ -207,7 +223,7 @@ class UiMainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
         self.pushButton_calculate.setText(_translate("MainWindow", "Calculate"))
-        self.pushButton_confirm1.setText(_translate("MainWindow", "Confirm"))
+        # self.pushButton_confirm1.setText(_translate("MainWindow", "Confirm"))
         self.pushButton_start.setText(_translate("MainWindow", "Start !"))
         self.label.setText(_translate("MainWindow", "Set Parametrs\n" "to\n" "Start modeling!"))
         self.label_pulse.setText(_translate("MainWindow", "Pulse :"))
@@ -216,9 +232,14 @@ class UiMainWindow(object):
         self.label_current_direction_angle.setText(_translate("MainWindow", "0"))
         self.label_direction_angle.setText(_translate("MainWindow", "Angle :"))
         self.label_time_factor.setText(_translate("MainWindow", "Time factor :"))
-        #####################################
+
         self.label_time_of_calculation_tr.setText(_translate("MainWindow", "Time of \ncalculation:"))
-        ######################################
+
+        self.label_current_velocity_fuel.setText(_translate("MainWindow", "Velocity: \nFuel consumption:"))
+        self.label_current_fuel_value.setText(_translate("MainWindow", "0"))
+        self.label_current_velocity_value.setText(_translate("MainWindow", "0"))
+
+
         self.comboBox_time.setItemText(0, _translate("MainWindow", "X1"))
         self.comboBox_time.setItemText(1, _translate("MainWindow", "X2"))
         self.comboBox_time.setItemText(2, _translate("MainWindow", "X5"))
@@ -243,7 +264,11 @@ class MainWindow:
         self.screen_size = open_gl.size()
         self.input_pulse_direction_angle = 0
         self.show()
-        self.ui.pushButton_confirm1.clicked.connect(open_gl.setFocus)
+        # self.thread_class = ThreadClass()
+        # self.thread_class.start()
+        # self.ui.label_current_velocity_value.connect(self.thread_class, QtCore.SIGNAL('Velocity'), self.update_velocity)
+
+        # self.ui.pushButton_confirm1.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
         self.pulse = ''
@@ -259,6 +284,9 @@ class MainWindow:
 
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
+    def update_velocity(self):
+        self.ui.label_current_velocity_value.setText(str(self.open_gl.current_velocity))
+
     def set_time_accelerate(self):
         self.open_gl.setFocus()
         if self.ui.comboBox_time.currentIndex() == 0:
@@ -271,8 +299,7 @@ class MainWindow:
             self.combobox_index_time = 10
         if self.ui.comboBox_time.currentIndex() == 4:
             self.combobox_index_time = 0.001
-        print(self.combobox_index_time)
-        self.open_gl.calculation_module.set_speed(30000 * self.combobox_index_time)
+        self.open_gl.calculation_module.set_speed(3000 * self.combobox_index_time)
 
     def slider_pulse_direction(self):
         self.input_pulse_direction_angle = int(self.ui.slider_pulse_direction.value())
@@ -291,12 +318,6 @@ class MainWindow:
             self.ui.pushButton_start.setEnabled(True)
             self.ui.pushButton_calculate.setText('Calculate')
 
-
-
-
-        # TODO: меняем текст кнопки вызываем метод окна PyQt
-        #          Оттуда вызываем калкулятор и возвращаем большуб херню
-        #         потом в том же методе отрисовываем эту фигню
         self.open_gl.setFocus()
         self.pulse = str(self.ui.textEdit_pulse.toPlainText())
         self.time_engine_working = str(self.ui.textEdit_time_engine_working.toPlainText())
@@ -323,6 +344,12 @@ class MainWindow:
             self.ui.pushButton_start.setText("Pause")
             if self.time_engine_working != '':
                 self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
+                if self.pulse != '':
+                    """Расчет расхода топлива"""
+                    self.open_gl.total_fuel_consumption += float(self.time_engine_working) * float(self.pulse)\
+                                                           / self.open_gl.specific_impulse_of_rocket_engine
+                    self.ui.label_current_fuel_value.setText(str(int(self.open_gl.total_fuel_consumption)))
+
             if self.input_pulse_direction_angle != '':
                 self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
                                                                         * pi / 180
@@ -343,3 +370,12 @@ class MainWindow:
         Отображает меню на экране
         """
         self.main_win.show()
+
+
+# class ThreadClass(QtCore.QThread):
+#     def __init__(self, parent=None):
+#         super(ThreadClass, self).__init__(parent)
+#
+#     def run(self):
+#         while 1:
+#             self.emit(QtCore.SIGNAL('Velocity'), 1)
