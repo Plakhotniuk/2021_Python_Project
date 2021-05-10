@@ -279,6 +279,7 @@ class MainWindow(QtWidgets.QWidget):
     def update_velocity_and_angle(self):
         self.ui.label_current_velocity_value.setText(str(int(self.open_gl.current_velocity)))
         self.open_gl.current_angle = int(self.ui.slider_pulse_direction.value())
+        self.ui.label_current_fuel_value.setText(str(int(self.open_gl.total_fuel_consumption)))
 
     def set_time_accelerate(self):
         self.open_gl.setFocus()

@@ -37,12 +37,12 @@ class CelestialBody:
         """
         Draws
         """
-        sphere = OpenGL.GLU.gluNewQuadric()  # Create new sphere
+        sphere = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
 
-        OpenGL.GL.glTranslatef(self.x, 5.0E7, self.y)  # Move to the place
-        OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)  # Put color
-        OpenGL.GLU.gluSphere(sphere, self.r, 320, 160)  # Draw sphere (sphere, radius)
+        OpenGL.GL.glTranslatef(self.x, 5.0E7, self.y)
+        OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
+        OpenGL.GLU.gluSphere(sphere, self.r, 320, 160)
         OpenGL.GLU.gluDeleteQuadric(sphere)
         OpenGL.GL.glPopMatrix()
 

@@ -12,8 +12,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
     def __init__(self, sp_objects: list, parent=None):
         super().__init__(parent)
         QtWidgets.qApp.installEventFilter(self)
-        width = self.width()
-        height = self.height()
         self.viewMatrix = None
         self.setFocus()
         self.scalefactor = 5.0E6
@@ -25,6 +23,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.total_fuel_consumption = 0
         self.current_velocity = 0
         self.current_angle = 0
+        self.manual_control_delta_pulse = 2000000
         self.start_modeling = False
         self.is_trajectory_shown = False
         self.calculation_module = Calculation(sp_objects, speed=3000, dt=100)
@@ -67,7 +66,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
                 if not self.start_modeling:
                     obj.engine_angle = self.current_angle
                     obj.set_engine_angle()
-                print(self.current_velocity)
 
         self.update()
 
@@ -85,13 +83,21 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         if event.key() == Qt.Key_Up:
             self.scale_z = self.scalefactor
         if event.key() == Qt.Key_6:
-            self.calculation_module.v[0] += 50
+            self.calculation_module.v[0] += self.manual_control_delta_pulse / self.space_objects[0].m
+            self.total_fuel_consumption += self.manual_control_delta_pulse \
+                                                   / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_4:
-            self.calculation_module.v[0] -= 50
+            self.calculation_module.v[0] -= self.manual_control_delta_pulse / self.space_objects[0].m
+            self.total_fuel_consumption += self.manual_control_delta_pulse \
+                                           / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_8:
-            self.calculation_module.v[1] += 50
+            self.calculation_module.v[1] += self.manual_control_delta_pulse / self.space_objects[0].m
+            self.total_fuel_consumption += self.manual_control_delta_pulse \
+                                           / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_2:
-            self.calculation_module.v[1] -= 50
+            self.calculation_module.v[1] -= self.manual_control_delta_pulse / self.space_objects[0].m
+            self.total_fuel_consumption += self.manual_control_delta_pulse \
+                                           / self.specific_impulse_of_rocket_engine
 
     def keyReleaseEvent(self, event: QtGui.QKeyEvent):
         if event.key() == Qt.Key_W:
