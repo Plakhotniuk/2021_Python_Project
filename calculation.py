@@ -3,6 +3,7 @@ from math import cos, sin
 
 G = -6.67E-11
 
+#TODO PEP8!
 
 class function_f:
     """

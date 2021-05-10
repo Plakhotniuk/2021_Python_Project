@@ -28,7 +28,7 @@ from PyQt_OpenGL import PyOpenGL
 from PyQt5.QtCore import QTimer
 
 
-class UiMainWindow(object):
+class UiMainWindow:
     """
     Класс, создающий все виджеты (кнопки, слайдеры, надписи...)
     """
@@ -59,8 +59,8 @@ class UiMainWindow(object):
         self.label_current_velocity_value = QtWidgets.QLabel(self.centralwidget)
         self.label_current_fuel_value = QtWidgets.QLabel(self.centralwidget)
 
-
     def setupUi(self, MainWindow):
+        #TODO: Functions!
         """
         Интерфейс окна
         :param MainWindow:
