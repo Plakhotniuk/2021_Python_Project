@@ -25,6 +25,7 @@ from math import pi
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
 from PyQt_OpenGL import PyOpenGL
+from PyQt5.QtCore import QTimer
 
 
 
@@ -248,12 +249,13 @@ class UiMainWindow(object):
 
 
 
-class MainWindow:
+class MainWindow(QtWidgets.QWidget):
     """
     Класс основного меню внутри приложения
     """
 
     def __init__(self, sp_objects: list):
+        super().__init__()
         self.app = QtWidgets.QApplication(sys.argv)
         self.main_win = QtWidgets.QMainWindow()
         self.ui = UiMainWindow(self.main_win)
@@ -264,10 +266,10 @@ class MainWindow:
         self.screen_size = open_gl.size()
         self.input_pulse_direction_angle = 0
         self.show()
-        # self.thread_class = ThreadClass()
-        # self.thread_class.start()
-        # self.ui.label_current_velocity_value.connect(self.thread_class, QtCore.SIGNAL('Velocity'), self.update_velocity)
 
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_velocity)
+        self.timer.start(100)
         # self.ui.pushButton_confirm1.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
@@ -285,7 +287,7 @@ class MainWindow:
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
     def update_velocity(self):
-        self.ui.label_current_velocity_value.setText(str(self.open_gl.current_velocity))
+        self.ui.label_current_velocity_value.setText(str(int(self.open_gl.current_velocity)))
 
     def set_time_accelerate(self):
         self.open_gl.setFocus()
@@ -371,11 +373,3 @@ class MainWindow:
         """
         self.main_win.show()
 
-
-# class ThreadClass(QtCore.QThread):
-#     def __init__(self, parent=None):
-#         super(ThreadClass, self).__init__(parent)
-#
-#     def run(self):
-#         while 1:
-#             self.emit(QtCore.SIGNAL('Velocity'), 1)

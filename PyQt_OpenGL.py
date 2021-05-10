@@ -62,7 +62,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             obj.Draw()
 
             if obj.name == 'SpaceShip':
-                self.current_velocity = math.sqrt(obj.vx**2 + obj.vy**2)
+                self.current_velocity = int(math.sqrt(obj.vx**2 + obj.vy**2))
                 print(self.current_velocity)
 
         self.update()
@@ -102,10 +102,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.scale_z = 0
         if event.key() == Qt.Key_Up:
             self.scale_z = 0
-
-# TODO: 1) Отрисовать траекторию (параметры корректно лежат в классах)   <-- done
-#       2) Вывести парамтерты корабля
-#       3) Кастануть ползунки (Жене)
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
