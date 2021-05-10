@@ -24,6 +24,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.input_pulse = 0
         self.total_fuel_consumption = 0
         self.current_velocity = 0
+        self.current_angle = 0
         self.start_modeling = False
         self.is_trajectory_shown = False
         self.calculation_module = Calculation(sp_objects, speed=3000, dt=100)
@@ -63,6 +64,9 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
 
             if obj.name == 'SpaceShip':
                 self.current_velocity = int(math.sqrt(obj.vx**2 + obj.vy**2))
+                if not self.start_modeling:
+                    obj.engine_angle = self.current_angle
+                    obj.set_engine_angle()
                 print(self.current_velocity)
 
         self.update()
@@ -102,6 +106,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.scale_z = 0
         if event.key() == Qt.Key_Up:
             self.scale_z = 0
+
 
 if __name__ == "__main__":
     print("This module is not for direct call!")

@@ -60,7 +60,7 @@ class UiMainWindow:
         self.label_current_fuel_value = QtWidgets.QLabel(self.centralwidget)
 
     def setupUi(self, MainWindow):
-        #TODO: Functions!
+        # TODO: Functions!
         """
         Интерфейс окна
         :param MainWindow:
@@ -71,29 +71,29 @@ class UiMainWindow:
         """Полноэкранный режим и фиксация основного окна"""
         desktop_size = QtWidgets.QDesktopWidget().screenGeometry()
         MainWindow.resize(desktop_size.width(), desktop_size.height())
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
-        MainWindow.setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(size_policy)
         MainWindow.setMouseTracking(True)
         """Далее идут все детали интерфейса (ползунки, кнопочки и тд):"""
 
         self.centralwidget.setMinimumSize(QtCore.QSize(800, 0))
         self.centralwidget.setObjectName("centralwidget")
         self.frame.setGeometry(
-            QtCore.QRect(250 * desktop_size.width() / 1440, desktop_size.height() * 20 / 900, desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
+            QtCore.QRect(250 * desktop_size.width() / 1440, desktop_size.height() * 20 / 900,
+                         desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
-        self.frame.setSizePolicy(sizePolicy)
+        size_policy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
+        self.frame.setSizePolicy(size_policy)
         self.frame.setMouseTracking(True)
 
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
 
-        #TODO: уйти от хардкода в расположении виджетов(кнопок)
+        # TODO: уйти от хардкода в расположении виджетов(кнопок)
 
         """Buttons"""
         self.pushButton_quit.setGeometry(QtCore.QRect(60, 800, 113, 32))
@@ -110,7 +110,7 @@ class UiMainWindow:
         self.pushButton_start.setObjectName("pushButton_start")
 
         """Slider"""
-        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 225, 200, 22))
+        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 245, 200, 22))
         self.slider_pulse_direction.setOrientation(QtCore.Qt.Horizontal)
         self.slider_pulse_direction.setObjectName("horizontalSlider_pulse_direction")
         self.slider_pulse_direction.valueChanged['int'].connect(self.label_current_direction_angle.setNum)
@@ -131,9 +131,9 @@ class UiMainWindow:
         self.comboBox_time.addItem("Real Time")
         self.comboBox_time.setGeometry(QtCore.QRect(130, 507, 105, 25))
 
-
         """Labels and Fonts"""
-        self.label.setGeometry(QtCore.QRect(20, 20, int(220 / 1440 * desktop_size.width()), int(110 / 900 * desktop_size.height())))
+        self.label.setGeometry(
+            QtCore.QRect(20, 20, int(220 / 1440 * desktop_size.width()), int(110 / 900 * desktop_size.height())))
         font = QtGui.QFont()
         font.setPointSize(25)
         font.setBold(True)
@@ -143,7 +143,7 @@ class UiMainWindow:
 
         font = QtGui.QFont()
         font.setPointSize(25)
-        self.label_pulse.setGeometry(QtCore.QRect(20, 117, 121, 51))
+        self.label_pulse.setGeometry(QtCore.QRect(20, 117, 157, 51))
         self.label_pulse.setFont(font)
         self.label_pulse.setObjectName("label_pulse")
 
@@ -157,7 +157,7 @@ class UiMainWindow:
         self.label_time_of_calculation_tr.setFont(font)
         self.label_time_of_calculation_tr.setObjectName("label_time_of_calc")
 
-        self.label_current_velocity_fuel.setGeometry(QtCore.QRect(1100, 50, 210, 70))
+        self.label_current_velocity_fuel.setGeometry(QtCore.QRect(1050, 50, 250, 70))
         self.label_current_velocity_fuel.setFont(font)
         self.label_current_velocity_fuel.setObjectName("label_current_velocity")
         self.label_current_velocity_fuel.setStyleSheet("color: white")
@@ -172,15 +172,14 @@ class UiMainWindow:
         self.label_current_fuel_value.setObjectName("label_current_fuel_value")
         self.label_current_fuel_value.setStyleSheet("color: white")
 
-
         font.setPointSize(18)
         self.label_current_direction_angle.setFont(font)
-        self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 215, 50, 31))
+        self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 235, 50, 31))
         self.label_current_direction_angle.setObjectName("label_direction_angle")
 
         font.setPointSize(25)
         self.label_direction_angle.setFont(font)
-        self.label_direction_angle.setGeometry(QtCore.QRect(20, 170, 250, 61))
+        self.label_direction_angle.setGeometry(QtCore.QRect(20, 190, 250, 61))
         self.label_direction_angle.setObjectName("label_direction_angle")
 
         self.label_time_factor.setFont(font)
@@ -188,7 +187,7 @@ class UiMainWindow:
         self.label_time_factor.setObjectName("label_time_factor")
 
         """Text edit"""
-        self.textEdit_pulse.setGeometry(QtCore.QRect(110, 130, 105, 30))
+        self.textEdit_pulse.setGeometry(QtCore.QRect(110, 160, 105, 30))
         self.textEdit_pulse.setObjectName("textEdit_pulse")
 
         self.textEdit_time_engine_working.setGeometry(QtCore.QRect(110, 330, 105, 30))
@@ -221,26 +220,24 @@ class UiMainWindow:
         self.pushButton_calculate.setText(_translate("MainWindow", "Calculate"))
         self.pushButton_start.setText(_translate("MainWindow", "Start !"))
         self.label.setText(_translate("MainWindow", "Set Parametrs\n" "to\n" "Start modeling!"))
-        self.label_pulse.setText(_translate("MainWindow", "Pulse :"))
-        self.label_engine_running_time.setText(_translate("MainWindow", "Engine running\ntime :"))
+        self.label_pulse.setText(_translate("MainWindow", "Pulse (kg m/s):"))
+        self.label_engine_running_time.setText(_translate("MainWindow", "Engine running\ntime (s):"))
         self.menuOpengl.setTitle(_translate("MainWindow", "Opengl"))
         self.label_current_direction_angle.setText(_translate("MainWindow", "0"))
-        self.label_direction_angle.setText(_translate("MainWindow", "Angle :"))
+        self.label_direction_angle.setText(_translate("MainWindow", "Angle (degrees) :"))
         self.label_time_factor.setText(_translate("MainWindow", "Time factor :"))
 
-        self.label_time_of_calculation_tr.setText(_translate("MainWindow", "Time of \ncalculation:"))
+        self.label_time_of_calculation_tr.setText(_translate("MainWindow", "Time of \ncalculation (s):"))
 
-        self.label_current_velocity_fuel.setText(_translate("MainWindow", "Velocity: \nFuel consumption:"))
+        self.label_current_velocity_fuel.setText(_translate("MainWindow", "Velocity(m/s): \nFuel consumption (kg):"))
         self.label_current_fuel_value.setText(_translate("MainWindow", "0"))
         self.label_current_velocity_value.setText(_translate("MainWindow", "0"))
-
 
         self.comboBox_time.setItemText(0, _translate("MainWindow", "X1"))
         self.comboBox_time.setItemText(1, _translate("MainWindow", "X2"))
         self.comboBox_time.setItemText(2, _translate("MainWindow", "X5"))
         self.comboBox_time.setItemText(3, _translate("MainWindow", "X10"))
         self.comboBox_time.setItemText(4, _translate("MainWindow", "Real Time"))
-
 
 
 class MainWindow(QtWidgets.QWidget):
@@ -262,8 +259,8 @@ class MainWindow(QtWidgets.QWidget):
         self.show()
 
         self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_velocity)
-        self.timer.start(100)
+        self.timer.timeout.connect(self.update_velocity_and_angle)
+        self.timer.start(10)
         self.ui.pushButton_start.clicked.connect(open_gl.setFocus)
         self.ui.pushButton_quit.clicked.connect(self.main_win.close)
         self.pulse = ''
@@ -279,8 +276,9 @@ class MainWindow(QtWidgets.QWidget):
 
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
-    def update_velocity(self):
+    def update_velocity_and_angle(self):
         self.ui.label_current_velocity_value.setText(str(int(self.open_gl.current_velocity)))
+        self.open_gl.current_angle = int(self.ui.slider_pulse_direction.value())
 
     def set_time_accelerate(self):
         self.open_gl.setFocus()
@@ -341,7 +339,7 @@ class MainWindow(QtWidgets.QWidget):
                 self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
                 if self.pulse != '':
                     """Расчет расхода топлива"""
-                    self.open_gl.total_fuel_consumption += float(self.time_engine_working) * float(self.pulse)\
+                    self.open_gl.total_fuel_consumption += float(self.time_engine_working) * float(self.pulse) \
                                                            / self.open_gl.specific_impulse_of_rocket_engine
                     self.ui.label_current_fuel_value.setText(str(int(self.open_gl.total_fuel_consumption)))
 
@@ -353,16 +351,15 @@ class MainWindow(QtWidgets.QWidget):
             self.ui.slider_pulse_direction.setValue(0)
             self.clear()
 
-            self.ui.pushButton_calculate.setEnabled(False)  # чтобы нельзя было калькулить во время работы игры
+            self.ui.pushButton_calculate.setEnabled(False)
 
         else:
             self.ui.pushButton_start.setText("Start!")
             self.time_engine_working = 0
-            self.ui.pushButton_calculate.setEnabled(True)  # чтобы можно было калькулить только когда игра не работает
+            self.ui.pushButton_calculate.setEnabled(True)
 
     def show(self):
         """
         Отображает меню на экране
         """
         self.main_win.show()
-
