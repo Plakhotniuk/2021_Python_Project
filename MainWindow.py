@@ -49,12 +49,15 @@ class UiMainWindow(object):
         self.textEdit_time_engine_working = QtWidgets.QTextEdit(self.centralwidget)
         self.label_current_direction_angle = QtWidgets.QLabel(self.centralwidget)
         self.label_direction_angle = QtWidgets.QLabel(self.centralwidget)
+        self.label_time_factor = QtWidgets.QLabel(self.centralwidget)
         self.slider_pulse_direction = QtWidgets.QSlider(self.centralwidget)
         self.frame = QtWidgets.QFrame(self.centralwidget)
         ########################################################
         self.label_time_of_calculation_tr = QtWidgets.QLabel(self.centralwidget)
         self.textEdit_calc_tr = QtWidgets.QTextEdit(self.centralwidget)
         #########################################################
+        self.comboBox_time = QtWidgets.QComboBox(self.centralwidget)
+
 
     def setupUi(self, MainWindow):
         """
@@ -78,7 +81,7 @@ class UiMainWindow(object):
         self.centralwidget.setMinimumSize(QtCore.QSize(800, 0))
         self.centralwidget.setObjectName("centralwidget")
         self.frame.setGeometry(
-            QtCore.QRect(250, 20, desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
+            QtCore.QRect(250 * desktop_size.width() / 1440, desktop_size.height() * 20 / 900, desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         # sizePolicy.setHorizontalStretch(0)
@@ -86,12 +89,14 @@ class UiMainWindow(object):
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
         self.frame.setSizePolicy(sizePolicy)
         self.frame.setMouseTracking(True)
+
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
+
         #TODO: уйти от хардкода в расположении виджетов(кнопок)
         """Buttons"""
-        self.pushButton_quit.setGeometry(QtCore.QRect(60, 850, 113, 32))
+        self.pushButton_quit.setGeometry(QtCore.QRect(60, 800, 113, 32))
         self.pushButton_quit.setObjectName("pushButton_quit")
         font = QtGui.QFont()
         font.setPointSize(25)
@@ -109,7 +114,7 @@ class UiMainWindow(object):
         self.pushButton_start.setObjectName("pushButton_start")
 
         """Slider"""
-        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 265, 200, 22))
+        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 225, 200, 22))
         self.slider_pulse_direction.setOrientation(QtCore.Qt.Horizontal)
         self.slider_pulse_direction.setObjectName("horizontalSlider_pulse_direction")
         self.slider_pulse_direction.valueChanged['int'].connect(self.label_current_direction_angle.setNum)
@@ -120,6 +125,16 @@ class UiMainWindow(object):
         self.slider_pulse_direction.setTickPosition(QSlider.TicksBelow)
         self.slider_pulse_direction.setProperty("value", 0)
         self.slider_pulse_direction.setSliderPosition(0)
+
+        """Combo Box"""
+        self.comboBox_time.setObjectName("comboBox")
+        self.comboBox_time.addItem("X1")
+        self.comboBox_time.addItem("X2")
+        self.comboBox_time.addItem("X5")
+        self.comboBox_time.addItem("X10")
+        self.comboBox_time.addItem("Real Time")
+        self.comboBox_time.setGeometry(QtCore.QRect(130, 507, 105, 25))
+
 
         """Labels and Fonts"""
         self.label.setGeometry(QtCore.QRect(20, 20, int(220 / 1440 * desktop_size.width()), int(110 / 900 * desktop_size.height())))
@@ -132,39 +147,44 @@ class UiMainWindow(object):
 
         font = QtGui.QFont()
         font.setPointSize(25)
-        self.label_pulse.setGeometry(QtCore.QRect(20, 137, 121, 51))
+        self.label_pulse.setGeometry(QtCore.QRect(20, 117, 121, 51))
         self.label_pulse.setFont(font)
         self.label_pulse.setObjectName("label_pulse")
+
         font.setPointSize(25)
-        self.label_engine_running_time.setGeometry(QtCore.QRect(20, 225, 200, 251))
+        self.label_engine_running_time.setGeometry(QtCore.QRect(20, 195, 200, 251))
         self.label_engine_running_time.setFont(font)
         self.label_engine_running_time.setObjectName("label_time_wait")
+
         font.setPointSize(25)
-################################
-        self.label_time_of_calculation_tr.setGeometry(QtCore.QRect(20, 410, 210, 70))
+        self.label_time_of_calculation_tr.setGeometry(QtCore.QRect(20, 380, 210, 70))
         self.label_time_of_calculation_tr.setFont(font)
         self.label_time_of_calculation_tr.setObjectName("label_time_of_calc")
+
         font.setPointSize(18)
-###############################
         self.label_current_direction_angle.setFont(font)
-        self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 260, 50, 31))
+        self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 215, 50, 31))
         self.label_current_direction_angle.setObjectName("label_direction_angle")
 
         font.setPointSize(25)
-
         self.label_direction_angle.setFont(font)
-        self.label_direction_angle.setGeometry(QtCore.QRect(20, 200, 250, 61))
+        self.label_direction_angle.setGeometry(QtCore.QRect(20, 170, 250, 61))
         self.label_direction_angle.setObjectName("label_direction_angle")
 
+        self.label_time_factor.setFont(font)
+        self.label_time_factor.setGeometry(QtCore.QRect(10, 500, 130, 30))
+        self.label_time_factor.setObjectName("label_time_factor")
+
         """Text edit"""
-        self.textEdit_pulse.setGeometry(QtCore.QRect(110, 150, 105, 30))
+        self.textEdit_pulse.setGeometry(QtCore.QRect(110, 130, 105, 30))
         self.textEdit_pulse.setObjectName("textEdit_pulse")
-        self.textEdit_time_engine_working.setGeometry(QtCore.QRect(110, 360, 105, 30))
+
+        self.textEdit_time_engine_working.setGeometry(QtCore.QRect(110, 330, 105, 30))
         self.textEdit_time_engine_working.setObjectName("textEdit_time_engine_working")
-##############
-        self.textEdit_calc_tr.setGeometry(QtCore.QRect(110, 480, 105, 30))
+
+        self.textEdit_calc_tr.setGeometry(QtCore.QRect(110, 450, 105, 30))
         self.textEdit_calc_tr.setObjectName("textEdit_calcs_tr")
-##############
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 827, 24))
         self.menubar.setObjectName("menubar")
@@ -195,9 +215,16 @@ class UiMainWindow(object):
         self.menuOpengl.setTitle(_translate("MainWindow", "Opengl"))
         self.label_current_direction_angle.setText(_translate("MainWindow", "0"))
         self.label_direction_angle.setText(_translate("MainWindow", "Angle :"))
+        self.label_time_factor.setText(_translate("MainWindow", "Time factor :"))
         #####################################
         self.label_time_of_calculation_tr.setText(_translate("MainWindow", "Time of \ncalculation:"))
         ######################################
+        self.comboBox_time.setItemText(0, _translate("MainWindow", "X1"))
+        self.comboBox_time.setItemText(1, _translate("MainWindow", "X2"))
+        self.comboBox_time.setItemText(2, _translate("MainWindow", "X5"))
+        self.comboBox_time.setItemText(3, _translate("MainWindow", "X10"))
+        self.comboBox_time.setItemText(4, _translate("MainWindow", "Real Time"))
+
 
 
 class MainWindow:
@@ -224,12 +251,28 @@ class MainWindow:
         self.time_of_modeling = ''
         self.space_objects = sp_objects
         self.starshipi_index = 0
+        self.combobox_index_time = 0
 
         self.ui.pushButton_start.clicked.connect(self.input)
+        self.ui.pushButton_start.clicked.connect(self.set_time_accelerate)
         self.ui.pushButton_calculate.clicked.connect(self.calc_trajectory)
 
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
+    def set_time_accelerate(self):
+        self.open_gl.setFocus()
+        if self.ui.comboBox_time.currentIndex() == 0:
+            self.combobox_index_time = 1
+        if self.ui.comboBox_time.currentIndex() == 1:
+            self.combobox_index_time = 2
+        if self.ui.comboBox_time.currentIndex() == 2:
+            self.combobox_index_time = 5
+        if self.ui.comboBox_time.currentIndex() == 3:
+            self.combobox_index_time = 10
+        if self.ui.comboBox_time.currentIndex() == 4:
+            self.combobox_index_time = 0.001
+        print(self.combobox_index_time)
+        self.open_gl.calculation_module.set_speed(30000 * self.combobox_index_time)
 
     def slider_pulse_direction(self):
         self.input_pulse_direction_angle = int(self.ui.slider_pulse_direction.value())
@@ -247,6 +290,8 @@ class MainWindow:
         else:
             self.ui.pushButton_start.setEnabled(True)
             self.ui.pushButton_calculate.setText('Calculate')
+
+
 
 
         # TODO: меняем текст кнопки вызываем метод окна PyQt
