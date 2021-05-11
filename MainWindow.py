@@ -215,7 +215,7 @@ class UiMainWindow:
         :param MainWindow:
         """
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Welcome to Kerbal 2.0 !"))
         self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
         self.pushButton_calculate.setText(_translate("MainWindow", "Calculate"))
         self.pushButton_start.setText(_translate("MainWindow", "Start !"))
@@ -229,7 +229,7 @@ class UiMainWindow:
 
         self.label_time_of_calculation_tr.setText(_translate("MainWindow", "Time of \ncalculation (s):"))
 
-        self.label_current_velocity_fuel.setText(_translate("MainWindow", "Velocity(m/s): \nFuel consumption (kg):"))
+        self.label_current_velocity_fuel.setText(_translate("MainWindow", "Velocity(m/s): \nFuel left (kg):"))
         self.label_current_fuel_value.setText(_translate("MainWindow", "0"))
         self.label_current_velocity_value.setText(_translate("MainWindow", "0"))
 
@@ -279,7 +279,7 @@ class MainWindow(QtWidgets.QWidget):
     def update_velocity_and_angle(self):
         self.ui.label_current_velocity_value.setText(str(int(self.open_gl.current_velocity)))
         self.open_gl.current_angle = int(self.ui.slider_pulse_direction.value())
-        self.ui.label_current_fuel_value.setText(str(int(self.open_gl.total_fuel_consumption)))
+        self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
     def set_time_accelerate(self):
         self.open_gl.setFocus()
@@ -292,7 +292,7 @@ class MainWindow(QtWidgets.QWidget):
         if self.ui.comboBox_time.currentIndex() == 3:
             self.combobox_index_time = 10
         if self.ui.comboBox_time.currentIndex() == 4:
-            self.combobox_index_time = 0.001
+            self.combobox_index_time = 0.00033
         self.open_gl.calculation_module.set_speed(3000 * self.combobox_index_time)
 
     def slider_pulse_direction(self):
@@ -324,6 +324,7 @@ class MainWindow(QtWidgets.QWidget):
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
         if self.time_of_modeling == '':
             self.time_of_modeling = 0
+
         self.open_gl.calculation_module.calculate_prev_trajectory(float(self.time_of_modeling))
 
     def input(self):
@@ -336,18 +337,18 @@ class MainWindow(QtWidgets.QWidget):
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setText("Pause")
-            if self.time_engine_working != '':
+            if self.time_engine_working != '' and self.pulse != '' and\
+                    self.space_objects[0].m - float(self.time_engine_working) * float(self.pulse)\
+                    / self.open_gl.specific_impulse_of_rocket_engine > self.open_gl.minimum_mass:
                 self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
-                if self.pulse != '':
-                    """Расчет расхода топлива"""
-                    self.open_gl.total_fuel_consumption += float(self.time_engine_working) * float(self.pulse) \
-                                                           / self.open_gl.specific_impulse_of_rocket_engine
-                    self.ui.label_current_fuel_value.setText(str(int(self.open_gl.total_fuel_consumption)))
+                """Расчет расхода топлива"""
+                self.space_objects[0].m -= float(self.time_engine_working) * float(self.pulse) \
+                                                               / self.open_gl.specific_impulse_of_rocket_engine
+                self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
-            if self.input_pulse_direction_angle != '':
-                self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
-                                                                        * pi / 180
-            if self.pulse != '':
+                if self.input_pulse_direction_angle != '':
+                    self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
+                                                                            * pi / 180
                 self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
             self.ui.slider_pulse_direction.setValue(0)
             self.clear()

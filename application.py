@@ -11,7 +11,7 @@ if __name__ == '__main__':
     space_objects = []
 
     """Cписок небесных тел"""
-    space_objects.append(Starship(name='SpaceShip', r=5.7E5, m=40000,
+    space_objects.append(Starship(name='SpaceShip', r=5.7E5, m=440000,
                                   color=Globals.WHITE, x=3.8E7, vy=3000, vx=-0, engine_thrust=130000,
                                   time_engine_working=0))
     space_objects.append(CelestialBody(name='Earth', r=6.4E6, m=5.974E24,

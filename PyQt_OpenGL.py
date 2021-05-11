@@ -20,7 +20,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.scale_y = 0
         self.scale_z = 0
         self.input_pulse = 0
-        self.total_fuel_consumption = 0
+        self.minimum_mass = 40000
         self.current_velocity = 0
         self.current_angle = 0
         self.manual_control_delta_pulse = 2000000
@@ -82,21 +82,34 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.scale_z = -self.scalefactor
         if event.key() == Qt.Key_Up:
             self.scale_z = self.scalefactor
+
         if event.key() == Qt.Key_6:
-            self.calculation_module.v[0] += self.manual_control_delta_pulse / self.space_objects[0].m
-            self.total_fuel_consumption += self.manual_control_delta_pulse \
-                                                   / self.specific_impulse_of_rocket_engine
-        if event.key() == Qt.Key_4:
-            self.calculation_module.v[0] -= self.manual_control_delta_pulse / self.space_objects[0].m
-            self.total_fuel_consumption += self.manual_control_delta_pulse \
+            if self.space_objects[0].m - self.manual_control_delta_pulse \
+                    / self.specific_impulse_of_rocket_engine > self.minimum_mass:
+                self.calculation_module.v[0] += self.manual_control_delta_pulse \
+                                                 / self.space_objects[0].m
+                self.space_objects[0].m -= self.manual_control_delta_pulse\
                                            / self.specific_impulse_of_rocket_engine
+        if event.key() == Qt.Key_4:
+            if self.space_objects[0].m - self.manual_control_delta_pulse  \
+                    / self.specific_impulse_of_rocket_engine > self.minimum_mass:
+                self.calculation_module.v[0] -= self.manual_control_delta_pulse \
+                                                 / self.space_objects[0].m
+                self.space_objects[0].m -= self.manual_control_delta_pulse \
+                                            / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_8:
-            self.calculation_module.v[1] += self.manual_control_delta_pulse / self.space_objects[0].m
-            self.total_fuel_consumption += self.manual_control_delta_pulse \
+            if self.space_objects[0].m - self.manual_control_delta_pulse  \
+                    / self.specific_impulse_of_rocket_engine > self.minimum_mass:
+                self.calculation_module.v[1] += self.manual_control_delta_pulse \
+                                                / self.space_objects[0].m
+                self.space_objects[0].m -= self.manual_control_delta_pulse  \
                                            / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_2:
-            self.calculation_module.v[1] -= self.manual_control_delta_pulse / self.space_objects[0].m
-            self.total_fuel_consumption += self.manual_control_delta_pulse \
+            if self.space_objects[0].m - self.manual_control_delta_pulse  \
+                    / self.specific_impulse_of_rocket_engine > self.minimum_mass:
+                self.calculation_module.v[1] -= self.manual_control_delta_pulse \
+                                                / self.space_objects[0].m
+                self.space_objects[0].m -= self.manual_control_delta_pulse  \
                                            / self.specific_impulse_of_rocket_engine
 
     def keyReleaseEvent(self, event: QtGui.QKeyEvent):
