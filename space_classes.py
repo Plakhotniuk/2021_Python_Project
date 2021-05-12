@@ -66,13 +66,13 @@ class Starship(CelestialBody):
         self.engine_angle = 0
         self.arrow_length = 30000000
 
-    def set_engine_angle(self):
+    def set_engine_angle(self, angle):
         OpenGL.GL.glLineWidth(1000000000)
         OpenGL.GL.glBegin(OpenGL.GL.GL_LINE_STRIP)
         OpenGL.GL.glColor3d(1, 0, 0)
         OpenGL.GL.glVertex3d(self.x, 5.0E7, self.y)
-        OpenGL.GL.glVertex3d(self.x + int(self.arrow_length * np.cos(self.engine_angle * np.pi / 180)), 5.0E7,
-                             self.y + int(self.arrow_length * np.sin(self.engine_angle * np.pi / 180)))
+        OpenGL.GL.glVertex3d(self.x + int(self.arrow_length * np.cos(angle * np.pi / 180)), 5.0E7,
+                             self.y + int(self.arrow_length * np.sin(angle * np.pi / 180)))
         OpenGL.GL.glEnd()
 
 

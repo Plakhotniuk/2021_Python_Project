@@ -64,8 +64,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             if obj.name == 'SpaceShip':
                 self.current_velocity = int(math.sqrt(obj.vx**2 + obj.vy**2))
                 if not self.start_modeling:
-                    obj.engine_angle = self.current_angle
-                    obj.set_engine_angle()
+                    obj.set_engine_angle(self.current_angle)
 
         self.update()
 
