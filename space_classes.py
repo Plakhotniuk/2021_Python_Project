@@ -29,13 +29,14 @@ class CelestialBody:
         self.color = color
         """Цвет"""
         self.name = name
-        "Название"
-        self.prev_trajectory_coords = [[self.x, self.y, 0]]
+        """Название"""
+        self.prev_trajectory_coordinates = [[self.x, self.y, 0]]
         self.prev_velocity = [[self.vx, self.vy, 0]]
+        """Предрасчитанная траектория"""
 
     def Draw(self):
         """
-        Draws
+        Отрисовывает объект
         """
         sphere = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
@@ -47,26 +48,42 @@ class CelestialBody:
         OpenGL.GL.glPopMatrix()
 
     def draw_trajectory(self):
+        """
+        Отрисовка траектории по предрасчитанным значениям
+        (prev_trajectory_coordinates)
+        """
         OpenGL.GL.glLineWidth(10000000000)
 
         OpenGL.GL.glBegin(OpenGL.GL.GL_LINE_STRIP)
         OpenGL.GL.glColor3d(self.color[0], self.color[1], self.color[2])
 
-        for point in self.prev_trajectory_coords:
+        for point in self.prev_trajectory_coordinates:
             OpenGL.GL.glVertex3d(point[0], 5.0E7, point[1])
 
         OpenGL.GL.glEnd()
 
 
 class Starship(CelestialBody):
-    def __init__(self, time_engine_working=0, engine_thrust=0, m=0, x=0, y=0, vx=0, vy=0, fx=0, fy=0, r=0, color='', name=''):
+    """
+    Класс космического аппарата (наследуется от CelestialBody и имеет немошко дополнительных методов)
+    """
+    def __init__(self, time_engine_working=0, engine_thrust=0, m=0, x=0, y=0, vx=0, vy=0, fx=0, fy=0, r=0, color='',
+                 name=''):
         super().__init__(m=m, x=x, y=y, vx=vx, vy=vy, fx=fx, fy=fy, r=r, color=color, name=name)
         self.time_engine_working = time_engine_working
+        """Текущее время работы двигателя (грубо говоря, сколько осталось работать)"""
         self.engine_thrust = engine_thrust
+        """Сила двигателя"""
         self.engine_angle = 0
-        self.arrow_length = 30000000
+        """Направление работы двигателя (в какую сторону будет лететь аппарат)"""
+        self.arrow_length = 10000000
+        """"""
 
     def set_engine_angle(self, angle):
+        """
+        Устанавливаем угол для отрисовки направления для выбора угла полета
+        angle - угол для отрисовки
+        """
         OpenGL.GL.glLineWidth(1000000000)
         OpenGL.GL.glBegin(OpenGL.GL.GL_LINE_STRIP)
         OpenGL.GL.glColor3d(1, 0, 0)
