@@ -20,12 +20,12 @@ try:
         util.find_library = new_util_find_library
 except ImportError:
     pass
-import sys
 from math import pi
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QSlider
+from PyQt5.QtWidgets import QSlider, QDialog
 from PyQt_OpenGL import PyOpenGL
 from PyQt5.QtCore import QTimer
+import sys
 
 
 class UiMainWindow:
@@ -205,17 +205,17 @@ class UiMainWindow:
         MainWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuOpengl.menuAction())
 
-        self.retranslateUi(MainWindow)
+        self.retranslateui(MainWindow)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateui(self, main_window):
         """
         Выводит надписи на кнопках и доп поверхностях
-        :param MainWindow:
+        :param main_window:
         """
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Welcome to Kerbal 2.0 !"))
+        main_window.setWindowTitle(_translate("MainWindow", "Welcome to Kerbal 2.0 !"))
         self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
         self.pushButton_calculate.setText(_translate("MainWindow", "Calculate"))
         self.pushButton_start.setText(_translate("MainWindow", "Start !"))
@@ -240,24 +240,92 @@ class UiMainWindow:
         self.comboBox_time.setItemText(4, _translate("MainWindow", "Real Time"))
 
 
+class UiStartWindow:
+    def __init__(self, StartWindow):
+        self.centralwidget = QtWidgets.QWidget(StartWindow)
+        self.statusbar = QtWidgets.QStatusBar(StartWindow)
+        self.menubar = QtWidgets.QMenuBar(StartWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.Picture = QtWidgets.QLabel(self.centralwidget)
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+
+    def setupUi(self, StartWindow):
+        desktop_size = QtWidgets.QDesktopWidget().screenGeometry()
+        StartWindow.setObjectName("StartWindow")
+        StartWindow.resize(desktop_size.width(), desktop_size.height())
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(StartWindow.sizePolicy().hasHeightForWidth())
+        StartWindow.setSizePolicy(sizePolicy)
+
+        self.Picture.setGeometry(QtCore.QRect(0, 0, desktop_size.width(), desktop_size.height()))
+        self.Picture.setText("")
+        self.Picture.setPixmap(QtGui.QPixmap("Entire_screen.jpg"))
+        self.Picture.setScaledContents(True)
+        self.Picture.setObjectName("Picture")
+        self.pushButton.setGeometry(QtCore.QRect(580, 620, 241, 91))
+
+        StartWindow.setCentralWidget(self.centralwidget)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1440, 22))
+        self.menubar.setObjectName("menubar")
+        StartWindow.setMenuBar(self.menubar)
+        self.statusbar.setObjectName("statusbar")
+        StartWindow.setStatusBar(self.statusbar)
+        self.pushButton.setStyleSheet("background-color: transparent; border-image: url(StartGame.png); background: none; border: none; background-repeat: none;")
+
+
+        self.retranslateUi(StartWindow)
+        QtCore.QMetaObject.connectSlotsByName(StartWindow)
+
+    def retranslateUi(self, StartWindow):
+        _translate = QtCore.QCoreApplication.translate
+        StartWindow.setWindowTitle(_translate("StartWindow", "StartWindow"))
+        self.pushButton.setText("")
+        self.pushButton.setObjectName("pushButton")
+
+
+class StartWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.start_win = QtWidgets.QMainWindow()
+        self.ui = UiStartWindow(self.start_win)
+        self.ui.setupUi(self.start_win)
+        self.show()
+
+
 class MainWindow(QtWidgets.QWidget):
     """
     Класс основного меню внутри приложения
     """
 
     def __init__(self, sp_objects: list):
-        super().__init__()
-        self.app = QtWidgets.QApplication(sys.argv)
+        super(MainWindow, self).__init__()
+        self.show_window1()
+        self.sp_objects = sp_objects
+
+    def show_window1(self):
+        """
+        Показывает начальое окно
+        """
+        self.main_win = QtWidgets.QMainWindow()
+        self.ui = UiStartWindow(self.main_win)
+        self.ui.setupUi(self.main_win)
+        self.ui.pushButton.clicked.connect(self.show_window2)
+        self.show()
+
+    def show_window2(self):
+        """
+        Показывает внутриигровое окно
+        """
         self.main_win = QtWidgets.QMainWindow()
         self.ui = UiMainWindow(self.main_win)
         self.ui.setupUi(self.main_win)
-        open_gl = PyOpenGL(sp_objects, parent=self.ui.frame)
+        open_gl = PyOpenGL(self.sp_objects, parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
         self.open_gl = open_gl
         self.screen_size = open_gl.size()
         self.input_pulse_direction_angle = 0
-        self.show()
-
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_velocity_and_angle)
         self.timer.start(10)
@@ -266,7 +334,7 @@ class MainWindow(QtWidgets.QWidget):
         self.pulse = ''
         self.time_engine_working = ''
         self.time_of_modeling = ''
-        self.space_objects = sp_objects
+        self.space_objects = self.sp_objects
         self.starshipi_index = 0
         self.combobox_index_time = 0
 
@@ -276,9 +344,12 @@ class MainWindow(QtWidgets.QWidget):
 
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
+        self.show()
+
     def update_velocity_and_angle(self):
         self.ui.label_current_velocity_value.setText(str(int(self.open_gl.current_velocity)))
         self.open_gl.current_angle = int(self.ui.slider_pulse_direction.value())
+
         self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
     def set_time_accelerate(self):
@@ -319,6 +390,7 @@ class MainWindow(QtWidgets.QWidget):
         if self.time_engine_working != '':
             self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
         if self.input_pulse_direction_angle != '':
+            print(self.input_pulse_direction_angle)
             self.space_objects[self.starshipi_index].engine_angle = (int(self.input_pulse_direction_angle) * pi) / 180
         if self.pulse != '':
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
@@ -347,12 +419,12 @@ class MainWindow(QtWidgets.QWidget):
                 self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
                 if self.input_pulse_direction_angle != '':
+                    print(self.input_pulse_direction_angle)
                     self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
                                                                             * pi / 180
                 self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
             self.ui.slider_pulse_direction.setValue(0)
             self.clear()
-
             self.ui.pushButton_calculate.setEnabled(False)
 
         else:

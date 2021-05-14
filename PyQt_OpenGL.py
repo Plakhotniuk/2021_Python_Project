@@ -38,12 +38,12 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         OpenGL.GL.glEnable(OpenGL.GL.GL_COLOR_MATERIAL)
 
     def resizeGL(self, w: int, h: int):
-        MIN_SCALE = 1.0E7
-        MAX_SCALE = 1.5E11
+        min_scale = 1.0E7
+        max_scale = 1.5E11
         OpenGL.GL.glViewport(0, 0, w, h)
         OpenGL.GL.glMatrixMode(OpenGL.GL.GL_PROJECTION)
         OpenGL.GL.glLoadIdentity()
-        OpenGL.GLU.gluPerspective(90, float(w / h), MIN_SCALE, MAX_SCALE)
+        OpenGL.GLU.gluPerspective(90, float(w / h), min_scale, max_scale)
         OpenGL.GL.glMatrixMode(OpenGL.GL.GL_MODELVIEW)
         OpenGL.GL.glLoadIdentity()
         OpenGL.GLU.gluLookAt(0, -1, 0, 0, 0, 0, 0, 0, 10)
@@ -58,11 +58,11 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.calculation_module.recalculate_space_objects_positions()
         for obj in self.space_objects:
             if self.is_trajectory_shown and not self.start_modeling:
-                 obj.draw_trajectory()
+                obj.draw_trajectory()
             obj.Draw()
 
             if obj.name == 'SpaceShip':
-                self.current_velocity = int(math.sqrt(obj.vx**2 + obj.vy**2))
+                self.current_velocity = int(math.sqrt(obj.vx ** 2 + obj.vy ** 2))
                 if not self.start_modeling:
                     obj.set_engine_angle(self.current_angle)
 
@@ -86,29 +86,29 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             if self.space_objects[0].m - self.manual_control_delta_pulse \
                     / self.specific_impulse_of_rocket_engine > self.minimum_mass:
                 self.calculation_module.v[0] += self.manual_control_delta_pulse \
-                                                 / self.space_objects[0].m
-                self.space_objects[0].m -= self.manual_control_delta_pulse\
+                                                / self.space_objects[0].m
+                self.space_objects[0].m -= self.manual_control_delta_pulse \
                                            / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_4:
-            if self.space_objects[0].m - self.manual_control_delta_pulse  \
+            if self.space_objects[0].m - self.manual_control_delta_pulse \
                     / self.specific_impulse_of_rocket_engine > self.minimum_mass:
                 self.calculation_module.v[0] -= self.manual_control_delta_pulse \
-                                                 / self.space_objects[0].m
+                                                / self.space_objects[0].m
                 self.space_objects[0].m -= self.manual_control_delta_pulse \
-                                            / self.specific_impulse_of_rocket_engine
+                                           / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_8:
-            if self.space_objects[0].m - self.manual_control_delta_pulse  \
+            if self.space_objects[0].m - self.manual_control_delta_pulse \
                     / self.specific_impulse_of_rocket_engine > self.minimum_mass:
                 self.calculation_module.v[1] += self.manual_control_delta_pulse \
                                                 / self.space_objects[0].m
-                self.space_objects[0].m -= self.manual_control_delta_pulse  \
+                self.space_objects[0].m -= self.manual_control_delta_pulse \
                                            / self.specific_impulse_of_rocket_engine
         if event.key() == Qt.Key_2:
-            if self.space_objects[0].m - self.manual_control_delta_pulse  \
+            if self.space_objects[0].m - self.manual_control_delta_pulse \
                     / self.specific_impulse_of_rocket_engine > self.minimum_mass:
                 self.calculation_module.v[1] -= self.manual_control_delta_pulse \
                                                 / self.space_objects[0].m
-                self.space_objects[0].m -= self.manual_control_delta_pulse  \
+                self.space_objects[0].m -= self.manual_control_delta_pulse \
                                            / self.specific_impulse_of_rocket_engine
 
     def keyReleaseEvent(self, event: QtGui.QKeyEvent):
