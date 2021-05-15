@@ -20,6 +20,7 @@ try:
         util.find_library = new_util_find_library
 except ImportError:
     pass
+import sys
 from math import pi
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
@@ -77,6 +78,7 @@ class UiMainWindow:
         size_policy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(size_policy)
         MainWindow.setMouseTracking(True)
+
         """Далее идут все детали интерфейса (ползунки, кнопочки и тд):"""
 
         self.centralwidget.setMinimumSize(QtCore.QSize(800, 0))
@@ -101,21 +103,29 @@ class UiMainWindow:
         # TODO: уйти от хардкода в расположении виджетов(кнопок)
 
         """Buttons"""
-        self.pushButton_quit.setGeometry(QtCore.QRect(60, 800, 113, 32))
+        self.pushButton_quit.setGeometry(QtCore.QRect(0 * desktop_size.width() / 1366, 0 * desktop_size.height()/768,
+                                                      113 * desktop_size.width()/1366, 32 * desktop_size.height()/768))
         self.pushButton_quit.setObjectName("pushButton_quit")
         font = QtGui.QFont()
-        font.setPointSize(25)
+        font.setPointSize(20)
         self.pushButton_calculate.setFont(font)
-        self.pushButton_calculate.setGeometry(QtCore.QRect(50, 645, 130, 70))
+        self.pushButton_calculate.setGeometry(QtCore.QRect(50 * desktop_size.width() / 1366,
+                                                           600 * desktop_size.height() / 768,
+                                                           130 * desktop_size.width() / 1366,
+                                                           70 * desktop_size.height() / 768))
         self.pushButton_calculate.setObjectName("pushButton_calculate")
 
-        self.pushButton_start.setGeometry(QtCore.QRect(50, 730, 130, 70))
+        self.pushButton_start.setGeometry(QtCore.QRect(50 * desktop_size.width() / 1366,
+                                                       700 * desktop_size.height() / 768,
+                                                       int(130 * desktop_size.width() / 1366),
+                                                       int(70 * desktop_size.height() / 768)))
         font.setPointSize(25)
         self.pushButton_start.setFont(font)
         self.pushButton_start.setObjectName("pushButton_start")
 
         """Slider"""
-        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 245, 200, 22))
+        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 245, int(200 * desktop_size.width() / 1366),
+                                                             int(22 * desktop_size.height() / 768)))
         self.slider_pulse_direction.setOrientation(QtCore.Qt.Horizontal)
         self.slider_pulse_direction.setObjectName("horizontalSlider_pulse_direction")
         self.slider_pulse_direction.valueChanged['int'].connect(self.label_current_direction_angle.setNum)
@@ -157,13 +167,11 @@ class UiMainWindow:
         self.label_pulse.setObjectName("label_pulse")
         self.label_pulse.setStyleSheet("color: white")
 
-
         font.setPointSize(25)
         self.label_engine_running_time.setGeometry(QtCore.QRect(20, 195, 200, 251))
         self.label_engine_running_time.setFont(font)
         self.label_engine_running_time.setObjectName("label_time_wait")
         self.label_engine_running_time.setStyleSheet("color: white")
-
 
         font.setPointSize(25)
         self.label_time_of_calculation_tr.setGeometry(QtCore.QRect(20, 380, 210, 70))
@@ -225,17 +233,17 @@ class UiMainWindow:
         MainWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuOpengl.menuAction())
 
-        self.retranslateui(MainWindow)
+        self.retranslateUi(MainWindow)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateui(self, main_window):
+    def retranslateUi(self, MainWindow):
         """
         Выводит надписи на кнопках и доп поверхностях
-        :param main_window:
+        :param MainWindow:
         """
         _translate = QtCore.QCoreApplication.translate
-        main_window.setWindowTitle(_translate("MainWindow", "Welcome to Kerbal 2.0 !"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Welcome to Kerbal 2.0 !"))
         self.pushButton_quit.setText(_translate("MainWindow", "Quit"))
         self.pushButton_calculate.setText(_translate("MainWindow", "Calculate"))
         self.pushButton_start.setText(_translate("MainWindow", "Start !"))
@@ -337,8 +345,10 @@ class MainWindow(QtWidgets.QWidget):
     """
     Класс основного меню внутри приложения
     """
+
     def __init__(self, sp_objects: list):
-        super(MainWindow, self).__init__()
+        super().__init__()
+        self.app = QtWidgets.QApplication(sys.argv)
         self.main_win = QtWidgets.QMainWindow()
         self.ui = UiMainWindow(self.main_win)
         self.ui.setupUi(self.main_win)
@@ -347,6 +357,8 @@ class MainWindow(QtWidgets.QWidget):
         self.open_gl = open_gl
         self.screen_size = open_gl.size()
         self.input_pulse_direction_angle = 0
+        self.show()
+
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_velocity_and_angle)
         self.timer.start(10)
@@ -365,12 +377,9 @@ class MainWindow(QtWidgets.QWidget):
 
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
 
-        self.show()
-
     def update_velocity_and_angle(self):
         self.ui.label_current_velocity_value.setText(str(int(self.open_gl.current_velocity)))
         self.open_gl.current_angle = int(self.ui.slider_pulse_direction.value())
-
         self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
     def set_time_accelerate(self):
@@ -411,7 +420,6 @@ class MainWindow(QtWidgets.QWidget):
         if self.time_engine_working != '':
             self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
         if self.input_pulse_direction_angle != '':
-            print(self.input_pulse_direction_angle)
             self.space_objects[self.starshipi_index].engine_angle = (int(self.input_pulse_direction_angle) * pi) / 180
         if self.pulse != '':
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
@@ -440,12 +448,12 @@ class MainWindow(QtWidgets.QWidget):
                 self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
                 if self.input_pulse_direction_angle != '':
-                    print(self.input_pulse_direction_angle)
                     self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
                                                                             * pi / 180
                 self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
             self.ui.slider_pulse_direction.setValue(0)
             self.clear()
+
             self.ui.pushButton_calculate.setEnabled(False)
 
         else:
