@@ -22,10 +22,9 @@ except ImportError:
     pass
 from math import pi
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QSlider, QDialog
+from PyQt5.QtWidgets import QSlider
 from PyQt_OpenGL import PyOpenGL
 from PyQt5.QtCore import QTimer
-import sys
 
 
 class UiMainWindow:
@@ -36,6 +35,7 @@ class UiMainWindow:
     def __init__(self, MainWindow):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.Picture = QtWidgets.QLabel(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menuOpengl = QtWidgets.QMenu(self.menubar)
         self.label_engine_running_time = QtWidgets.QLabel(self.centralwidget)
@@ -81,6 +81,11 @@ class UiMainWindow:
 
         self.centralwidget.setMinimumSize(QtCore.QSize(800, 0))
         self.centralwidget.setObjectName("centralwidget")
+        self.Picture.setGeometry(QtCore.QRect(0, 0, desktop_size.width(), desktop_size.height()))
+        self.Picture.setText("")
+        self.Picture.setPixmap(QtGui.QPixmap("StarrySky.jpg"))
+        self.Picture.setScaledContents(True)
+        self.Picture.setObjectName("Picture")
         self.frame.setGeometry(
             QtCore.QRect(250 * desktop_size.width() / 1440, desktop_size.height() * 20 / 900,
                          desktop_size.width() * 1161 / 1440, desktop_size.height() * 811 / 900))
@@ -121,6 +126,9 @@ class UiMainWindow:
         self.slider_pulse_direction.setTickPosition(QSlider.TicksBelow)
         self.slider_pulse_direction.setProperty("value", 0)
         self.slider_pulse_direction.setSliderPosition(0)
+        self.slider_pulse_direction.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4,"
+                                                  " stop:1 #8f8f8f);border: 1px solid #5c5c5c; width: 18px;"
+                                                  " margin: -2px 0; border-radius: 5px;")
 
         """Combo Box"""
         self.comboBox_time.setObjectName("comboBox")
@@ -140,22 +148,28 @@ class UiMainWindow:
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.label.setStyleSheet("color: white")
 
         font = QtGui.QFont()
         font.setPointSize(25)
         self.label_pulse.setGeometry(QtCore.QRect(20, 117, 157, 51))
         self.label_pulse.setFont(font)
         self.label_pulse.setObjectName("label_pulse")
+        self.label_pulse.setStyleSheet("color: white")
+
 
         font.setPointSize(25)
         self.label_engine_running_time.setGeometry(QtCore.QRect(20, 195, 200, 251))
         self.label_engine_running_time.setFont(font)
         self.label_engine_running_time.setObjectName("label_time_wait")
+        self.label_engine_running_time.setStyleSheet("color: white")
+
 
         font.setPointSize(25)
         self.label_time_of_calculation_tr.setGeometry(QtCore.QRect(20, 380, 210, 70))
         self.label_time_of_calculation_tr.setFont(font)
         self.label_time_of_calculation_tr.setObjectName("label_time_of_calc")
+        self.label_time_of_calculation_tr.setStyleSheet("color: white")
 
         self.label_current_velocity_fuel.setGeometry(QtCore.QRect(1050, 50, 250, 70))
         self.label_current_velocity_fuel.setFont(font)
@@ -176,15 +190,21 @@ class UiMainWindow:
         self.label_current_direction_angle.setFont(font)
         self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 235, 50, 31))
         self.label_current_direction_angle.setObjectName("label_direction_angle")
+        self.label_current_direction_angle.setStyleSheet("color: white")
+
 
         font.setPointSize(25)
         self.label_direction_angle.setFont(font)
         self.label_direction_angle.setGeometry(QtCore.QRect(20, 190, 250, 61))
         self.label_direction_angle.setObjectName("label_direction_angle")
+        self.label_direction_angle.setStyleSheet("color: white")
+
 
         self.label_time_factor.setFont(font)
         self.label_time_factor.setGeometry(QtCore.QRect(10, 500, 130, 30))
         self.label_time_factor.setObjectName("label_time_factor")
+        self.label_time_factor.setStyleSheet("color: white")
+
 
         """Text edit"""
         self.textEdit_pulse.setGeometry(QtCore.QRect(110, 160, 105, 30))
@@ -272,7 +292,8 @@ class UiStartWindow:
         StartWindow.setMenuBar(self.menubar)
         self.statusbar.setObjectName("statusbar")
         StartWindow.setStatusBar(self.statusbar)
-        self.pushButton.setStyleSheet("background-color: transparent; border-image: url(StartGame.png); background: none; border: none; background-repeat: none;")
+        self.pushButton.setStyleSheet("#pushButton{background-color: transparent; border-image: url(StartGame.png);"
+                                      " background: none; border: none; background-repeat: none;} #pushButton:pressed {border-image: url(StartGamePressed.png)}")
 
 
         self.retranslateUi(StartWindow)
@@ -286,13 +307,16 @@ class UiStartWindow:
 
 
 class StartWindow(QtWidgets.QWidget):
+    """
+        Класс начального меню внутри приложения
+    """
     def __init__(self, sp_objects: list):
         super(StartWindow, self).__init__()
         self.main_win = QtWidgets.QMainWindow()
         self.ui = UiStartWindow(self.main_win)
         self.sp_objects = sp_objects
         self.ui.setupUi(self.main_win)
-        self.ui.pushButton.clicked.connect(self.show_window2)
+        self.ui.pushButton.clicked.connect(self.show_main_window)
         self.show()
 
     def show(self):
@@ -301,7 +325,7 @@ class StartWindow(QtWidgets.QWidget):
         """
         self.main_win.show()
 
-    def show_window2(self):
+    def show_main_window(self):
         """
         Создает основное окно внутри приложения
         """

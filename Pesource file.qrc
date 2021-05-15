@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="newPrefix_ButtonStart">
+    <file>StartGamePressed.png</file>
     <file>StartGame.png</file>
     <file>Custom_Button_Test.png</file>
   </qresource>
