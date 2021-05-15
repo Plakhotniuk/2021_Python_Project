@@ -34,7 +34,7 @@ class CelestialBody:
         self.prev_velocity = [[self.vx, self.vy, 0]]
         """Предрасчитанная траектория"""
 
-    def drawing(self):
+    def Draw(self):
         """
         Отрисовывает объект
         """

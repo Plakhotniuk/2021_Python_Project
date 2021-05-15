@@ -14,7 +14,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         QtWidgets.qApp.installEventFilter(self)
         self.viewMatrix = None
         self.setFocus()
-        self.scale_factor = 5.0E6
+        self.scalefactor = 5.0E6
         self.specific_impulse_of_rocket_engine = 30000
         self.scale_x = 0
         self.scale_y = 0
@@ -59,7 +59,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         for obj in self.space_objects:
             if self.is_trajectory_shown and not self.start_modeling:
                 obj.draw_trajectory()
-            obj.drawing()
+            obj.Draw()
 
             if obj.name == 'SpaceShip':
                 self.current_velocity = int(math.sqrt(obj.vx ** 2 + obj.vy ** 2))
@@ -70,17 +70,17 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_W:
-            self.scale_y = self.scale_factor
+            self.scale_y = self.scalefactor
         elif event.key() == Qt.Key_S:
-            self.scale_y = -self.scale_factor
+            self.scale_y = -self.scalefactor
         elif event.key() == Qt.Key_D:
-            self.scale_x = -self.scale_factor
+            self.scale_x = -self.scalefactor
         elif event.key() == Qt.Key_A:
-            self.scale_x = self.scale_factor
+            self.scale_x = self.scalefactor
         if event.key() == Qt.Key_Down:
-            self.scale_z = -self.scale_factor
+            self.scale_z = -self.scalefactor
         if event.key() == Qt.Key_Up:
-            self.scale_z = self.scale_factor
+            self.scale_z = self.scalefactor
 
         if event.key() == Qt.Key_6:
             if self.space_objects[0].m - self.manual_control_delta_pulse \
