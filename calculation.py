@@ -3,9 +3,8 @@ from math import cos, sin
 
 G = -6.67E-11
 
-#TODO PEP8!
 
-class function_f:
+class FunctionF:
     """
     Функтор, отвечающий за функцию по первой произсводной в расчёте системы
     """
@@ -19,7 +18,7 @@ class function_f:
         pass
 
 
-class function_g:
+class FunctionG:
     """
     Функтор, отвечающий за функцию по второй произсводной в расчёте системы
     """
@@ -34,13 +33,13 @@ class function_g:
         self.index_of_starship = 0
 
     def __call__(self, t_n, x_n, vx_n):
-        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_gforces(1, x_n),
-                         *self.calc_all_gforces(2, x_n), *self.calc_all_gforces(3, x_n)])
+        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_g_forces(1, x_n),
+                         *self.calc_all_g_forces(2, x_n), *self.calc_all_g_forces(3, x_n)])
 
     def __add__(self):
         pass
 
-    def calc_gforce(self, x1, y1, x2, y2, mass):
+    def calculate_g_force(self, x1, y1, x2, y2, mass):
         """
         Расчет гравитационной силы по осям, действующих со стороны x2 y2 на x1 y1
         :param x1, y1, x2, y2 - координаты соответсвующих объектов
@@ -49,7 +48,7 @@ class function_g:
         return np.array([G * mass * (x1 - x2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3),
                          G * mass * (y1 - y2) / ((np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)) ** 3)])
 
-    def calc_all_gforces(self, ind, x_n):
+    def calc_all_g_forces(self, ind, x_n):
         """
         Вычисление всех гравитационных сил для соответвующего тела
         :param ind: индекс соответвующего тела в массиве space_objects
@@ -59,15 +58,15 @@ class function_g:
         result = np.array([0.0, 0.0])
         for i in range(x_n.size // 2):
             if i != ind:
-                result = result + self.calc_gforce(x_n[2 * ind], x_n[2 * ind + 1], x_n[2 * i], x_n[2 * i + 1],
-                                                   self.mass[i])
+                result = result + self.calculate_g_force(x_n[2 * ind], x_n[2 * ind + 1], x_n[2 * i], x_n[2 * i + 1],
+                                                         self.mass[i])
         return result
 
     def calc_forces_on_starship(self, ind, x_n):
         """
         Функция вычисления сил, действующих на корабль
         """
-        result = self.calc_all_gforces(ind, x_n)
+        result = self.calc_all_g_forces(ind, x_n)
         if self.space_objects[self.index_of_starship].time_engine_working > 0:
             result = result + np.array([self.space_objects[self.index_of_starship].engine_thrust * cos(
                 self.space_objects[self.index_of_starship].engine_angle) / self.mass[self.index_of_starship],
@@ -82,8 +81,8 @@ class Calculation:
     Класс - калькулятор, инкапсулируешь в себе вычисления координат траекторий
     """
     def __init__(self, space_obj, dt, speed):
-        self.f = function_f()
-        self.g = function_g(space_obj)
+        self.f = FunctionF()
+        self.g = FunctionG(space_obj)
         self.dt = dt  # шаг по времени
         self.time_of_count = 0  # "на сколько времени уже предрассчитано"
         self.x = np.array([])  # координаты всех объектов системы подряд
@@ -307,7 +306,7 @@ class Calculation:
         self.g.space_objects[3].prev_velocity.clear()
 
         self.dt = 100
-        time_of_calcs = 0
+        time_of_calculations = 0
 
         nx = self.x
         nv = self.v
@@ -325,13 +324,13 @@ class Calculation:
             self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
             self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
 
-            time_of_calcs += self.dt
+            time_of_calculations += self.dt
             self.g.space_objects[self.g.index_of_starship].time_engine_working = 0
             self.dt = 100
 
-        while time_of_calcs < time:
+        while time_of_calculations < time:
             nx, nv = self.dorm_prise(0, nx, nv, 0)
-            time_of_calcs += self.dt
+            time_of_calculations += self.dt
 
             # потому что фор лучше не делать
             self.g.space_objects[0].prev_trajectory_coords.append([nx[0], nx[1], 0])
@@ -349,7 +348,7 @@ class Calculation:
                 self.g.space_objects[self.g.index_of_starship].time_engine_working -= self.dt
             if 0 < self.g.space_objects[0].time_engine_working < 100:
                 self.dt = self.g.space_objects[0].time_engine_working
-                time_of_calcs += self.dt
+                time_of_calculations += self.dt
                 nx, nv = self.dorm_prise(0, nx, nv, 0)
 
                 # потому что фор лучше не делать
