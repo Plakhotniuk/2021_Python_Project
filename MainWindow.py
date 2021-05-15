@@ -285,43 +285,40 @@ class UiStartWindow:
         self.pushButton.setObjectName("pushButton")
 
 
-class StartWindow(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.start_win = QtWidgets.QMainWindow()
-        self.ui = UiStartWindow(self.start_win)
-        self.ui.setupUi(self.start_win)
+class StartWindow(QtWidgets.QWidget):
+    def __init__(self, sp_objects: list):
+        super(StartWindow, self).__init__()
+        self.main_win = QtWidgets.QMainWindow()
+        self.ui = UiStartWindow(self.main_win)
+        self.sp_objects = sp_objects
+        self.ui.setupUi(self.main_win)
+        self.ui.pushButton.clicked.connect(self.show_window2)
         self.show()
+
+    def show(self):
+        """
+        Отображает меню на экране
+        """
+        self.main_win.show()
+
+    def show_window2(self):
+        """
+        Создает основное окно внутри приложения
+        """
+        self.game_window = MainWindow(self.sp_objects)
+        self.main_win.close()
 
 
 class MainWindow(QtWidgets.QWidget):
     """
     Класс основного меню внутри приложения
     """
-
     def __init__(self, sp_objects: list):
         super(MainWindow, self).__init__()
-        self.show_window1()
-        self.sp_objects = sp_objects
-
-    def show_window1(self):
-        """
-        Показывает начальое окно
-        """
-        self.main_win = QtWidgets.QMainWindow()
-        self.ui = UiStartWindow(self.main_win)
-        self.ui.setupUi(self.main_win)
-        self.ui.pushButton.clicked.connect(self.show_window2)
-        self.show()
-
-    def show_window2(self):
-        """
-        Показывает внутриигровое окно
-        """
         self.main_win = QtWidgets.QMainWindow()
         self.ui = UiMainWindow(self.main_win)
         self.ui.setupUi(self.main_win)
-        open_gl = PyOpenGL(self.sp_objects, parent=self.ui.frame)
+        open_gl = PyOpenGL(sp_objects, parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
         self.open_gl = open_gl
         self.screen_size = open_gl.size()
@@ -334,7 +331,7 @@ class MainWindow(QtWidgets.QWidget):
         self.pulse = ''
         self.time_engine_working = ''
         self.time_of_modeling = ''
-        self.space_objects = self.sp_objects
+        self.space_objects = sp_objects
         self.starshipi_index = 0
         self.combobox_index_time = 0
 
