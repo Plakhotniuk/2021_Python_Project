@@ -103,28 +103,30 @@ class UiMainWindow:
         # TODO: уйти от хардкода в расположении виджетов(кнопок)
 
         """Buttons"""
-        self.pushButton_quit.setGeometry(QtCore.QRect(0 * desktop_size.width() / 1366, 0 * desktop_size.height()/768,
+        self.pushButton_quit.setGeometry(QtCore.QRect(60 * desktop_size.width() / 1366, 642 * desktop_size.height()/768,
                                                       113 * desktop_size.width()/1366, 32 * desktop_size.height()/768))
         self.pushButton_quit.setObjectName("pushButton_quit")
         font = QtGui.QFont()
         font.setPointSize(20)
         self.pushButton_calculate.setFont(font)
         self.pushButton_calculate.setGeometry(QtCore.QRect(50 * desktop_size.width() / 1366,
-                                                           600 * desktop_size.height() / 768,
+                                                           530 * desktop_size.height() / 768,
                                                            130 * desktop_size.width() / 1366,
-                                                           70 * desktop_size.height() / 768))
+                                                           55 * desktop_size.height() / 768))
         self.pushButton_calculate.setObjectName("pushButton_calculate")
 
         self.pushButton_start.setGeometry(QtCore.QRect(50 * desktop_size.width() / 1366,
-                                                       700 * desktop_size.height() / 768,
+                                                       588 * desktop_size.height() / 768,
                                                        int(130 * desktop_size.width() / 1366),
-                                                       int(70 * desktop_size.height() / 768)))
+                                                       int(52 * desktop_size.height() / 768)))
         font.setPointSize(25)
         self.pushButton_start.setFont(font)
         self.pushButton_start.setObjectName("pushButton_start")
 
         """Slider"""
-        self.slider_pulse_direction.setGeometry(QtCore.QRect(10, 245, int(200 * desktop_size.width() / 1366),
+        self.slider_pulse_direction.setGeometry(QtCore.QRect(10 * desktop_size.width() / 1366,
+                                                             245 * desktop_size.height() / 768,
+                                                             int(200 * desktop_size.width() / 1366),
                                                              int(22 * desktop_size.height() / 768)))
         self.slider_pulse_direction.setOrientation(QtCore.Qt.Horizontal)
         self.slider_pulse_direction.setObjectName("horizontalSlider_pulse_direction")
@@ -147,13 +149,17 @@ class UiMainWindow:
         self.comboBox_time.addItem("X5")
         self.comboBox_time.addItem("X10")
         self.comboBox_time.addItem("Real Time")
-        self.comboBox_time.setGeometry(QtCore.QRect(130, 507, 105, 25))
+        self.comboBox_time.setGeometry(QtCore.QRect(130 * desktop_size.width() / 1366,
+                                                    507 * desktop_size.height() / 768,
+                                                    105 * desktop_size.width() / 1366,
+                                                    25 * desktop_size.height() / 768))
 
         """Labels and Fonts"""
         self.label.setGeometry(
-            QtCore.QRect(20, 20, int(220 / 1440 * desktop_size.width()), int(110 / 900 * desktop_size.height())))
+            QtCore.QRect(20 * desktop_size.width() / 1366, 20 * desktop_size.height() / 768,
+                         int(220 / 1440 * desktop_size.width()), int(110 / 900 * desktop_size.height())))
         font = QtGui.QFont()
-        font.setPointSize(25)
+        font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
         self.label.setFont(font)
@@ -161,71 +167,101 @@ class UiMainWindow:
         self.label.setStyleSheet("color: white")
 
         font = QtGui.QFont()
-        font.setPointSize(25)
-        self.label_pulse.setGeometry(QtCore.QRect(20, 117, 157, 51))
+        font.setPointSize(18)
+        self.label_pulse.setGeometry(QtCore.QRect(16 * desktop_size.width() / 1366, 117 * desktop_size.height() / 768,
+                                                  157 * desktop_size.width() / 1366, 51 * desktop_size.height() / 768))
         self.label_pulse.setFont(font)
         self.label_pulse.setObjectName("label_pulse")
         self.label_pulse.setStyleSheet("color: white")
 
-        font.setPointSize(25)
-        self.label_engine_running_time.setGeometry(QtCore.QRect(20, 195, 200, 251))
+        font.setPointSize(20)
+        self.label_engine_running_time.setGeometry(QtCore.QRect(16 * desktop_size.width() / 1366,
+                                                                195 * desktop_size.height() / 768,
+                                                                200 * desktop_size.width() / 1366,
+                                                                251 * desktop_size.height() / 768))
         self.label_engine_running_time.setFont(font)
         self.label_engine_running_time.setObjectName("label_time_wait")
         self.label_engine_running_time.setStyleSheet("color: white")
 
-        font.setPointSize(25)
-        self.label_time_of_calculation_tr.setGeometry(QtCore.QRect(20, 380, 210, 70))
+        font.setPointSize(20)
+        self.label_time_of_calculation_tr.setGeometry(QtCore.QRect(20 * desktop_size.width() / 1366,
+                                                                   380 * desktop_size.height() / 768,
+                                                                   210 * desktop_size.width() / 1366,
+                                                                   70 * desktop_size.height() / 768))
         self.label_time_of_calculation_tr.setFont(font)
         self.label_time_of_calculation_tr.setObjectName("label_time_of_calc")
         self.label_time_of_calculation_tr.setStyleSheet("color: white")
 
-        self.label_current_velocity_fuel.setGeometry(QtCore.QRect(1050, 50, 250, 70))
+        self.label_current_velocity_fuel.setGeometry(QtCore.QRect(1050 * desktop_size.width() / 1366,
+                                                                  50 * desktop_size.height() / 768,
+                                                                  250 * desktop_size.width() / 1366,
+                                                                  70 * desktop_size.height() / 768))
         self.label_current_velocity_fuel.setFont(font)
         self.label_current_velocity_fuel.setObjectName("label_current_velocity")
         self.label_current_velocity_fuel.setStyleSheet("color: white")
 
-        self.label_current_velocity_value.setGeometry(QtCore.QRect(1300, 40, 210, 70))
+        self.label_current_velocity_value.setGeometry(QtCore.QRect(1290 * desktop_size.width() / 1366,
+                                                                   40 * desktop_size.height() / 768,
+                                                                   210 * desktop_size.width() / 1366,
+                                                                   70 * desktop_size.height() / 768))
         self.label_current_velocity_value.setFont(font)
         self.label_current_velocity_value.setObjectName("label_current_velocity_value")
         self.label_current_velocity_value.setStyleSheet("color: white")
 
-        self.label_current_fuel_value.setGeometry(QtCore.QRect(1300, 65, 210, 70))
+        self.label_current_fuel_value.setGeometry(QtCore.QRect(1290 * desktop_size.width() / 1366,
+                                                               65 * desktop_size.height() / 768,
+                                                               210 * desktop_size.width() / 1366,
+                                                               70 * desktop_size.height() / 768))
         self.label_current_fuel_value.setFont(font)
         self.label_current_fuel_value.setObjectName("label_current_fuel_value")
         self.label_current_fuel_value.setStyleSheet("color: white")
 
         font.setPointSize(18)
         self.label_current_direction_angle.setFont(font)
-        self.label_current_direction_angle.setGeometry(QtCore.QRect(215, 235, 50, 31))
+        self.label_current_direction_angle.setGeometry(QtCore.QRect(215 * desktop_size.width() / 1366,
+                                                                    235 * desktop_size.height() / 768,
+                                                                    50 * desktop_size.width() / 1366,
+                                                                    31 * desktop_size.height() / 768))
         self.label_current_direction_angle.setObjectName("label_direction_angle")
         self.label_current_direction_angle.setStyleSheet("color: white")
 
-
-        font.setPointSize(25)
+        font.setPointSize(20)
         self.label_direction_angle.setFont(font)
-        self.label_direction_angle.setGeometry(QtCore.QRect(20, 190, 250, 61))
+        self.label_direction_angle.setGeometry(QtCore.QRect(20 * desktop_size.width() / 1366, 190,
+                                                            250 * desktop_size.width() / 1366, 61))
         self.label_direction_angle.setObjectName("label_direction_angle")
         self.label_direction_angle.setStyleSheet("color: white")
 
-
+        font.setPointSize(17)
         self.label_time_factor.setFont(font)
-        self.label_time_factor.setGeometry(QtCore.QRect(10, 500, 130, 30))
+        self.label_time_factor.setGeometry(QtCore.QRect(5 * desktop_size.width() / 1366,
+                                                        500 * desktop_size.height() / 768,
+                                                        130 * desktop_size.width() / 1366,
+                                                        30 * desktop_size.height() / 768))
         self.label_time_factor.setObjectName("label_time_factor")
         self.label_time_factor.setStyleSheet("color: white")
 
-
         """Text edit"""
-        self.textEdit_pulse.setGeometry(QtCore.QRect(110, 160, 105, 30))
+        self.textEdit_pulse.setGeometry(QtCore.QRect(110 * desktop_size.width() / 1366,
+                                                     160 * desktop_size.height() / 768,
+                                                     105 * desktop_size.width() / 1366,
+                                                     30 * desktop_size.height() / 768))
         self.textEdit_pulse.setObjectName("textEdit_pulse")
 
-        self.textEdit_time_engine_working.setGeometry(QtCore.QRect(110, 330, 105, 30))
+        self.textEdit_time_engine_working.setGeometry(QtCore.QRect(110 * desktop_size.width() / 1366,
+                                                                   330 * desktop_size.height() / 768,
+                                                                   105 * desktop_size.width() / 1366,
+                                                                   30 * desktop_size.height() / 768))
         self.textEdit_time_engine_working.setObjectName("textEdit_time_engine_working")
 
-        self.textEdit_calc_tr.setGeometry(QtCore.QRect(110, 450, 105, 30))
+        self.textEdit_calc_tr.setGeometry(QtCore.QRect(110 * desktop_size.width() / 1366,
+                                                       450 * desktop_size.height() / 768,
+                                                       105 * desktop_size.width() / 1366,
+                                                       30 * desktop_size.height() / 768))
         self.textEdit_calc_tr.setObjectName("textEdit_calcs_tr")
 
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 827, 24))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 827 * desktop_size.width() / 1366, 24 * desktop_size.height()/768))
         self.menubar.setObjectName("menubar")
         self.menuOpengl.setObjectName("menuOpengl")
         MainWindow.setMenuBar(self.menubar)
@@ -292,17 +328,17 @@ class UiStartWindow:
         self.Picture.setPixmap(QtGui.QPixmap("Entire_screen.jpg"))
         self.Picture.setScaledContents(True)
         self.Picture.setObjectName("Picture")
-        self.pushButton.setGeometry(QtCore.QRect(580, 620, 241, 91))
+        self.pushButton.setGeometry(QtCore.QRect(580 * desktop_size.width() / 1366, 620 * desktop_size.height()/768,
+                                                 241 * desktop_size.width() / 1366, 91 * desktop_size.height()/768))
 
         StartWindow.setCentralWidget(self.centralwidget)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1440, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1440 * desktop_size.width() / 1366, 22 * desktop_size.height()/768))
         self.menubar.setObjectName("menubar")
         StartWindow.setMenuBar(self.menubar)
         self.statusbar.setObjectName("statusbar")
         StartWindow.setStatusBar(self.statusbar)
         self.pushButton.setStyleSheet("#pushButton{background-color: transparent; border-image: url(StartGame.png);"
                                       " background: none; border: none; background-repeat: none;} #pushButton:pressed {border-image: url(StartGamePressed.png)}")
-
 
         self.retranslateUi(StartWindow)
         QtCore.QMetaObject.connectSlotsByName(StartWindow)
