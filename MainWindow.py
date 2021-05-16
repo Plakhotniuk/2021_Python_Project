@@ -16,6 +16,7 @@ try:
                 return res
             return '/System/Library/Frameworks/' + name + '.framework/' + name
 
+
         util.find_library = new_util_find_library
 except ImportError:
     pass
@@ -30,6 +31,7 @@ class StartWindow(QtWidgets.QWidget):
     """
     Класс начального меню внутри приложения
     """
+
     def __init__(self, sp_objects: list):
         super(StartWindow, self).__init__()
         self.start_win = QtWidgets.QMainWindow()
@@ -49,6 +51,9 @@ class StartWindow(QtWidgets.QWidget):
 
 
 class TutorialWindow(QtWidgets.QWidget):
+    """
+    Класс окна-справки по действиям
+    """
     def __init__(self):
         super().__init__()
         self.start_win = QtWidgets.QMainWindow()
@@ -63,6 +68,7 @@ class MainWindow(QtWidgets.QWidget):
     """
     Класс основного меню внутри приложения
     """
+
     def __init__(self, sp_objects: list):
         super(MainWindow, self).__init__()
         self.main_win = QtWidgets.QMainWindow()
@@ -183,14 +189,14 @@ class MainWindow(QtWidgets.QWidget):
                     / self.open_gl.specific_impulse_of_rocket_engine > self.open_gl.minimum_mass:
                 self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
                 """Расчет расхода топлива"""
-                self.space_objects[0].m -= float(self.time_engine_working) * float(self.pulse) \
-                                           / self.open_gl.specific_impulse_of_rocket_engine
+                self.space_objects[0].m -= float(self.time_engine_working) * float(
+                    self.pulse) / self.open_gl.specific_impulse_of_rocket_engine
                 self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
                 if self.input_pulse_direction_angle != '':
                     print(self.input_pulse_direction_angle)
-                    self.space_objects[self.starshipi_index].engine_angle = float(self.input_pulse_direction_angle) \
-                                                                            * pi / 180
+                    self.space_objects[self.starshipi_index].engine_angle = float(
+                        self.input_pulse_direction_angle) * pi / 180
                 self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
             self.ui.slider_pulse_direction.setValue(0)
             self.clear()
@@ -205,9 +211,15 @@ class MainWindow(QtWidgets.QWidget):
             self.ui.pushButton_calculate.setEnabled(True)
 
     def show(self):
+        """
+        Запускает окно
+        """
         self.main_win.show()
         self.help()
 
     def help(self):
+        """
+        Вызывает окно-справку
+        """
         self.tutorial_window = TutorialWindow()
         self.tutorial_window.show()

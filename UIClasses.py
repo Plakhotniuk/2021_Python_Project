@@ -16,6 +16,7 @@ try:
                 return res
             return '/System/Library/Frameworks/' + name + '.framework/' + name
 
+
         util.find_library = new_util_find_library
 except ImportError:
     pass
@@ -116,9 +117,9 @@ class UiMainWindow:
         Buttons params
         """
         self.pushButton_quit.setGeometry(QtCore.QRect(60 * self.desktop_size.width() / 1366,
-                                                      642 * self.desktop_size.height()/768,
-                                                      113 * self.desktop_size.width()/1366,
-                                                      32 * self.desktop_size.height()/768))
+                                                      642 * self.desktop_size.height() / 768,
+                                                      113 * self.desktop_size.width() / 1366,
+                                                      32 * self.desktop_size.height() / 768))
         self.pushButton_quit.setObjectName("pushButton_quit")
         self.pushButton_quit.setStyleSheet(
             "#pushButton{background-color: transparent; border-image: url(Quit.png);"
@@ -356,7 +357,7 @@ class UiMainWindow:
         """
         self.main_window.setCentralWidget(self.centralwidget)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 827 * self.desktop_size.width() / 1366,
-                                              24 * self.desktop_size.height()/768))
+                                              24 * self.desktop_size.height() / 768))
         self.menubar.setObjectName("menubar")
         self.menuOpengl.setObjectName("menuOpengl")
         self.main_window.setMenuBar(self.menubar)
@@ -404,6 +405,7 @@ class UiStartWindow:
     The class in which the initialization of all
     initial window widgets with specified default values
     """
+
     def __init__(self, start_window):
         self.centralwidget = QtWidgets.QWidget(start_window)
         self.statusbar = QtWidgets.QStatusBar(start_window)
@@ -439,9 +441,9 @@ class UiStartWindow:
         self.Picture.setScaledContents(True)
         self.Picture.setObjectName("Picture")
         self.pushButton.setGeometry(QtCore.QRect(580 * self.desktop_size.width() / 1366,
-                                                 620 * self.desktop_size.height()/768,
+                                                 620 * self.desktop_size.height() / 768,
                                                  241 * self.desktop_size.width() / 1366,
-                                                 91 * self.desktop_size.height()/768))
+                                                 91 * self.desktop_size.height() / 768))
 
     def set_menubar(self):
         """
@@ -449,7 +451,7 @@ class UiStartWindow:
         """
         self.start_window.setCentralWidget(self.centralwidget)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1440 * self.desktop_size.width() / 1366,
-                                              22 * self.desktop_size.height()/768))
+                                              22 * self.desktop_size.height() / 768))
         self.menubar.setObjectName("menubar")
         self.start_window.setMenuBar(self.menubar)
         self.statusbar.setObjectName("statusbar")
@@ -495,11 +497,10 @@ class UiTutorial:
         self.retranslateUi(self.window)
 
     def set_menubar(self):
-
-        self.window.resize(600 * self.desktop_size.width() / 1366, 600 * self.desktop_size.height() / 768)
+        self.window.resize(700 * self.desktop_size.width() / 1366, 600 * self.desktop_size.height() / 768)
         self.window.setObjectName("MainWindow")
         self.window.setCentralWidget(self.centralwidget)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 300, 24))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 100, 24))
         self.menubar.setObjectName("menubar")
         self.window.setMenuBar(self.menubar)
         self.statusbar.setObjectName("statusbar")
@@ -522,8 +523,8 @@ class UiTutorial:
         self.label.setScaledContents(False)
         self.label.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.label.setObjectName("label")
-        self.label.setGeometry(QtCore.QRect(0, 0, int(600 / 1440 * self.desktop_size.width()),
-                                            int(500 / 900 * self.desktop_size.height())))
+        self.label.setGeometry(QtCore.QRect(0, 0, int(900 / 1336 * self.desktop_size.width()),
+                                            int(500 / 768 * self.desktop_size.height())))
         self.font.setPointSize(20)
         self.font.setBold(True)
         self.font.setWeight(75)
@@ -535,8 +536,8 @@ class UiTutorial:
         """
         Buttons params
         """
-        self.pushButton_back.setGeometry(QtCore.QRect(248 * self.desktop_size.width() / 1366,
-                                                      400 * self.desktop_size.height() / 768,
+        self.pushButton_back.setGeometry(QtCore.QRect(300 * self.desktop_size.width() / 1366,
+                                                      530 * self.desktop_size.height() / 768,
                                                       113 * self.desktop_size.width() / 1366,
                                                       50 * self.desktop_size.height() / 768))
         self.pushButton_back.setObjectName("pushButton_quit")
@@ -544,4 +545,3 @@ class UiTutorial:
             "#pushButton{background-color: transparent; border-image: url(Backtut.png);"
             " background: none; border: none; background-repeat: none;} #pushButton:pressed"
             " {border-image: url(BacktutPressed.png)}")
-

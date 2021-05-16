@@ -3,9 +3,6 @@ import numpy as np
 G = -6.67E-11
 
 
-# TODO PEP8!
-# все хорошо, не так ли?
-
 class FunctionF:
     """
     Функтор, отвечающий за функцию по первой произсводной в расчёте системы
@@ -84,6 +81,7 @@ class Calculation:
     """
     Класс - калькулятор, инкапсулирующий в себе вычисления координат траекторий
     """
+
     def __init__(self, space_obj, dt, speed):
         self.f = FunctionF()  # по первой производной
         self.g = FunctionG(space_obj)  # функция по второй производной
