@@ -381,7 +381,7 @@ class UiMainWindow:
         self.pushButton_start.setObjectName("pushButton")
         self.pushButton_help.setText("")
         self.pushButton_help.setObjectName("pushButton")
-        self.label.setText(_translate("MainWindow", "Set Parametrs\n" "to\n" "Start modeling!"))
+        self.label.setText(_translate("MainWindow", "Set Parametrs to\n" "change trajectory"))
         self.label_pulse.setText(_translate("MainWindow", "Pulse (kg m/s):"))
         self.label_engine_running_time.setText(_translate("MainWindow", "Engine running\ntime (s):"))
         self.menuOpengl.setTitle(_translate("MainWindow", "Opengl"))
@@ -495,6 +495,7 @@ class UiTutorial:
         self.retranslateUi(self.window)
 
     def set_menubar(self):
+
         self.window.resize(600 * self.desktop_size.width() / 1366, 600 * self.desktop_size.height() / 768)
         self.window.setObjectName("MainWindow")
         self.window.setCentralWidget(self.centralwidget)

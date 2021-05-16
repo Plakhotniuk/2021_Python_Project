@@ -37,12 +37,13 @@ class StartWindow(QtWidgets.QWidget):
         self.sp_objects = sp_objects
         self.ui.pushButton.clicked.connect(self.show_main_window)
         self.start_win.show()
-        self.game_window = MainWindow(self.sp_objects)
+        self.game_window = None
 
     def show_main_window(self):
         """
         Create game window
         """
+        self.game_window = MainWindow(self.sp_objects)
         self.game_window.show()
         self.start_win.close()
 
