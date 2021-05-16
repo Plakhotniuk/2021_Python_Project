@@ -6,7 +6,7 @@ G = -6.67E-11
 # TODO PEP8!
 # все хорошо, не так ли?
 
-class function_f:
+class FunctionF:
     """
     Функтор, отвечающий за функцию по первой произсводной в расчёте системы
     """
@@ -21,7 +21,7 @@ class function_f:
         pass
 
 
-class function_g:
+class FunctionG:
     """
     Функтор, отвечающий за функцию по второй произсводной в расчёте системы
     """
@@ -85,8 +85,8 @@ class Calculation:
     Класс - калькулятор, инкапсулирующий в себе вычисления координат траекторий
     """
     def __init__(self, space_obj, dt, speed):
-        self.f = function_f()  # по первой производной
-        self.g = function_g(space_obj)  # функция по второй производной
+        self.f = FunctionF()  # по первой производной
+        self.g = FunctionG(space_obj)  # функция по второй производной
         self.dt = dt  # шаг по времени
         self.time_of_count = 0  # "на сколько времени уже предрассчитано"
         self.x = np.array([])  # координаты всех объектов системы подряд

@@ -24,6 +24,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QSlider
 from PyQt_OpenGL import PyOpenGL
 from PyQt5.QtCore import QTimer
+from PyQt5.Qt import Qt
 
 
 class UiMainWindow:
@@ -48,6 +49,7 @@ class UiMainWindow:
         self.pushButton_start = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_quit = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_calculate = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_help = QtWidgets.QPushButton(self.centralwidget)
         self.textEdit_pulse = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_time_engine_working = QtWidgets.QTextEdit(self.centralwidget)
         self.label_current_direction_angle = QtWidgets.QLabel(self.centralwidget)
@@ -151,6 +153,18 @@ class UiMainWindow:
             "#pushButton{background-color: transparent; border-image: url(Start.png);"
             " background: none; border: none; background-repeat: none;} #pushButton:pressed"
             " {border-image: url(StartPressed.png)}")
+
+        self.pushButton_help.setGeometry(QtCore.QRect(200 * self.desktop_size.width() / 1366,
+                                                      50 * self.desktop_size.height() / 768,
+                                                      int(50 * self.desktop_size.width() / 1366),
+                                                      int(50 * self.desktop_size.height() / 768)))
+        font.setPointSize(25)
+        self.pushButton_help.setFont(font)
+        self.pushButton_help.setObjectName("pushButton_help")
+        self.pushButton_help.setStyleSheet("#pushButton{background-color: transparent; border-image: url(Help.png);"
+                                           " background: none; border: none; background-repeat: none;}"
+                                           " #pushButton:pressed"
+                                           " {border-image: url(HelpPressed.png)}")
 
     def set_slider(self):
         """
@@ -459,6 +473,78 @@ class UiStartWindow:
         self.pushButton.setObjectName("pushButton")
 
 
+class UiTutorial:
+    def __init__(self, mainwindow):
+        self.window = mainwindow
+        self.menubar = QtWidgets.QMenuBar(self.window)
+        self.desktop_size = QtWidgets.QDesktopWidget().screenGeometry()
+        self.statusbar = QtWidgets.QStatusBar(self.window)
+        self.centralwidget = QtWidgets.QWidget(mainwindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.pushButton_back = QtWidgets.QPushButton(self.centralwidget)
+        self.font = QtGui.QFont()
+
+        self.set_menubar()
+        self.set_main_label()
+        self.set_buttons()
+
+        self.text = ""
+        text_file = open('tutorial.txt')
+        for line in text_file:
+            self.text += line
+
+        self.retranslateUi(self.window)
+
+    def set_menubar(self):
+        self.window.resize(600 * self.desktop_size.width() / 1366, 600 * self.desktop_size.height() / 768)
+        self.window.setObjectName("MainWindow")
+        self.window.setCentralWidget(self.centralwidget)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 300, 24))
+        self.menubar.setObjectName("menubar")
+        self.window.setMenuBar(self.menubar)
+        self.statusbar.setObjectName("statusbar")
+        self.window.setStatusBar(self.statusbar)
+
+        QtCore.QMetaObject.connectSlotsByName(self.window)
+
+    def retranslateUi(self, main_win):
+        _translate = QtCore.QCoreApplication.translate
+        main_win.setWindowTitle(_translate("Tutorial", "Tutorial"))
+        self.label.setText(_translate("MainWindow", self.text))
+
+    def set_main_label(self):
+        """
+        Main Label params
+        """
+        self.label.setTextFormat(QtCore.Qt.AutoText)
+        self.label.setScaledContents(False)
+        self.label.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        self.label.setObjectName("label")
+        self.label.setGeometry(QtCore.QRect(0, 0, int(600 / 1440 * self.desktop_size.width()),
+                                            int(500 / 900 * self.desktop_size.height())))
+        self.font.setPointSize(20)
+        self.font.setBold(True)
+        self.font.setWeight(75)
+        self.label.setFont(self.font)
+        self.label.setObjectName("label")
+        self.label.setStyleSheet("color: black")
+
+    def set_buttons(self):
+        """
+        Buttons params
+        """
+        self.pushButton_back.setGeometry(QtCore.QRect(248 * self.desktop_size.width() / 1366,
+                                                      400 * self.desktop_size.height() / 768,
+                                                      113 * self.desktop_size.width() / 1366,
+                                                      32 * self.desktop_size.height() / 768))
+        self.pushButton_back.setObjectName("pushButton_quit")
+        self.pushButton_back.setStyleSheet(
+            "#pushButton{background-color: transparent; border-image: url(Quit.png);"
+            " background: none; border: none; background-repeat: none;} #pushButton:pressed"
+            " {border-image: url(QuitPressed.png)}")
+
+
 class StartWindow(QtWidgets.QWidget):
     """
     Класс начального меню внутри приложения
@@ -470,13 +556,25 @@ class StartWindow(QtWidgets.QWidget):
         self.sp_objects = sp_objects
         self.ui.pushButton.clicked.connect(self.show_main_window)
         self.start_win.show()
+        self.game_window = MainWindow(self.sp_objects)
 
     def show_main_window(self):
         """
         Create game window
         """
-        self.game_window = MainWindow(self.sp_objects)
+        self.game_window.show()
         self.start_win.close()
+
+
+class TutorialWindow(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.start_win = QtWidgets.QMainWindow()
+        self.ui = UiTutorial(self.start_win)
+        self.ui.pushButton_back.clicked.connect(self.start_win.close)
+
+    def show(self):
+        self.start_win.show()
 
 
 class MainWindow(QtWidgets.QWidget):
@@ -490,6 +588,7 @@ class MainWindow(QtWidgets.QWidget):
         open_gl = PyOpenGL(sp_objects, parent=self.ui.frame)
         open_gl.setMinimumSize(self.ui.frame.width(), self.ui.frame.height())
         self.open_gl = open_gl
+        self.tutorial_window = TutorialWindow()
         self.screen_size = open_gl.size()
         self.input_pulse_direction_angle = 0
         self.timer = QTimer(self)
@@ -507,7 +606,7 @@ class MainWindow(QtWidgets.QWidget):
         self.ui.pushButton_start.clicked.connect(self.set_time_accelerate)
         self.ui.pushButton_calculate.clicked.connect(self.calc_trajectory)
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
-        self.main_win.show()
+        self.ui.pushButton_help.clicked.connect(self.help)
 
     def update_velocity_and_angle(self):
         """
@@ -622,3 +721,11 @@ class MainWindow(QtWidgets.QWidget):
                 " {border-image: url(StartPressed.png)}")
             self.time_engine_working = 0
             self.ui.pushButton_calculate.setEnabled(True)
+
+    def show(self):
+        self.main_win.show()
+        self.tutorial_window.show()
+
+    def help(self):
+        self.tutorial_window = TutorialWindow()
+        self.tutorial_window.show()

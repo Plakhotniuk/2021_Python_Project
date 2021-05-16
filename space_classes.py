@@ -79,14 +79,14 @@ class Starship(CelestialBody):
         self.arrow_length = 10000000
         """"""
 
-    def set_engine_angle(self, angle):
+    def set_arrow_angle(self, angle, color):
         """
         Устанавливаем угол для отрисовки направления для выбора угла полета
         angle - угол для отрисовки
         """
         OpenGL.GL.glLineWidth(1000000000)
         OpenGL.GL.glBegin(OpenGL.GL.GL_LINE_STRIP)
-        OpenGL.GL.glColor3d(1, 0, 0)
+        OpenGL.GL.glColor3d(*color)
         OpenGL.GL.glVertex3d(self.x, 5.0E7, self.y)
         OpenGL.GL.glVertex3d(self.x + int(self.arrow_length * np.cos(angle * np.pi / 180)), 5.0E7,
                              self.y + int(self.arrow_length * np.sin(angle * np.pi / 180)))
