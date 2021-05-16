@@ -494,7 +494,7 @@ class UiTutorial:
         for line in text_file:
             self.text += line
 
-        self.retranslateUi(self.window)
+        self.retranslate_ui(self.window)
 
     def set_menubar(self):
         self.window.resize(700 * self.desktop_size.width() / 1366, 600 * self.desktop_size.height() / 768)
@@ -508,7 +508,7 @@ class UiTutorial:
 
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
-    def retranslateUi(self, main_win):
+    def retranslate_ui(self, main_win):
         _translate = QtCore.QCoreApplication.translate
         main_win.setWindowTitle(_translate("Tutorial", "Tutorial"))
         self.label.setText(_translate("MainWindow", self.text))
