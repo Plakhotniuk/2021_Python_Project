@@ -503,13 +503,10 @@ class MainWindow(QtWidgets.QWidget):
         self.space_objects = sp_objects
         self.starshipi_index = 0
         self.combobox_index_time = 0
-
         self.ui.pushButton_start.clicked.connect(self.input)
         self.ui.pushButton_start.clicked.connect(self.set_time_accelerate)
         self.ui.pushButton_calculate.clicked.connect(self.calc_trajectory)
-
         self.ui.slider_pulse_direction.valueChanged.connect(self.slider_pulse_direction)
-
         self.main_win.show()
 
     def update_velocity_and_angle(self):
