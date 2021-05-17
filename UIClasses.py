@@ -474,6 +474,9 @@ class UiStartWindow:
 
 
 class UiTutorial:
+    """
+    Class of tutorial window
+    """
     def __init__(self, mainwindow):
         self.window = mainwindow
         self.menubar = QtWidgets.QMenuBar(self.window)
@@ -497,6 +500,9 @@ class UiTutorial:
         self.retranslate_ui(self.window)
 
     def set_menubar(self):
+        """
+        Menubar params
+        """
         self.window.resize(700 * self.desktop_size.width() / 1366, 600 * self.desktop_size.height() / 768)
         self.window.setObjectName("MainWindow")
         self.window.setCentralWidget(self.centralwidget)
@@ -509,6 +515,9 @@ class UiTutorial:
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
     def retranslate_ui(self, main_win):
+        """
+        Show labels on surfaces
+        """
         _translate = QtCore.QCoreApplication.translate
         main_win.setWindowTitle(_translate("Tutorial", "Tutorial"))
         self.label.setText(_translate("MainWindow", self.text))
@@ -517,7 +526,7 @@ class UiTutorial:
 
     def set_main_label(self):
         """
-        Main Label params
+        Params of main label
         """
         self.label.setTextFormat(QtCore.Qt.AutoText)
         self.label.setScaledContents(False)
@@ -534,7 +543,7 @@ class UiTutorial:
 
     def set_buttons(self):
         """
-        Buttons params
+        Button params
         """
         self.pushButton_back.setGeometry(QtCore.QRect(300 * self.desktop_size.width() / 1366,
                                                       530 * self.desktop_size.height() / 768,
