@@ -1,5 +1,6 @@
 Hello there!
-Are you ready to explore outer space on your brand new spaceship? Lets’s do this!
+Are you ready to explore outer space on your brand new spaceship?
+Lets’s do this!
 
 To start your exciting journey first of all you need to set the parameters for:
 1. Pulse
@@ -9,14 +10,15 @@ To start your exciting journey first of all you need to set the parameters for:
 5. Time factor
 You need them to calculate the direction and trajectory of the ship.
  In order to do so you need to write the digits in boxes for Pulse,
- Engine run time, Time of calculations, set the Angle using the slider, choose the coefficient for the Time factor.
+ Engine run time, Time of calculations, set the Angle using the slider,
+ choose the coefficient for the Time factor.
 
 Want to see the full picture?
 Use UP/DOWN arrow keys if you want zoom IN/OUT
 Use W/A/S/D keys to move the camera around.
 
 All the parameters are set and you are ready to take off?
-Press ‘CALCULATE’ to see the trajectory (red arrow shows the calculated trajectory,
+Press ‘CALCULATE’ to see the trajectory
+(red arrow shows the calculated trajectory,
 gray arrow shows the direction of current velocity) and then press ‘START’.
-
 Have fun!
