@@ -162,7 +162,6 @@ class MainWindow(QtWidgets.QWidget):
         if self.time_engine_working != '':
             self.space_objects[self.starshipi_index].time_engine_working = float(self.time_engine_working)
         if self.input_pulse_direction_angle != '':
-            print(self.input_pulse_direction_angle)
             self.space_objects[self.starshipi_index].engine_angle = (int(self.input_pulse_direction_angle) * pi) / 180
         if self.pulse != '':
             self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)

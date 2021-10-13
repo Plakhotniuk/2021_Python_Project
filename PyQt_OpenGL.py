@@ -71,7 +71,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         for obj in self.space_objects:
             if self.is_trajectory_shown and not self.start_modeling:
                 obj.draw_trajectory()
-            obj.Draw()
+            obj.draw()
 
             if obj.name == 'SpaceShip':
                 self.current_velocity = int(math.sqrt(obj.vx ** 2 + obj.vy ** 2))
