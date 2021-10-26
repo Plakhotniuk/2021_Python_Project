@@ -99,7 +99,7 @@ class UiMainWindow:
         self.centralwidget.setObjectName("centralwidget")
         self.Picture.setGeometry(QtCore.QRect(0, 0, self.desktop_size.width(), self.desktop_size.height()))
         self.Picture.setText("")
-        self.Picture.setPixmap(QtGui.QPixmap("StarrySky.jpg"))
+        self.Picture.setPixmap(QtGui.QPixmap("Pictures/StarrySky.jpg"))
         self.Picture.setScaledContents(True)
         self.Picture.setObjectName("Picture")
         self.frame.setGeometry(
@@ -122,9 +122,9 @@ class UiMainWindow:
                                                       32 * self.desktop_size.height() / 768))
         self.pushButton_quit.setObjectName("pushButton_quit")
         self.pushButton_quit.setStyleSheet(
-            "#pushButton{background-color: transparent; border-image: url(Quit.png);"
+            "#pushButton{background-color: transparent; border-image: url(Pictures/Quit.png);"
             " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-            " {border-image: url(QuitPressed.png)}")
+            " {border-image: url(Pictures/QuitPressed.png)}")
         font = QtGui.QFont()
         font.setPointSize(20)
         self.pushButton_calculate.setFont(font)
@@ -132,12 +132,12 @@ class UiMainWindow:
                                                            530 * self.desktop_size.height() / 768,
                                                            130 * self.desktop_size.width() / 1366,
                                                            55 * self.desktop_size.height() / 768))
-        self.pushButton_calculate.setObjectName("pushButton_calculate")
+        self.pushButton_calculate.setObjectName("Pictures/pushButton_calculate")
         self.pushButton_calculate.setStyleSheet("#pushButton{background-color: transparent; border-image:"
-                                                " url(Calculate.png);"
+                                                " url(Pictures/Calculate.png);"
                                                 " background: none; border: none; background-repeat: none;}"
                                                 " #pushButton:pressed"
-                                                " {border-image: url(CalculatePressed.png)}")
+                                                " {border-image: url(Pictures/CalculatePressed.png)}")
 
         self.pushButton_start.setGeometry(QtCore.QRect(50 * self.desktop_size.width() / 1366,
                                                        588 * self.desktop_size.height() / 768,
@@ -145,11 +145,11 @@ class UiMainWindow:
                                                        int(52 * self.desktop_size.height() / 768)))
         font.setPointSize(25)
         self.pushButton_start.setFont(font)
-        self.pushButton_start.setObjectName("pushButton_start")
+        self.pushButton_start.setObjectName("Pictures/pushButton_start")
         self.pushButton_start.setStyleSheet(
-            "#pushButton{background-color: transparent; border-image: url(Start.png);"
+            "#pushButton{background-color: transparent; border-image: url(Pictures/Start.png);"
             " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-            " {border-image: url(StartPressed.png)}")
+            " {border-image: url(Pictures/StartPressed.png)}")
 
         self.pushButton_help.setGeometry(QtCore.QRect(200 * self.desktop_size.width() / 1366,
                                                       50 * self.desktop_size.height() / 768,
@@ -157,11 +157,12 @@ class UiMainWindow:
                                                       int(50 * self.desktop_size.height() / 768)))
         font.setPointSize(25)
         self.pushButton_help.setFont(font)
-        self.pushButton_help.setObjectName("pushButton_help")
-        self.pushButton_help.setStyleSheet("#pushButton{background-color: transparent; border-image: url(Help.png);"
+        self.pushButton_help.setObjectName("Pictures/pushButton_help")
+        self.pushButton_help.setStyleSheet("#pushButton{background-color: transparent; border-image:"
+                                           " url(Pictures/Help.png);"
                                            " background: none; border: none; background-repeat: none;}"
                                            " #pushButton:pressed"
-                                           " {border-image: url(HelpPressed.png)}")
+                                           " {border-image: url(Pictures/HelpPressed.png)}")
 
     def set_slider(self):
         """
@@ -437,7 +438,7 @@ class UiStartWindow:
         """
         self.Picture.setGeometry(QtCore.QRect(0, 0, self.desktop_size.width(), self.desktop_size.height()))
         self.Picture.setText("")
-        self.Picture.setPixmap(QtGui.QPixmap("Entire_screen.jpg"))
+        self.Picture.setPixmap(QtGui.QPixmap("Pictures/Entire_screen.jpg"))
         self.Picture.setScaledContents(True)
         self.Picture.setObjectName("Picture")
         self.pushButton.setGeometry(QtCore.QRect(580 * self.desktop_size.width() / 1366,
@@ -456,9 +457,9 @@ class UiStartWindow:
         self.start_window.setMenuBar(self.menubar)
         self.statusbar.setObjectName("statusbar")
         self.start_window.setStatusBar(self.statusbar)
-        self.pushButton.setStyleSheet("#pushButton{background-color: transparent; border-image: url(StartGame.png);"
+        self.pushButton.setStyleSheet("#pushButton{background-color: transparent; border-image: url(Pictures/StartGame.png);"
                                       " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-                                      " {border-image: url(StartGamePressed.png)}")
+                                      " {border-image: url(Pictures/StartGamePressed.png)}")
 
         self.retranslate_ui(self.start_window)
         QtCore.QMetaObject.connectSlotsByName(self.start_window)
@@ -551,6 +552,6 @@ class UiTutorial:
                                                       50 * self.desktop_size.height() / 768))
         self.pushButton_back.setObjectName("pushButton_quit")
         self.pushButton_back.setStyleSheet(
-            "#pushButton{background-color: transparent; border-image: url(Backtut.png);"
+            "#pushButton{background-color: transparent; border-image: url(Pictures/Backtut.png);"
             " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-            " {border-image: url(BacktutPressed.png)}")
+            " {border-image: url(Pictures/BacktutPressed.png)}")

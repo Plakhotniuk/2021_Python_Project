@@ -144,16 +144,16 @@ class MainWindow(QtWidgets.QWidget):
         self.open_gl.is_trajectory_shown = not self.open_gl.is_trajectory_shown
         if self.open_gl.is_trajectory_shown:
             self.ui.pushButton_calculate.setStyleSheet(
-                "#pushButton{background-color: transparent; border-image: url(Back.png);"
+                "#pushButton{background-color: transparent; border-image: url(Pictures/Back.png);"
                 " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-                " {border-image: url(BackPressed.png)}")
+                " {border-image: url(Pictures/BackPressed.png)}")
             self.ui.pushButton_start.setEnabled(False)
         else:
             self.ui.pushButton_start.setEnabled(True)
             self.ui.pushButton_calculate.setStyleSheet(
-                "#pushButton{background-color: transparent; border-image: url(Calculate.png);"
+                "#pushButton{background-color: transparent; border-image: url(Pictures/Calculate.png);"
                 " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-                " {border-image: url(CalculatePressed.png)}")
+                " {border-image: url(Pictures/CalculatePressed.png)}")
 
         self.open_gl.setFocus()
         self.pulse = str(self.ui.textEdit_pulse.toPlainText())
@@ -180,9 +180,9 @@ class MainWindow(QtWidgets.QWidget):
         self.open_gl.start_modeling = not self.open_gl.start_modeling
         if self.open_gl.start_modeling:
             self.ui.pushButton_start.setStyleSheet(
-                "#pushButton{background-color: transparent; border-image: url(Pause.png);"
+                "#pushButton{background-color: transparent; border-image: url(Pictures/Pause.png);"
                 " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-                " {border-image: url(PausePressed.png)}")
+                " {border-image: url(Pictures/PausePressed.png)}")
             if self.time_engine_working != '' and self.pulse != '' and \
                     self.space_objects[0].m - float(self.time_engine_working) * float(self.pulse) \
                     / self.open_gl.specific_impulse_of_rocket_engine > self.open_gl.minimum_mass:
@@ -203,9 +203,9 @@ class MainWindow(QtWidgets.QWidget):
 
         else:
             self.ui.pushButton_start.setStyleSheet(
-                "#pushButton{background-color: transparent; border-image: url(Start.png);"
+                "#pushButton{background-color: transparent; border-image: url(Pictures/Start.png);"
                 " background: none; border: none; background-repeat: none;} #pushButton:pressed"
-                " {border-image: url(StartPressed.png)}")
+                " {border-image: url(Pictures/StartPressed.png)}")
             self.time_engine_working = 0
             self.ui.pushButton_calculate.setEnabled(True)
 
