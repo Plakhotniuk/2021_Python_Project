@@ -38,14 +38,23 @@ class CelestialBody:
         """
         Отрисовывает объект
         """
-        sphere = OpenGL.GLU.gluNewQuadric()
-        OpenGL.GL.glPushMatrix()
-
-        OpenGL.GL.glTranslatef(self.x, 5.0E7, self.y)
-        OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
-        OpenGL.GLU.gluSphere(sphere, self.r, 320, 160)
-        OpenGL.GLU.gluDeleteQuadric(sphere)
-        OpenGL.GL.glPopMatrix()
+        if self.name == 'SpaceShip':
+            cyliner = OpenGL.GLU.gluNewQuadric()
+            OpenGL.GL.glPushMatrix()
+            OpenGL.GL.glTranslatef(self.x, 5.0E7, self.y)
+            OpenGL.GL.glRotate(90, 0, 0, 1)
+            OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
+            OpenGL.GLU.gluCylinder(cyliner, 10*self.r, 10*self.r, 3 * self.r, 1000, 10)
+            OpenGL.GLU.gluDeleteQuadric(cyliner)
+            OpenGL.GL.glPopMatrix()
+        else:
+            sphere = OpenGL.GLU.gluNewQuadric()
+            OpenGL.GL.glPushMatrix()
+            OpenGL.GL.glTranslatef(self.x, 5.0E7, self.y)
+            OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
+            OpenGL.GLU.gluSphere(sphere, self.r, 320, 160)
+            OpenGL.GLU.gluDeleteQuadric(sphere)
+            OpenGL.GL.glPopMatrix()
 
     def draw_trajectory(self):
         """

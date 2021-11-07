@@ -193,7 +193,6 @@ class MainWindow(QtWidgets.QWidget):
                 self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
                 if self.input_pulse_direction_angle != '':
-                    print(self.input_pulse_direction_angle)
                     self.space_objects[self.starshipi_index].engine_angle = float(
                         self.input_pulse_direction_angle) * pi / 180
                 self.space_objects[self.starshipi_index].engine_thrust = float(self.pulse)
