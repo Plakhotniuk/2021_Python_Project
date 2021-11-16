@@ -34,8 +34,7 @@ class FunctionG:
         self.index_of_starship = 0
 
     def __call__(self, t_n, x_n, vx_n):
-        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_gforces(1, x_n),
-                         *self.calc_all_gforces(2, x_n), *self.calc_all_gforces(3, x_n)])
+        return np.array([*self.calc_forces_on_starship(0, x_n), *self.calc_all_gforces(1, x_n)])
 
     def __add__(self):
         pass
@@ -219,10 +218,6 @@ class Calculation:
             self.dt = self.dt / 2
         elif abs(x1[2] - x2[2]) > 0.0005:
             self.dt = self.dt / 2
-        elif abs(x1[4] - x2[4]) > 0.0005:
-            self.dt = self.dt / 2
-        elif abs(x1[6] - x2[6]) > 0.0005:
-            self.dt = self.dt / 2
         else:
             self.dt = self.dt * 2
 
@@ -261,7 +256,8 @@ class Calculation:
                 self.dt = self.g.space_objects[0].time_engine_working
             now_dt = self.dt
 
-            nx, nv = self.dorm_prinse(0, nx, nv, max_step=max_step)
+            # nx, nv = self.dorm_prinse(0, nx, nv, max_step=max_step)
+            nx, nv = self.eiler(0, nx, nv)
             self.time_of_count += now_dt
             self.g.space_objects[self.g.index_of_starship].time_engine_working -= now_dt
 
@@ -293,12 +289,8 @@ class Calculation:
         """
         self.g.space_objects[0].prev_trajectory_coordinates.clear()
         self.g.space_objects[1].prev_trajectory_coordinates.clear()
-        self.g.space_objects[2].prev_trajectory_coordinates.clear()
-        self.g.space_objects[3].prev_trajectory_coordinates.clear()
         self.g.space_objects[0].prev_velocity.clear()
         self.g.space_objects[1].prev_velocity.clear()
-        self.g.space_objects[2].prev_velocity.clear()
-        self.g.space_objects[3].prev_velocity.clear()
 
         self.dt = 100
         time_of_calcs = 0
@@ -318,12 +310,8 @@ class Calculation:
             # потому что фор лучше не делать
             self.g.space_objects[0].prev_trajectory_coordinates.append([nx[0], nx[1], 0])
             self.g.space_objects[1].prev_trajectory_coordinates.append([nx[2], nx[3], 0])
-            self.g.space_objects[2].prev_trajectory_coordinates.append([nx[4], nx[5], 0])
-            self.g.space_objects[3].prev_trajectory_coordinates.append([nx[6], nx[7], 0])
             self.g.space_objects[0].prev_velocity.append([nv[0], nv[1], 0])
             self.g.space_objects[1].prev_velocity.append([nv[2], nv[3], 0])
-            self.g.space_objects[2].prev_velocity.append([nv[4], nv[5], 0])
-            self.g.space_objects[3].prev_velocity.append([nv[6], nv[7], 0])
 
 
 if __name__ == "__main__":

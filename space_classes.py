@@ -33,19 +33,20 @@ class CelestialBody:
         self.prev_trajectory_coordinates = [[self.x, self.y, 0]]
         self.prev_velocity = [[self.vx, self.vy, 0]]
         """Предрасчитанная траектория"""
+        # self.current_orientation =
 
     def draw(self):
         """
         Отрисовывает объект
         """
         if self.name == 'SpaceShip':
-            cyliner = OpenGL.GLU.gluNewQuadric()
+            cylinder = OpenGL.GLU.gluNewQuadric()
             OpenGL.GL.glPushMatrix()
             OpenGL.GL.glTranslatef(self.x, 5.0E7, self.y)
-            OpenGL.GL.glRotate(90, 0, 0, 1)
+            # OpenGL.GL.glRotate(i, 0, 1, 1)
             OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
-            OpenGL.GLU.gluCylinder(cyliner, 10*self.r, 10*self.r, 3 * self.r, 1000, 10)
-            OpenGL.GLU.gluDeleteQuadric(cyliner)
+            OpenGL.GLU.gluCylinder(cylinder, self.r, self.r, 10 * self.r, 1000, 10)
+            OpenGL.GLU.gluDeleteQuadric(cylinder)
             OpenGL.GL.glPopMatrix()
         else:
             sphere = OpenGL.GLU.gluNewQuadric()

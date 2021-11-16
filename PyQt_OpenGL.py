@@ -79,7 +79,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
                     obj.set_arrow_angle(self.current_angle, obj.color)
                     if obj.vx:
                         plus_pi = int(obj.vx < 0) * 180
-                        print(plus_pi)
                         obj.set_arrow_angle((math.atan(obj.vy / obj.vx) * 180 / math.pi) + plus_pi, (1, 1, 1))
                     else:
                         obj.set_arrow_angle(((180 / abs(obj.vy)) * obj.vy) / 2, (1, 1, 1))
