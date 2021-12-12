@@ -77,11 +77,11 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
                 self.current_velocity = int(math.sqrt(obj.vx ** 2 + obj.vy ** 2))
                 if not self.start_modeling:
                     obj.set_arrow_angle(self.current_angle, obj.color)
-                    if obj.vx:
-                        plus_pi = int(obj.vx < 0) * 180
-                        obj.set_arrow_angle((math.atan(obj.vy / obj.vx) * 180 / math.pi) + plus_pi, (1, 1, 1))
-                    else:
-                        obj.set_arrow_angle(((180 / abs(obj.vy)) * obj.vy) / 2, (1, 1, 1))
+                if obj.vx:
+                    plus_pi = int(obj.vx < 0) * 180
+                    obj.set_arrow_angle((math.atan(obj.vy / obj.vx) * 180 / math.pi) + plus_pi, (1, 1, 1))
+                else:
+                    obj.set_arrow_angle(((180 / abs(obj.vy)) * obj.vy) / 2, (1, 1, 1))
 
         self.update()
 
