@@ -1,6 +1,7 @@
 import OpenGL.GLU
 import OpenGL.GL
 import numpy as np
+from pyquaternion import Quaternion
 
 
 class CelestialBody:
@@ -9,8 +10,8 @@ class CelestialBody:
         Содержит массу, координаты, скорость звезды,
         а также визуальный радиус звезды в пикселах и её цвет.
     """
-    def __init__(self, color=(1, 0, 0), name='', current_orientation_quaternion=np.array([]),
-                 angle_speed=np.array([]),
+    def __init__(self, color=(1, 0, 0), name='', quaternion=Quaternion(0, 1, 0, 0),
+                 angle_velocity=np.array([]), orientation=np.array([]),
                  mass_value_coordinates_velocity=np.array([]),
                  tensor_of_inertia=np.array([])):
 
@@ -22,7 +23,7 @@ class CelestialBody:
         """Направление работы двигателя (в какую сторону будет лететь аппарат)"""
         self.arrow_length = 10000000
 
-        self.current_orientation_quaternion = current_orientation_quaternion
+        self.quaternion = quaternion
 
         self.mass_value_and_coordinates = mass_value_coordinates_velocity
 
@@ -30,9 +31,11 @@ class CelestialBody:
 
         self.eigenvectors = np.array([])
 
-        self.angle_speed = angle_speed  # (p, q, r)
+        self.angle_velocity = angle_velocity  # (p, q, r)
 
         self.external_momentum = np.array([])
+
+        self.orientation = orientation
 
     def draw(self):
         """
@@ -40,12 +43,9 @@ class CelestialBody:
         """
         obj = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
-        OpenGL.GL.glTranslatef(self.mass_value_and_coordinates[1], 5.0E7, self.mass_value_and_coordinates[2])
+        OpenGL.GL.glTranslatef(0, 5.0E7, 0)
         if self.name == 'SpaceShip':
-            OpenGL.GL.glRotate(self.current_orientation_quaternion[0],
-                               self.current_orientation_quaternion[1],
-                               self.current_orientation_quaternion[2],
-                               self.current_orientation_quaternion[3])
+            OpenGL.GL.glRotate(self.quaternion.radians, *self.quaternion.axis)
             OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
             OpenGL.GLU.gluCylinder(obj, 1000000, 0, 10 * 1000000, 1000, 10)
         else:

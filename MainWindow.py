@@ -103,7 +103,7 @@ class MainWindow(QtWidgets.QWidget):
         self.ui.label_current_velocity_value.setText(str(int(self.open_gl.current_velocity)))
         self.open_gl.current_angle = int(self.ui.slider_pulse_direction.value())
 
-        self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
+        # self.ui.label_current_fuel_value.setText(str(int(self.space_objects[0].m - self.open_gl.minimum_mass)))
 
     def set_time_accelerate(self):
         """
@@ -120,7 +120,7 @@ class MainWindow(QtWidgets.QWidget):
             self.combobox_index_time = 10
         if self.ui.comboBox_time.currentIndex() == 4:
             self.combobox_index_time = 0.00033
-        self.open_gl.calculation_module.set_speed(3000 * self.combobox_index_time)
+        # self.open_gl.calculation_module.set_speed(3000 * self.combobox_index_time)
 
     def slider_pulse_direction(self):
         """

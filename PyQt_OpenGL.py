@@ -4,7 +4,7 @@ from PyQt5.Qt import Qt
 import OpenGL.GL
 import OpenGL.GLU
 import OpenGL.GLUT
-from calculation import Calculation
+from NewCalculation import Calculation
 import math
 
 
@@ -30,7 +30,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.manual_control_delta_pulse = 2000000
         self.start_modeling = False
         self.is_trajectory_shown = False
-        self.calculation_module = Calculation(sp_objects, speed=3000, dt=100)
+        self.calculation_module = Calculation(sp_objects, dt=10)
         self.space_objects = sp_objects
 
     def initializeGL(self):
@@ -66,23 +66,11 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         OpenGL.GL.glClear(OpenGL.GL.GL_COLOR_BUFFER_BIT | OpenGL.GL.GL_DEPTH_BUFFER_BIT)
         OpenGL.GL.glTranslated(self.scale_x, -self.scale_z, -self.scale_y)
 
-        if self.start_modeling:
-            self.calculation_module.recalculate_space_objects_positions()
+        # if self.start_modeling:
+        #
         for obj in self.space_objects:
-            if self.is_trajectory_shown and not self.start_modeling:
-                obj.draw_trajectory()
+            self.calculation_module.recalculate_quaternion()
             obj.draw()
-
-            if obj.name == 'SpaceShip':
-                self.current_velocity = int(math.sqrt(obj.vx ** 2 + obj.vy ** 2))
-                if not self.start_modeling:
-                    obj.set_arrow_angle(self.current_angle, obj.color)
-                if obj.vx:
-                    plus_pi = int(obj.vx < 0) * 180
-                    obj.set_arrow_angle((math.atan(obj.vy / obj.vx) * 180 / math.pi) + plus_pi, (1, 1, 1))
-                else:
-                    obj.set_arrow_angle(((180 / abs(obj.vy)) * obj.vy) / 2, (1, 1, 1))
-
         self.update()
 
     def keyPressEvent(self, event):
