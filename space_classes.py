@@ -1,6 +1,7 @@
 import OpenGL.GLU
 import OpenGL.GL
 import numpy as np
+from pyquaternion import Quaternion
 
 
 class CelestialBody:
@@ -9,7 +10,7 @@ class CelestialBody:
         Содержит массу, координаты, скорость звезды,
         а также визуальный радиус звезды в пикселах и её цвет.
     """
-    def __init__(self, color=(1, 0, 0), name='', current_orientation_quaternion=np.array([]),
+    def __init__(self, color=(1, 0, 0), name='', quaternion=Quaternion(0, 0, 0, 0),
                  angle_speed=np.array([]),
                  mass_value_coordinates_velocity=np.array([]),
                  tensor_of_inertia=np.array([])):
@@ -22,7 +23,7 @@ class CelestialBody:
         """Направление работы двигателя (в какую сторону будет лететь аппарат)"""
         self.arrow_length = 10000000
 
-        self.current_orientation_quaternion = current_orientation_quaternion
+        self.current_orientation_quaternion = quaternion
 
         self.mass_value_and_coordinates = mass_value_coordinates_velocity
 
