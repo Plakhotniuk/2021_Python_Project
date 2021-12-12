@@ -11,9 +11,8 @@ class CelestialBody:
         а также визуальный радиус звезды в пикселах и её цвет.
     """
     def __init__(self, color=(1, 0, 0), name='', quaternion=Quaternion(0, 1, 0, 0),
-                 angle_velocity=np.array([]), orientation=np.array([]),
-                 mass_value_coordinates_velocity=np.array([]),
-                 tensor_of_inertia=np.array([])):
+                 angle_velocity=np.array([]),
+                 tensor_of_inertia=np.array([]), mass_center_coordinates_velocity=np.array([])):
 
         self.color = color
         """Цвет"""
@@ -25,7 +24,7 @@ class CelestialBody:
 
         self.quaternion = quaternion
 
-        self.mass_value_and_coordinates = mass_value_coordinates_velocity
+        self.mass_center_coordinates_velocity = mass_center_coordinates_velocity
 
         self.tensor_of_inertia = tensor_of_inertia  # (A, B, C)
 
@@ -35,7 +34,10 @@ class CelestialBody:
 
         self.external_momentum = np.array([])
 
-        self.orientation = orientation
+        self.basis_orts = np.array([])
+
+    def get_basis_orts(self):
+        self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
 
     def draw(self):
         """
@@ -43,13 +45,14 @@ class CelestialBody:
         """
         obj = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
-        OpenGL.GL.glTranslatef(0, 5.0E7, 0)
+        OpenGL.GL.glTranslatef(*self.mass_center_coordinates_velocity[:3])
         if self.name == 'SpaceShip':
-            OpenGL.GL.glRotate(self.quaternion.radians, *self.quaternion.axis)
-            OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
+            OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
+            OpenGL.GL.glColor4f(*self.color, 1)
             OpenGL.GLU.gluCylinder(obj, 1000000, 0, 10 * 1000000, 1000, 10)
+            # print(self.quaternion)
         else:
-            OpenGL.GL.glColor4f(self.color[0], self.color[1], self.color[2], 1)
+            OpenGL.GL.glColor4f(*self.color, 1)
             OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
 
         OpenGL.GLU.gluDeleteQuadric(obj)
