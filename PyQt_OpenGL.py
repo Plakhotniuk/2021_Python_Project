@@ -30,7 +30,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
         self.manual_control_delta_pulse = 2000000
         self.start_modeling = False
         self.is_trajectory_shown = False
-        self.calculation_module = Calculation(sp_objects, dt=1)
+        self.calculation_module = Calculation(sp_objects, dt=0.5)
         self.space_objects = sp_objects
 
     def initializeGL(self):
@@ -71,6 +71,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.calculation_module.recalculate_mass_center_coordinates()
         for obj in self.space_objects:
             obj.draw()
+            obj.draw_center()
         self.update()
 
     def keyPressEvent(self, event):

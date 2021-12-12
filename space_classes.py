@@ -36,8 +36,9 @@ class CelestialBody:
 
         self.basis_orts = np.array([])
 
-    def get_basis_orts(self):
-        self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
+    # def get_basis_orts(self):
+    #     self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
+    #     self.tensor_of_inertia = np.diag(np.linalg.eigh(self.tensor_of_inertia))
 
     def draw(self):
         """
@@ -55,6 +56,15 @@ class CelestialBody:
             OpenGL.GL.glColor4f(*self.color, 1)
             OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
 
+        OpenGL.GLU.gluDeleteQuadric(obj)
+        OpenGL.GL.glPopMatrix()
+
+    def draw_center(self):
+        obj = OpenGL.GLU.gluNewQuadric()
+        OpenGL.GL.glPushMatrix()
+        OpenGL.GL.glTranslatef(0, 5.0E7, 0)
+        OpenGL.GL.glColor4f(*self.color, 1)
+        OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()
 
