@@ -5,7 +5,9 @@ from pyquaternion import Quaternion
 
 G = 6.674E-11
 M = 1.989E30
-a  = G*M
+a = G * M
+
+
 class Calculation:
     def __init__(self, space_objs, dt):
         self.space_objs = space_objs
@@ -19,10 +21,9 @@ class Calculation:
 
     def recalculate_accelerations(self):
         for obj in self.space_objs:
-            for i in range(3):
-                obj.mass_center_coordinates_velocity[6 + i] = \
-                    - a * (obj.mass_center_coordinates_velocity[i]) /\
-                    (np.linalg.norm(obj.mass_center_coordinates_velocity[:3]))**3
+            obj.mass_center_coordinates_velocity[6:] = \
+                - a * (obj.mass_center_coordinates_velocity[:3]) /\
+                (np.linalg.norm(obj.mass_center_coordinates_velocity[:3]))**3
 
     def recalculate_mass_center_coordinates(self):
         for obj in self.space_objs:
