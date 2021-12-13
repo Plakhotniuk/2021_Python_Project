@@ -36,6 +36,8 @@ class CelestialBody:
 
         self.basis_orts = np.array([])
 
+        self.initials = mass_center_coordinates_velocity
+
     def get_basis_orts(self):
         self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
 
