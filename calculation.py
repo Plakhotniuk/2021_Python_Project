@@ -270,7 +270,7 @@ class Calculation:
     def recalculate_space_objects_positions(self):
         """
         Пересчитывает координаты объектов.
-        Записывает актуальные значени координат и скоростей в space_objects — список оьъектов сисетмы
+        Записывает актуальные значени координат и скоростей в space_objects — список объектов сисетмы
         (нужно для отрисовки)
         """
         new_x, new_v = self.count_pos(self.speed * 0.01)
