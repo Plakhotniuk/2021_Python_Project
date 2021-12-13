@@ -32,6 +32,7 @@ class Calculation:
     def __init__(self, space_objs, dt):
         self.space_objs = space_objs
         self.dt = dt
+        self.trajectory = self.calculate_trajectory()
         self.moment = np.array([])
 
     def recalculate_quaternion(self):
@@ -42,7 +43,7 @@ class Calculation:
             # print(obj.quaternion)
 
     def calculate_trajectory(self):
-        t = np.arange(0, 100000, 0.1)
+        t = np.arange(0, 100000, self.dt)
         result = []
         for obj in self.space_objs:
             y0 = obj.initials[:6]
@@ -61,15 +62,6 @@ class Calculation:
         for i in range(len(self.space_objs)):
             self.space_objs[i].mass_center_coordinates_velocity[:6] = self.trajectory[i][T]
         T += 1
-        # global T
-        # T += self.dt
-        #
-        # for obj in self.space_objs:
-        #     self.recalculate_accelerations()
-        #     obj.mass_center_coordinates_velocity[3:6] +=\
-        #         obj.mass_center_coordinates_velocity[6:9] * self.dt
-        #     obj.mass_center_coordinates_velocity[:3] +=\
-        #         obj.mass_center_coordinates_velocity[3:6] * self.dt
 
     def calculate_moment_forces(self):
         for obj in self.space_objs:
