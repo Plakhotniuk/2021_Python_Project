@@ -43,7 +43,7 @@ class Calculation:
             # print(obj.quaternion)
 
     def calculate_trajectory(self):
-        t = np.arange(0, 100000, self.dt)
+        t = np.arange(0, 1000, self.dt)
         result = []
         for obj in self.space_objs:
             y0 = obj.initials[:6]

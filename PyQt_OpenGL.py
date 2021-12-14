@@ -71,7 +71,6 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
             self.calculation_module.recalculate_mass_center_coordinates()
         for obj in self.space_objects:
             obj.draw()
-            obj.draw_center()
         self.update()
 
     def keyPressEvent(self, event):

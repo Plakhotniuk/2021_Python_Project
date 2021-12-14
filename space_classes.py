@@ -10,7 +10,7 @@ class CelestialBody:
         Содержит массу, координаты, скорость звезды,
         а также визуальный радиус звезды в пикселах и её цвет.
     """
-    def __init__(self, color=(1, 0, 0), name='', quaternion=Quaternion(0, 1, 0, 0),
+    def __init__(self, color=(1, 0, 0), name='', quaternion=Quaternion(0, 1, 0, 0), dimentions=np.array([], dtype=int),
                  angle_velocity=np.array([]),
                  tensor_of_inertia=np.array([]), mass_center_coordinates_velocity=np.array([])):
 
@@ -38,6 +38,8 @@ class CelestialBody:
 
         self.initials = mass_center_coordinates_velocity
 
+        self.dimentions = dimentions
+
     def get_basis_orts(self):
         self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
     # def get_basis_orts(self):
@@ -50,16 +52,18 @@ class CelestialBody:
         """
         obj = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
-        OpenGL.GL.glTranslatef(*self.mass_center_coordinates_velocity[:3])
-        if self.name == 'SpaceShip':
+        # mass_center = np.array([])
+        OpenGL.GL.glTranslatef(*(self.mass_center_coordinates_velocity[:3] +
+                                 np.array([0, 0, 1]) * self.quaternion.axis * self.dimentions[2] / 3))
+        print(np.linalg.eigh(self.tensor_of_inertia, UPLO='L')[1][2] * self.dimentions[2] / 3)
+        if self.name == 'Cone':
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
-            OpenGL.GLU.gluCylinder(obj, 1000000, 0, 10 * 1000000, 1000, 10)
-            # print(self.quaternion)
-        else:
+            # print(*self.dimentions)
+            OpenGL.GLU.gluCylinder(obj, *self.dimentions)
+        elif self.name == 'Sphere':
             OpenGL.GL.glColor4f(*self.color, 1)
             OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
-
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()
 
