@@ -12,7 +12,7 @@ class CelestialBody:
     """
     def __init__(self, color=(1, 0, 0), name='', quaternion=Quaternion(0, 1, 0, 0), dimentions=np.array([], dtype=int),
                  angle_velocity=np.array([]),
-                 tensor_of_inertia=np.array([]), mass_center_coordinates_velocity=np.array([])):
+                 tensor_of_inertia=np.array([]), mass_center_coordinates_velocity=np.array([]), mass=0):
 
         self.color = color
         """Цвет"""
@@ -40,6 +40,8 @@ class CelestialBody:
 
         self.dimentions = dimentions
 
+        self.mass = mass
+
     def get_basis_orts(self):
         self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
     # def get_basis_orts(self):
@@ -64,6 +66,7 @@ class CelestialBody:
         elif self.name == 'Sphere':
             OpenGL.GL.glColor4f(*self.color, 1)
             OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
+
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()
 
