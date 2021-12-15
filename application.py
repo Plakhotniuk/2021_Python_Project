@@ -12,7 +12,8 @@ if __name__ == '__main__':
                                    mass_center_coordinates_velocity=np.array([0, 5.0E7, 5.0E7, -1.0E6, 0, 0, 0, 0, 0]),
                                    tensor_of_inertia=np.array([[1.0E6, 0, 0], [0, 1.0E6, 0], [0, 0, 1.0E5]]),
                                    quaternion=Quaternion(0, 1, 1, 0), mass=1.0E30),
-                     CelestialBody(name='SpaceShip', color=Globals.GREEN, angle_velocity=np.array([0.01, 0.02, 0.03]),
+                     CelestialBody(name='Cone', color=Globals.GREEN, angle_velocity=np.array([0.01, 0.02, 0.03]),
+                                   dimentions=np.array([1.0E6, 0, 1.0E7, 1.0E3, 10], dtype=int),
                                    mass_center_coordinates_velocity=np.array([0, 5.0E7, -5.0E7, 0, 0, 0, 0, 0, 0]),
                                    tensor_of_inertia=np.array([[1.0E6, 0, 0], [0, 1.0E6, 0], [0, 0, 1.0E5]]),
                                    quaternion=Quaternion(0, 1, 1, 0), mass=1.0E30)
