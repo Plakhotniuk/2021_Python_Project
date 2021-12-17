@@ -25,12 +25,12 @@ class Calculation:
         Initial position and velocity are given.
         y[0:2] = position components
         y[3:] = velocity components"""
+        y = np.reshape(y, (-1, 6))
+        differs = np.zeros((len(y), 6))
 
-        differs = np.zeros(6)
-
-        differs[:3] = y[3:6]
-        differs[3:] = self.calculate_accelerations()[counter]
-        return differs
+        differs[:, :3] = y[:, 3:6]
+        differs[:, 3:] = self.calculate_accelerations(y[:, :3])
+        return differs.ravel()
 
     def recalculate_quaternion(self):
         self.calculate_moment_forces()
@@ -53,48 +53,54 @@ class Calculation:
                                           obj.tensor_of_inertia.ravel(), [obj.mass]), axis=0))
         return np.array(result)
 
-    def calculate_accelerations(self):
+    def calculate_accelerations(self, coordinates):
         mass_matrix = self.parsed_space_objs[:, 34].reshape((1, -1, 1)) * \
                       self.parsed_space_objs[:, 34].reshape((-1, 1, 1))
-        displacements = self.parsed_space_objs[:, :3].reshape((1, -1, 3)) - \
-                        self.parsed_space_objs[:, :3].reshape((-1, 1, 3))
+        displacements = coordinates.reshape((1, -1, 3)) - coordinates.reshape((-1, 1, 3))
         distances = np.linalg.norm(displacements, axis=2)
-        distances[distances == 0] = 0.001  # avoid divide by zero
+        distances[distances == 0] = 0.001
         forces = G * displacements * mass_matrix / np.expand_dims(distances, 2) ** 3
         return forces.sum(axis=1) / self.parsed_space_objs[:, 34].reshape(-1, 1)
 
     def calculate_trajectory(self):
         global counter
-        t = np.arange(0, 100000, self.dt)
+        t = np.arange(0, 1000, self.dt)
         result = []
-        # for obj in self.space_objs:
-        #     y0 = obj.initials[:6]
-        #     result.append(odeint(dr_dt, y0, t))
-        y0 = self.parsed_space_objs[:, 12:18]
-        for Y0 in y0:
-            result.append(odeint(self.dr_dt, Y0, t))
-            counter += 1
-        counter = 0
-        return np.array(result)
+        y0 = self.parsed_space_objs[:, 0:6]
+        # for Y0 in y0:
+        #     result.append(odeint(self.dr_dt, Y0, t))
+        #     counter += 1
+        result.append(odeint(self.dr_dt, y0.ravel(), t))
+        # print(result[0])
+        return np.array(result)[0]
 
-    def recalculate_accelerations(self):
-        for obj in self.space_objs:
-            obj.mass_center_coordinates_velocity[6:] = \
-                - mu * (obj.mass_center_coordinates_velocity[:3]) / \
-                (np.linalg.norm(obj.mass_center_coordinates_velocity[:3])) ** 3
+    def for_calculate_accelerations(self):
+        for obj1 in self.space_objs:
+            for obj2 in self.space_objs:
+                if obj2.mass_center_coordinates_velocity[:3] - obj1.mass_center_coordinates_velocity[:3] != 0:
+                    obj1.mass_center_coordinates_velocity[6:] += \
+                        - G * obj2.mass * (obj2.mass_center_coordinates_velocity[:3] -
+                                           obj1.mass_center_coordinates_velocity[:3]) / \
+                        (np.linalg.norm(obj2.mass_center_coordinates_velocity[:3] -
+                                        obj1.mass_center_coordinates_velocity[:3]) ** 3)
 
     def recalculate_mass_center_coordinates(self):
         global T
+        # print("============")
+        # print(self.space_objs[0].mass_center_coordinates_velocity[:6])
+        # print("============")
+        # print(self.trajectory)
+        # print("============")
+        # print(self.trajectory[T, 6 * 0:6 * 0 + 6])
         for i in range(len(self.space_objs)):
-            self.space_objs[i].mass_center_coordinates_velocity[:6] = self.trajectory[i][T]
+            self.space_objs[i].mass_center_coordinates_velocity[:6] = self.trajectory[T, 6 * i:6 * i + 6]
         T += 1
 
     def calculate_moment_forces(self):
         for obj in self.space_objs:
             moment = 3 * mu * np.cross((obj.tensor_of_inertia @ obj.mass_center_coordinates_velocity[:3]),
-                                       obj.mass_center_coordinates_velocity[:3])\
-                     / linalg.norm(obj.mass_center_coordinates_velocity[:3])**5
+                                       obj.mass_center_coordinates_velocity[:3]) \
+                     / linalg.norm(obj.mass_center_coordinates_velocity[:3]) ** 5
             kinetic_moment = moment * self.dt
-            obj.angle_velocity = np.dot( linalg.inv(obj.tensor_of_inertia),  kinetic_moment)
-            print(obj.angle_velocity)
+            obj.angle_velocity = np.dot(linalg.inv(obj.tensor_of_inertia), kinetic_moment)
     # def calculate_kinetic_moment(self):

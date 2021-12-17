@@ -57,7 +57,7 @@ class CelestialBody:
         # mass_center = np.array([])
         OpenGL.GL.glTranslatef(*(self.mass_center_coordinates_velocity[:3] +
                                  np.array([0, 0, 1]) * self.quaternion.axis * self.dimentions[2] / 3))
-        print(np.linalg.eigh(self.tensor_of_inertia, UPLO='L')[1][2] * self.dimentions[2] / 3)
+        # print(np.linalg.eigh(self.tensor_of_inertia, UPLO='L')[1][2] * self.dimentions[2] / 3)
         if self.name == 'Cone':
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
