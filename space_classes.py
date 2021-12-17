@@ -1,5 +1,6 @@
 import OpenGL.GLU
 import OpenGL.GL
+import OpenGL.GLUT
 import numpy as np
 from pyquaternion import Quaternion
 
@@ -26,27 +27,36 @@ class CelestialBody:
 
         self.mass_center_coordinates_velocity = mass_center_coordinates_velocity
 
-        self.tensor_of_inertia = tensor_of_inertia  # (A, B, C)
+        self.mass = mass
+
+        self.dimentions = dimentions
+
+        self.tensor_of_inertia = self.calculate_tensor_of_inertia()  # (A, B, C)
 
         self.eigenvectors = np.array([])
 
         self.angle_velocity = angle_velocity  # (p, q, r)
 
-        self.external_momentum = np.array([])
+        # self.external_moment = np.array([0, 0, 0])
+
+        self.kinetic_moment = np.array([0, 0, 0])
 
         self.basis_orts = np.array([])
 
         self.initials = mass_center_coordinates_velocity
 
-        self.dimentions = dimentions
-
-        self.mass = mass
+    def calculate_tensor_of_inertia(self):
+        if self.name == 'Cone':
+            return np.diag([3/20 * self.mass * (self.dimentions[0]**2 + self.dimentions[2]**2 / 4),
+                                               3/20 * self.mass * (self.dimentions[0]**2 + self.dimentions[2]**2 / 4),
+                                               3/10 * self.mass * self.dimentions[0]**2])
+        elif self.name == 'Cylinder':
+            return np.diag([1/12 * self.mass * (3 * self.dimentions[0]**2 + self.dimentions[1]**2),
+                            1/12 * self.mass * (3 * self.dimentions[0]**2 + self.dimentions[1]**2),
+                            1/2 * self.mass * self.dimentions[0]**2])
 
     def get_basis_orts(self):
         self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
-    # def get_basis_orts(self):
-    #     self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
-    #     self.tensor_of_inertia = np.diag(np.linalg.eigh(self.tensor_of_inertia))
 
     def draw(self):
         """
@@ -55,17 +65,20 @@ class CelestialBody:
         obj = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
         # mass_center = np.array([])
-        OpenGL.GL.glTranslatef(*(self.mass_center_coordinates_velocity[:3] +
-                                 np.array([0, 0, 1]) * self.quaternion.axis * self.dimentions[2] / 3))
+
         # print(np.linalg.eigh(self.tensor_of_inertia, UPLO='L')[1][2] * self.dimentions[2] / 3)
         if self.name == 'Cone':
+            OpenGL.GL.glTranslated(*(self.mass_center_coordinates_velocity[:3] +
+                                     self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[1] / 4))
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
-            # print(*self.dimentions)
-            OpenGL.GLU.gluCylinder(obj, *self.dimentions)
-        elif self.name == 'Sphere':
+            OpenGL.GLUT.glutSolidCone(*self.dimentions)
+        elif self.name == 'Cylinder':
+            OpenGL.GL.glTranslated(*(self.mass_center_coordinates_velocity[:3] -
+                                        self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[2] / 2))
+            OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
-            OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
+            OpenGL.GLU.gluCylinder(obj, *self.dimentions)
 
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()
@@ -78,6 +91,9 @@ class CelestialBody:
         OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()
+
+    def leave_trace(self):
+        pass
 
     def set_arrow_angle(self, angle, color):
         """
