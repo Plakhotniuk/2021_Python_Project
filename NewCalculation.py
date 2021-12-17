@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import linalg
 from pyquaternion import Quaternion
-from scipy.integrate import odeint
+from scipy.integrate import odeint, solve_ivp
 
 T = 0
 G = 6.674E-11
@@ -18,6 +18,7 @@ class Calculation:
         self.dt = dt
         self.trajectory = self.calculate_trajectory()
         self.moment = np.array([])
+        self.displacements = np.array([])
 
     def dr_dt(self, y, t):
         """Integration of the governing vector differential equation.
@@ -32,11 +33,24 @@ class Calculation:
         differs[:, 3:] = self.calculate_accelerations(y[:, :3])
         return differs.ravel()
 
+    # def first_derivative(self, x, y):
+    #     return x
+    #
+    # def scipy_integrate(self):
+    #     return solve_ivp(self.first_derivative, )
+
     def recalculate_quaternion(self):
-        self.calculate_moment_forces()
-        for obj in self.space_objs:
-            angle = linalg.norm(obj.angle_velocity) * self.dt
-            obj.quaternion *= Quaternion(axis=obj.angle_velocity, angle=angle)
+        for obj1 in self.space_objs:
+            kin_moment = np.array([0, 0, 0])
+            for obj2 in self.space_objs:
+                if linalg.norm(obj2.mass_center_coordinates_velocity[:3] - obj1.mass_center_coordinates_velocity[:3]) != 0:
+                    r = obj1.mass_center_coordinates_velocity[:3] - obj2.mass_center_coordinates_velocity[:3]
+                    obj1.external_moment += (obj1.mass / linalg.norm(r)**5) * np.cross((obj1.tensor_of_inertia @ r), r) * self.dt
+                    kin_moment = np.vstack((kin_moment, obj1.external_moment))
+            obj1.kinetic_moment += kin_moment.sum(axis=0)
+            obj1.angle_velocity += 3 * G * (linalg.inv(obj1.tensor_of_inertia) @ obj1.kinetic_moment) * self.dt
+            angle = linalg.norm(obj1.angle_velocity) * self.dt
+            obj1.quaternion *= Quaternion(axis=obj1.angle_velocity, angle=angle)
 
     def parsing_into_numpy(self):
         result = []
@@ -56,10 +70,11 @@ class Calculation:
     def calculate_accelerations(self, coordinates):
         mass_matrix = self.parsed_space_objs[:, 34].reshape((1, -1, 1)) * \
                       self.parsed_space_objs[:, 34].reshape((-1, 1, 1))
-        displacements = coordinates.reshape((1, -1, 3)) - coordinates.reshape((-1, 1, 3))
-        distances = np.linalg.norm(displacements, axis=2)
+        self.displacements = coordinates.reshape((1, -1, 3)) - coordinates.reshape((-1, 1, 3))
+        # print(self.displacements)
+        distances = np.linalg.norm(self.displacements, axis=2)
         distances[distances == 0] = 0.001
-        forces = G * displacements * mass_matrix / np.expand_dims(distances, 2) ** 3
+        forces = G * self.displacements * mass_matrix / np.expand_dims(distances, 2) ** 3
         return forces.sum(axis=1) / self.parsed_space_objs[:, 34].reshape(-1, 1)
 
     def calculate_trajectory(self):
@@ -78,6 +93,7 @@ class Calculation:
         for obj1 in self.space_objs:
             for obj2 in self.space_objs:
                 if obj2.mass_center_coordinates_velocity[:3] - obj1.mass_center_coordinates_velocity[:3] != 0:
+                    # self.recalculate_angle_velocity(obj1, obj2)
                     obj1.mass_center_coordinates_velocity[6:] += \
                         - G * obj2.mass * (obj2.mass_center_coordinates_velocity[:3] -
                                            obj1.mass_center_coordinates_velocity[:3]) / \
@@ -103,4 +119,13 @@ class Calculation:
                      / linalg.norm(obj.mass_center_coordinates_velocity[:3]) ** 5
             kinetic_moment = moment * self.dt
             obj.angle_velocity = np.dot(linalg.inv(obj.tensor_of_inertia), kinetic_moment)
-    # def calculate_kinetic_moment(self):
+
+    def recalculate_angle_velocity(self):
+        for obj1 in self.space_objs:
+            kin_moment = np.array([0, 0, 0])
+            for obj2 in self.space_objs:
+                if linalg.norm(obj2.mass_center_coordinates_velocity[:3] - obj1.mass_center_coordinates_velocity[:3]) != 0:
+                    r = obj1.mass_center_coordinates_velocity[:3] - obj2.mass_center_coordinates_velocity[:3]
+                    kin_moment = np.vstack((kin_moment, (obj1.mass / linalg.norm(r)**5) * np.cross((obj1.tensor_of_inertia @ r), r) * self.dt))
+            obj1.kinetic_moment += kin_moment.sum(axis=0)
+            obj1.angle_velocity += 3 * G * (linalg.inv(obj1.tensor_of_inertia) @ obj1.kinetic_moment) * self.dt

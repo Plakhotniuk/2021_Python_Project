@@ -16,14 +16,14 @@ if __name__ == '__main__':
                                    mass_center_coordinates_velocity=np.array([0, 5.0E7, -5.0E7, 0, 0, 1.0E5, 0, 0, 0]),
                                    quaternion=Quaternion(0, 1, 1, 0), mass=1.0E30),
                      CelestialBody(name='Cone', color=Globals.BLUE, angle_velocity=np.array([0.01, 0.02, 0.03]),
-                                   dimentions=np.array([1.0E6, 1.0E7, 1.0E3, 10], dtype=int),
+                                   dimentions=np.array([5.0E6, 5.0E7, 1.0E3, 10], dtype=int),
                                    mass_center_coordinates_velocity=np.array([0, -5.0E7, -5.0E7, 1.0E6, 0, -1.0E5, 0, 0, 0]),
                                    quaternion=Quaternion(0, 1, 1, 0), mass=1.0E30),
-                     CelestialBody(name='Cylinder', color=Globals.CYAN, angle_velocity=np.array([0.01, 0.02, 0.03]),
-                                   dimentions=np.array([1.0E7, 1.0E7, 1.0E8, 1.0E3, 10], dtype=int),
+                     CelestialBody(name='Cylinder', color=Globals.CYAN, angle_velocity=np.array([0.01, 0.01, 0.03]),
+                                   dimentions=np.array([5.0E6, 5.0E6, 1.0E8, 1.0E3, 10], dtype=int),
                                    mass_center_coordinates_velocity=np.array(
                                        [-5.0E7, -5.0E7, -5.0E7, 0, 0, 0, 0, 0, 0]),
-                                   quaternion=Quaternion(0, 1, 1, 0), mass=1.0E31)
+                                   quaternion=Quaternion(0, 1, 0, 0), mass=1.0E31)
                      ]
     window = StartWindow(space_objects)
     sys.exit(App.exec())

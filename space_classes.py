@@ -37,9 +37,9 @@ class CelestialBody:
 
         self.angle_velocity = angle_velocity  # (p, q, r)
 
-        # self.external_moment = np.array([0, 0, 0])
+        self.external_moment = np.array([0.0, 0.0, 0.0])
 
-        self.kinetic_moment = np.array([0, 0, 0])
+        self.kinetic_moment = np.array([0.0, 0.0, 0.0])
 
         self.basis_orts = np.array([])
 
@@ -68,7 +68,7 @@ class CelestialBody:
 
         # print(np.linalg.eigh(self.tensor_of_inertia, UPLO='L')[1][2] * self.dimentions[2] / 3)
         if self.name == 'Cone':
-            OpenGL.GL.glTranslated(*(self.mass_center_coordinates_velocity[:3] +
+            OpenGL.GL.glTranslated(*(self.mass_center_coordinates_velocity[:3] -
                                      self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[1] / 4))
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
