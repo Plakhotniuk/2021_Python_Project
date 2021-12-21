@@ -168,7 +168,7 @@ class MainWindow(QtWidgets.QWidget):
         if self.time_of_modeling == '':
             self.time_of_modeling = 0
 
-        self.open_gl.calculation_module.calculate_prev_trajectory(float(self.time_of_modeling))
+        self.open_gl.calculation_module.recalculate_mass_center_coordinates(float(self.time_of_modeling))
 
     def input(self):
         """

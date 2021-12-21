@@ -4,7 +4,7 @@ from pyquaternion import Quaternion
 from scipy.integrate import odeint, solve_ivp
 
 T = 0
-G = 6.674E-11
+G = 1
 M = 1.989E30
 mu = G * M
 sqrt_mu = np.sqrt(mu)
@@ -33,22 +33,19 @@ class Calculation:
         differs[:, 3:] = self.calculate_accelerations(y[:, :3])
         return differs.ravel()
 
-    # def first_derivative(self, x, y):
-    #     return x
-    #
-    # def scipy_integrate(self):
-    #     return solve_ivp(self.first_derivative, )
+        def d_dt(self):
+            pass
 
     def recalculate_quaternion(self):
         for obj1 in self.space_objs:
-            kin_moment = np.array([0, 0, 0])
+            external_moment = np.array([0.0, 0.0, 0.0])
+            kinetic_moment = np.array([0.0, 0.0, 0.0])
             for obj2 in self.space_objs:
                 if linalg.norm(obj2.mass_center_coordinates_velocity[:3] - obj1.mass_center_coordinates_velocity[:3]) != 0:
                     r = obj1.mass_center_coordinates_velocity[:3] - obj2.mass_center_coordinates_velocity[:3]
-                    obj1.external_moment += (obj1.mass / linalg.norm(r)**5) * np.cross((obj1.tensor_of_inertia @ r), r) * self.dt
-                    kin_moment = np.vstack((kin_moment, obj1.external_moment))
-            obj1.kinetic_moment += kin_moment.sum(axis=0)
-            obj1.angle_velocity += 3 * G * (linalg.inv(obj1.tensor_of_inertia) @ obj1.kinetic_moment) * self.dt
+                    external_moment -= 3 * G * (obj1.mass / linalg.norm(r)**5) * np.cross((obj1.tensor_of_inertia @ r), r) * self.dt
+            kinetic_moment += external_moment * self.dt
+            obj1.angle_velocity += (linalg.inv(obj1.tensor_of_inertia) @ kinetic_moment) * self.dt
             angle = linalg.norm(obj1.angle_velocity) * self.dt
             obj1.quaternion *= Quaternion(axis=obj1.angle_velocity, angle=angle)
 

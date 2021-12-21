@@ -68,7 +68,7 @@ class PyOpenGL(QOpenGLWidget, QGraphicsView):
 
         if self.start_modeling:
             self.calculation_module.recalculate_quaternion()
-            self.calculation_module.recalculate_mass_center_coordinates()
+            # self.calculation_module.recalculate_mass_center_coordinates()
         for obj in self.space_objects:
             obj.draw()
         self.update()

@@ -54,6 +54,9 @@ class CelestialBody:
             return np.diag([1/12 * self.mass * (3 * self.dimentions[0]**2 + self.dimentions[1]**2),
                             1/12 * self.mass * (3 * self.dimentions[0]**2 + self.dimentions[1]**2),
                             1/2 * self.mass * self.dimentions[0]**2])
+        elif self.name == 'Sphere':
+            A = 2/5 * self.mass * self.dimentions[0]**2
+            return np.diag([A, A, A])
 
     def get_basis_orts(self):
         self.basis_orts = np.linalg.eigvals(self.tensor_of_inertia)
@@ -64,21 +67,23 @@ class CelestialBody:
         """
         obj = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
-        # mass_center = np.array([])
-
-        # print(np.linalg.eigh(self.tensor_of_inertia, UPLO='L')[1][2] * self.dimentions[2] / 3)
         if self.name == 'Cone':
             OpenGL.GL.glTranslated(*(self.mass_center_coordinates_velocity[:3] -
-                                     self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[1] / 4))
+                                     self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[2] / 4))
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
-            OpenGL.GLUT.glutSolidCone(*self.dimentions)
+            OpenGL.GLU.gluCylinder(obj, *self.dimentions)
         elif self.name == 'Cylinder':
             OpenGL.GL.glTranslated(*(self.mass_center_coordinates_velocity[:3] -
                                         self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[2] / 2))
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
             OpenGL.GLU.gluCylinder(obj, *self.dimentions)
+        elif self.name == 'Sphere':
+            OpenGL.GL.glTranslatef(*self.mass_center_coordinates_velocity[:3])
+            OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
+            OpenGL.GL.glColor4f(*self.color, 1)
+            OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
 
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()
@@ -86,9 +91,11 @@ class CelestialBody:
     def draw_center(self):
         obj = OpenGL.GLU.gluNewQuadric()
         OpenGL.GL.glPushMatrix()
+
         OpenGL.GL.glTranslatef(0, 5.0E7, 0)
         OpenGL.GL.glColor4f(*self.color, 1)
         OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
+
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()
 
