@@ -24,11 +24,10 @@ if __name__ == '__main__':
                       dimentions=np.array([5.0E5, 5.0E5, 5.0E7, 1.0E3, 10], dtype=int),
                       mass_center_coordinates_velocity=np.array([-5.0E8, 0, 5.0E8, 0, 5.0E5, 0, 0, 0, 0]),
                       quaternion=Quaternion(0.25, 0, 1, 0), mass=1.0E25),
-        # CelestialBody(name='Sphere', color=Globals.CYAN, angle_velocity=np.array([0.0, 0.0, 0.01])
-        #               dimentions=np.array([1.0E7, 1.0E3, 10], dtype=int),
-        #               mass_center_coordinates_velocity=np.array(
-        #                   [5.0E7, 0, -5.0E7, 0, 0, 0, 0, 0, 0]),
-        #               quaternion=Quaternion(0, 1, 0, 0), mass=1.0E30)
+        # CelestialBody(name='Sphere', color=Globals.CYAN, angle_velocity=np.array([0.0, 0.0, 0.01]),
+        #               dimentions=np.array([1.0E6, 1.0E3, 10], dtype=int),
+        #               mass_center_coordinates_velocity=np.array([5.2E8, 0, 0, -1E4, 0, -5.5E5, 0, 0, 0]),
+        #               quaternion=Quaternion(0, 1, 0, 0), mass=1.0E15)
     ]
     window = StartWindow(space_objects)
     sys.exit(App.exec())
