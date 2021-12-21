@@ -11,6 +11,7 @@ class CelestialBody:
         Содержит массу, координаты, скорость звезды,
         а также визуальный радиус звезды в пикселах и её цвет.
     """
+
     def __init__(self, color=(1, 0, 0), name='', quaternion=Quaternion(0, 1, 0, 0), dimentions=np.array([], dtype=int),
                  angle_velocity=np.array([]),
                  tensor_of_inertia=np.array([]), mass_center_coordinates_velocity=np.array([]), mass=0):
@@ -47,13 +48,13 @@ class CelestialBody:
 
     def calculate_tensor_of_inertia(self):
         if self.name == 'Cone':
-            return np.diag([3/20 * self.mass * (self.dimentions[0]**2 + self.dimentions[2]**2 / 4),
-                                               3/20 * self.mass * (self.dimentions[0]**2 + self.dimentions[2]**2 / 4),
-                                               3/10 * self.mass * self.dimentions[0]**2])
+            return np.diag([3 / 20 * self.mass * (self.dimentions[0] ** 2 + self.dimentions[2] ** 2 / 4),
+                            3 / 20 * self.mass * (self.dimentions[0] ** 2 + self.dimentions[2] ** 2 / 4),
+                            3 / 10 * self.mass * self.dimentions[0] ** 2])
         elif self.name == 'Cylinder':
-            return np.diag([1/12 * self.mass * (3 * self.dimentions[0]**2 + self.dimentions[1]**2),
-                            1/12 * self.mass * (3 * self.dimentions[0]**2 + self.dimentions[1]**2),
-                            1/2 * self.mass * self.dimentions[0]**2])
+            return np.diag([1 / 12 * self.mass * (3 * self.dimentions[0] ** 2 + self.dimentions[1] ** 2),
+                            1 / 12 * self.mass * (3 * self.dimentions[0] ** 2 + self.dimentions[1] ** 2),
+                            1 / 2 * self.mass * self.dimentions[0] ** 2])
         elif self.name == 'Sphere':
             A = 2/5 * self.mass * self.dimentions[0]**2
             return np.diag([A, A, A])
@@ -75,7 +76,7 @@ class CelestialBody:
             OpenGL.GLU.gluCylinder(obj, *self.dimentions)
         elif self.name == 'Cylinder':
             OpenGL.GL.glTranslated(*(self.mass_center_coordinates_velocity[:3] -
-                                        self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[2] / 2))
+                                     self.quaternion.rotate(np.array([0, 0, 1])) * self.dimentions[2] / 2))
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
             OpenGL.GLU.gluCylinder(obj, *self.dimentions)
@@ -83,7 +84,7 @@ class CelestialBody:
             OpenGL.GL.glTranslatef(*self.mass_center_coordinates_velocity[:3])
             OpenGL.GL.glRotate(self.quaternion.degrees, *self.quaternion.axis)
             OpenGL.GL.glColor4f(*self.color, 1)
-            OpenGL.GLU.gluSphere(obj, 1000000, 320, 160)
+            OpenGL.GLU.gluSphere(obj, *self.dimentions)
 
         OpenGL.GLU.gluDeleteQuadric(obj)
         OpenGL.GL.glPopMatrix()

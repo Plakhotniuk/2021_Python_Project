@@ -147,7 +147,7 @@ class MainWindow(QtWidgets.QWidget):
                 "#pushButton{background-color: transparent; border-image: url(Pictures/Back.png);"
                 " background: none; border: none; background-repeat: none;} #pushButton:pressed"
                 " {border-image: url(Pictures/BackPressed.png)}")
-            self.ui.pushButton_start.setEnabled(False)
+            self.ui.pushButton_start.setEnabled(True)
         else:
             self.ui.pushButton_start.setEnabled(True)
             self.ui.pushButton_calculate.setStyleSheet(
@@ -168,7 +168,7 @@ class MainWindow(QtWidgets.QWidget):
         if self.time_of_modeling == '':
             self.time_of_modeling = 0
 
-        self.open_gl.calculation_module.recalculate_mass_center_coordinates(float(self.time_of_modeling))
+        self.open_gl.calculation_module.calculate_trajectory(float(self.time_of_modeling))
 
     def input(self):
         """

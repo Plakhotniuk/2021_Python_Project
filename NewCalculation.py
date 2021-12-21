@@ -1,10 +1,11 @@
 import numpy as np
 from numpy import linalg
 from pyquaternion import Quaternion
-from scipy.integrate import odeint, solve_ivp
+from scipy.integrate import odeint
+from scipy.integrate import solve_ivp
 
 T = 0
-G = 1
+G = 6.674E-11
 M = 1.989E30
 mu = G * M
 sqrt_mu = np.sqrt(mu)
@@ -16,11 +17,12 @@ class Calculation:
         self.space_objs = space_objs
         self.parsed_space_objs = self.parsing_into_numpy()
         self.dt = dt
-        self.trajectory = self.calculate_trajectory()
+        self.time = 0
+        # self.trajectory = self.calculate_trajectory()
+        self.trajectory = []
         self.moment = np.array([])
-        self.displacements = np.array([])
 
-    def dr_dt(self, y, t):
+    def dr_dt(self, t, y):
         """Integration of the governing vector differential equation.
         d2r_dt2 = -(mu/R^3)*r with d2r_dt2 and r as vecotrs.
         Initial position and velocity are given.
@@ -33,8 +35,8 @@ class Calculation:
         differs[:, 3:] = self.calculate_accelerations(y[:, :3])
         return differs.ravel()
 
-        def d_dt(self):
-            pass
+        # def d_dt(self):
+        #     pass
 
     def recalculate_quaternion(self):
         for obj1 in self.space_objs:
@@ -74,17 +76,13 @@ class Calculation:
         forces = G * self.displacements * mass_matrix / np.expand_dims(distances, 2) ** 3
         return forces.sum(axis=1) / self.parsed_space_objs[:, 34].reshape(-1, 1)
 
-    def calculate_trajectory(self):
-        global counter
-        t = np.arange(0, 1000, self.dt)
+    def calculate_trajectory(self, time):
+        self.time = time
+        t = np.arange(0, self.time, self.dt)
         result = []
-        y0 = self.parsed_space_objs[:, 0:6]
-        # for Y0 in y0:
-        #     result.append(odeint(self.dr_dt, Y0, t))
-        #     counter += 1
-        result.append(odeint(self.dr_dt, y0.ravel(), t))
-        # print(result[0])
-        return np.array(result)[0]
+        y0 = self.parsed_space_objs[:, 12:18]
+        result.append(odeint(self.dr_dt, y0.ravel(), t, tfirst=True))
+        self. trajectory = np.array(result)[0]
 
     def for_calculate_accelerations(self):
         for obj1 in self.space_objs:
@@ -99,14 +97,9 @@ class Calculation:
 
     def recalculate_mass_center_coordinates(self):
         global T
-        # print("============")
-        # print(self.space_objs[0].mass_center_coordinates_velocity[:6])
-        # print("============")
-        # print(self.trajectory)
-        # print("============")
-        # print(self.trajectory[T, 6 * 0:6 * 0 + 6])
-        for i in range(len(self.space_objs)):
-            self.space_objs[i].mass_center_coordinates_velocity[:6] = self.trajectory[T, 6 * i:6 * i + 6]
+        if len(self.trajectory) - T > 0:
+            for i in range(len(self.space_objs)):
+                self.space_objs[i].mass_center_coordinates_velocity[:6] = self.trajectory[T, 6 * i:6 * i + 6]
         T += 1
 
     def calculate_moment_forces(self):
